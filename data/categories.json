@@ -1,0 +1,10 @@
+[
+  { "id": "bank", "name": "銀行", "guide": "bank" },
+  { "id": "travel", "name": "交通（鉄道・飛行機の予約）", "guide": "travel" },
+  { "id": "delivery", "name": "宅配", "guide": "delivery" },
+  { "id": "shopping", "name": "通販・出前", "guide": "ec" },
+  { "id": "mobile", "name": "携帯電話", "guide": "mobile" },
+  { "id": "info", "name": "情報（ポータル・天気）", "guide": null },
+  { "id": "gov", "name": "行政の手続き", "guide": null },
+  { "id": "media", "name": "動画・電子書籍", "guide": null }
+]

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "data/consultation.json",
+  "description": "「偽サイトに注意」ページの相談先。",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["id", "name", "phone", "detail", "verified_at"],
+    "properties": {
+      "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+      "name": { "type": "string" },
+      "phone": { "type": ["string", "null"] },
+      "detail": { "type": "string" },
+      "verified_at": { "type": "string", "description": "YYYY-MM-DD か \"unverified\"" }
+    }
+  }
+}

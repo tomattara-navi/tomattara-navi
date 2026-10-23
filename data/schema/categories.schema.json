@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "data/categories.json",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["id", "name", "guide"],
+    "properties": {
+      "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+      "name": { "type": "string" },
+      "guide": { "type": ["string", "null"], "description": "content/guide-<guide>.html があること" }
+    }
+  }
+}

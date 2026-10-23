@@ -1,0 +1,4 @@
+# .github/ と data/ の変更は店主（非公開チーム maintainers）に自動でレビュー依頼が行く
+# （一人運用のため、main のブランチ保護で「Require review from Code Owners」は必須にしていない）
+/.github/ @tomattara-navi/maintainers
+/data/ @tomattara-navi/maintainers

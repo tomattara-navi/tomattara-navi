@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "data/links.json",
+  "description": "サービス以外でリンクしてよい先（公共機関・このサイト自身のリポジトリ）。docs/PLAN.md にある URL だけを入れ、basis に根拠を書く。",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["id", "name", "url", "domains", "basis"],
+    "properties": {
+      "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+      "name": { "type": "string" },
+      "url": { "type": "string", "pattern": "^https://", "description": "domains に一致すること" },
+      "domains": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+      "basis": { "type": "string" }
+    }
+  }
+}

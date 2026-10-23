@@ -1,0 +1,121 @@
+[
+  {
+    "id": "2024-06-niconico",
+    "service_ids": ["niconico"],
+    "name": "ニコニコ動画（ドワンゴ）",
+    "period": "2024年6月〜8月（約2か月）",
+    "cause": "ランサムウェア",
+    "summary": "サイバー攻撃を受けて動画サービスが約2か月止まった。",
+    "alternatives_used": ["運営の臨時サイト", "他社の動画サイト"],
+    "sources": [{ "url": "https://gamebiz.jp/news/389877", "type": "press" }]
+  },
+  {
+    "id": "2024-12-ddos-jal-banks",
+    "service_ids": ["jal", "mufg", "resona", "mizuho"],
+    "name": "JAL・三菱UFJ銀行・りそな銀行・みずほ銀行",
+    "period": "2024年12月26日〜31日（それぞれ数時間）",
+    "cause": "DDoS攻撃",
+    "summary": "年末に、航空会社と複数の銀行のサイトなどが、それぞれ数時間つながりにくくなった。",
+    "alternatives_used": ["空港の有人カウンター", "ATM・窓口"],
+    "sources": [
+      { "url": "https://news.mynavi.jp/techplus/article/20250110-3104063/", "type": "press" },
+      { "url": "https://internet.watch.impress.co.jp/docs/news/1660160.html", "type": "press" }
+    ]
+  },
+  {
+    "id": "2025-01-docomo-portal",
+    "service_ids": ["docomo"],
+    "name": "goo・dメニューニュース（ドコモ）",
+    "period": "2025年1月2日（約11時間）",
+    "cause": "DDoS攻撃",
+    "summary": "正月に、ポータルサイトとニュースが約11時間つながりにくくなった。なお goo のポータルは2025年11月25日に終了している。",
+    "alternatives_used": ["他のポータルサイト"],
+    "sources": [{ "url": "https://www.docomo.ne.jp/info/notice/page/250102_03_m.html", "type": "official", "service_id": "docomo" }]
+  },
+  {
+    "id": "2025-01-tenkijp",
+    "service_ids": ["tenkijp"],
+    "name": "tenki.jp（日本気象協会）",
+    "period": "2025年1月（4回・それぞれ数時間）",
+    "cause": "DDoS攻撃",
+    "summary": "天気予報のサイトが、2025年1月に4回、それぞれ数時間つながりにくくなった。",
+    "alternatives_used": ["気象庁や他の天気サイト"],
+    "sources": [{ "url": "https://scan.netsecurity.ne.jp/article/2025/01/14/52148.html", "type": "press" }]
+  },
+  {
+    "id": "2025-10-askul",
+    "service_ids": [],
+    "name": "ASKUL・LOHACO（無印良品・ロフトの通販も）",
+    "period": "2025年10月〜2026年1月（約3か月）",
+    "cause": "ランサムウェア",
+    "summary": "通販が約3か月止まり、無印良品・ロフトの通販にも影響が出た。",
+    "alternatives_used": ["他社の通販サイト", "実店舗"],
+    "sources": [
+      { "url": "https://netshop.impress.co.jp/n/2025/12/03/15228", "type": "press" },
+      { "url": "https://www.lnews.jp/2026/01/s0121605.html", "type": "press" }
+    ]
+  },
+  {
+    "id": "2026-09-keio",
+    "service_ids": [],
+    "name": "京王グループの店舗の決済・ホテルの予約",
+    "period": "2026年9月26日〜（順に再開）",
+    "cause": "ランサムウェア",
+    "summary": "グループの店舗の決済やホテルの予約が使えなくなり、順に再開している。",
+    "alternatives_used": ["現金", "対面のフロント"],
+    "sources": [{ "url": "https://www.sbbit.jp/article/cont1/187559", "type": "press" }]
+  },
+  {
+    "id": "2026-09-sagawa",
+    "service_ids": ["sagawa"],
+    "name": "佐川急便の Web サービス（荷物の追跡など）",
+    "period": "2026年9月30日〜（10月9日の時点でも一部停止）",
+    "cause": "不正アクセス",
+    "summary": "荷物の追跡などの Web のサービスが止まった。",
+    "alternatives_used": ["電話"],
+    "sources": [{ "url": "https://ecnomikata.com/ecnews/51852/", "type": "press" }]
+  },
+  {
+    "id": "2026-10-idcf",
+    "service_ids": [],
+    "name": "IDCF クラウド（茨城県などのサイトに影響）",
+    "period": "2026年10月7日〜（長期）",
+    "cause": "ランサムウェア",
+    "summary": "クラウドの事業者が攻撃を受け、その上で動いていた自治体などのサイトが見られなくなった。",
+    "alternatives_used": [],
+    "sources": [{ "url": "https://atmarkit.itmedia.co.jp/ait/articles/2610/09/news036.html", "type": "press" }]
+  },
+  {
+    "id": "2026-10-rideon",
+    "service_ids": [],
+    "name": "銀のさら・釜寅（ライドオン）",
+    "period": "2026年10月7日〜（長期）",
+    "cause": "ランサムウェア",
+    "summary": "サービスが止まり、会社は電話・店頭や、出前館・Uber Eats での注文を案内した。",
+    "alternatives_used": ["電話", "店頭", "出前館", "Uber Eats（会社の案内）"],
+    "sources": [{ "url": "https://internet.watch.impress.co.jp/docs/news/2147767.html", "type": "press" }]
+  },
+  {
+    "id": "2026-10-cmoa",
+    "service_ids": ["cmoa"],
+    "name": "コミックシーモア",
+    "period": "2026年10月15日〜（再開は未定）",
+    "cause": "不正アクセス",
+    "summary": "電子書籍のストアが止まった。",
+    "alternatives_used": ["他の電子書籍ストア"],
+    "sources": [
+      { "url": "https://internet.watch.impress.co.jp/docs/news/2149325.html", "type": "press" },
+      { "url": "https://www.nttsolmare.com/press/2026/1021.html", "type": "official", "service_id": "cmoa" }
+    ]
+  },
+  {
+    "id": "2026-10-geo",
+    "service_ids": [],
+    "name": "ゲオ・セカンドストリートの通販・アプリ",
+    "period": "2026年10月17日〜（再開は未定）",
+    "cause": "不正アクセス",
+    "summary": "通販サイトとアプリが止まった。",
+    "alternatives_used": ["実店舗（Ponta カード）"],
+    "sources": [{ "url": "https://innovatopia.jp/cyber-security/cyber-security-news/119032/", "type": "press" }]
+  }
+]

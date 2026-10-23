@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 脆弱性の報告（非公開）
+    url: https://github.com/tomattara-navi/tomattara-navi/security/advisories/new
+    about: セキュリティの問題は公開の Issue に書かず、こちらから非公開で知らせてください。

@@ -1,0 +1,9 @@
+# GitHub Actions の版の更新だけ（npm の依存は持たない）。公開から7日待ってから提案させる。
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7

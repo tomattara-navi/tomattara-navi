@@ -1,0 +1,40 @@
+name: 障害情報の追加
+description: 会社・団体が公式に発表した障害を知らせる（公式発表の URL が必須）
+title: "[障害] "
+labels: ["incident"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        このサイトが「障害中」と書くのは、**会社・団体の公式発表**を確かめたものだけです。報道や SNS の投稿だけでは登録できません。
+        ここに書いた内容は誰でも読めます。**個人情報（名前・電話番号・メールアドレス・注文番号など）は書かないでください。**
+  - type: input
+    id: service
+    attributes:
+      label: サービス名
+      placeholder: 例: 佐川急便
+    validations:
+      required: true
+  - type: input
+    id: official_url
+    attributes:
+      label: 公式発表の URL（必須）
+      description: 会社・団体のサイトにある発表のページ。短縮 URL は使わないでください。
+      placeholder: https://
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: 何が使えなくなっているか（公式発表に書かれていること）
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: 会社が案内している代わりの手段（あれば）
+  - type: input
+    id: press_url
+    attributes:
+      label: 参考の報道の URL（任意）
+      placeholder: https://
