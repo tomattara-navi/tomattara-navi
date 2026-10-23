@@ -17,9 +17,8 @@
 | 5 | 最初 | 「Add file → Create new file」で `docs/PLAN.md` を作り、この文書の全文を貼って Commit | 2分 |
 | 6 | 毎フェーズ | claude.ai/code でこのリポジトリを選び、「docs/PLAN.md のフェーズNを実装して PR にしてください」と頼む | — |
 | 7 | 毎フェーズ | PR の差分と、PR に貼られた画面の確認結果を見て Merge | 10分 |
-| 8 | フェーズ3 | Cloudflare の無料アカウントを作り、権限を絞った API トークンを1本発行して GitHub の `production` 環境の secret に入れる（手順は PR に書かれる） | 15分 |
-| 9 | 任意 | 独自ドメインを取る（取るなら フェーズ3） | — |
 
+- Cloudflare のアカウント作成・トークン発行（旧 #8）と独自ドメイン（旧 #9）の行は、フェーズ3の中止で外した（店主決定 2026-10-23）。日々の運用は Claude Code の定期タスクで回す（§9）
 - ★クラウドの Claude Code は**リポジトリを新規作成できない**（既存リポジトリを clone して作業ブランチへ push し、PR を作る仕組み）。だから1〜5は人が行う。
 - ★クラウドの既定のネットワーク（Trusted）は一般サイトへ出られない。**URL・電話番号は、この文書の付録の値か、公式ページで確かめた値（根拠の URL を PR 本文に書く）だけを使う。推測で作らない**（店主決定 2026-10-23）。
 - GitHub Pages を無料で使うには public リポジトリが要る。秘密情報はどこにも置かない設計なので public で問題ない。
@@ -103,6 +102,7 @@
 23. 秘密情報（トークン・鍵）をリポジトリに置かない。フェーズ1〜2は Actions にも置かない。
     **例外はフェーズ3の Cloudflare のデプロイ用トークン1本だけ**（権限は「Workers Scripts: Edit」の1アカウントに限定、
     GitHub の `production` 環境の secret にし、その環境は main ブランチからだけ使える設定にする）
+    → フェーズ3は中止したので、この例外は使わない（Actions にも秘密情報を置かない。店主決定 2026-10-23）
 24. 生成する HTML の値は**すべてエスケープ**。URL は `https:` かつ許可ドメインのみ
 
 ---
@@ -112,11 +112,9 @@
 | 項目 | 決定 | 理由 |
 |---|---|---|
 | 生成 | **Node 22 標準だけの自作スクリプト**（`scripts/build.mjs`）で JSON → 静的 HTML | 依存ゼロ（§2.4-20）。30件程度の一覧なら数百行で足りる |
-| JS | **ページ側の JavaScript は使わない**（フェーズ1〜3） | CSP を `script-src 'none'` にできる。古い端末・低速回線でも読める |
+| JS | **ページ側の JavaScript は使わない** | CSP を `script-src 'none'` にできる。古い端末・低速回線でも読める |
 | CSS | 1ファイル（`assets/site.css`）。システムフォント、ダークモード対応 | 外部フォント禁止（§2.1-6） |
-| 主系（フェーズ1〜2） | **GitHub Pages**（Actions でデプロイ） | 追加アカウント不要で今日始められる |
-| 主系（フェーズ3〜） | **Cloudflare Workers の静的アセット**（Worker のコードは持たない）＋ `_headers` で安全ヘッダ。Actions から `wrangler deploy` | 静的配信は無料・無制限、DDoS 防御付き、ヘッダ設定可。Pages の Git 連携は無料で月500ビルドまでなので、30分ごとの観測の反映（月約1,440回）に足りない |
-| 副系（フェーズ3〜） | GitHub Pages をミラーとして残す | Cloudflare 自体も 2025/11・12 に大規模障害。1社に頼らない |
+| 配信 | **GitHub Pages だけ**（Actions でデプロイ） | 追加アカウント不要で、店主の手作業なしに運用できる。Cloudflare への移行・二重化（旧フェーズ3）は中止（店主決定 2026-10-23。§8） |
 | 観測 | GitHub Actions の cron（`7,37 * * * *`）で `scripts/check.mjs` | 公開リポジトリなら無料。遅延はありうる前提で時刻を表示 |
 | 観測の前回値 | **公開中のサイトの `status.json` を取得**して前回値に使う | 状態のためのコミットを作らない（リポジトリが膨らまない） |
 | 試験 | `node --test`（標準のテストランナー） | 依存ゼロ |
@@ -157,7 +155,6 @@
 │  ├─ check.mjs                 自動観測（§7）
 │  └─ build.mjs                 生成（dist/ へ）
 ├─ assets/site.css  assets/og.png（自作の文字だけの画像）
-├─ static/_headers              フェーズ3 用。フェーズ1から置いておく
 └─ test/*.test.mjs
 ```
 
@@ -186,7 +183,7 @@
   "verified_by": "session2 調査（公式ページで確認）"
 }
 ```
-- `null` と「未確認」を区別する: 調べて無かった＝`null`、調べられなかった＝`"unverified"`。画面では後者を「未確認」と出す（三状態）
+- `null` と「未確認」を区別する: 調べて無かった＝`null`、調べられなかった＝`"unverified"`。データでは区別して残す。画面では `"unverified"` の項目を行ごと出さない（店主決定 2026-10-23。それ以前は「未確認」と出していた）。月1の見直しで確かめられたら出る
 - 付録Aで「未確認」のものは `"unverified"` のまま入れ、**推測で埋めない**
 
 ### 5.2 `data/incidents.json`（公式発表を確かめて登録）
@@ -289,34 +286,13 @@
   - [ ] 観測が2時間以上古いと「観測が止まっています」になることを試験
   - [ ] User-Agent に個人情報が無いことを試験（`@` を含まない）
 
-### フェーズ3: 主系を Cloudflare へ・二重化
-- 店主が Cloudflare の無料アカウントを作り、API トークンを1本発行して GitHub の `production` 環境の secret `CLOUDFLARE_API_TOKEN` に入れる（§0-8、§2.4-23）
-- `deploy.yml` に Cloudflare へのデプロイ job を足す（GitHub Pages へのデプロイも続ける＝ミラー）
-  - `wrangler` は**この job の中だけ**で、`deploy/package.json`＋`deploy/package-lock.json` で版を固定し `npm ci --ignore-scripts` で入れる（§2.4-20 の唯一の例外。サイト本体の生成には使わない）
-  - `wrangler.jsonc` は `assets.directory: "dist"` のみ（Worker のスクリプトなし。`run_worker_first` を使わない＝無料枠の 429 を避ける）
-  - ★着手時に、無料プランでデプロイ回数（1日48回）に制限が無いかを Cloudflare の最新の公式文書で確かめ、PR 本文に書く（2026-10-23 時点で未確認）
-- `static/_headers` を有効化:
-  ```
-  /*
-    Content-Security-Policy: default-src 'none'; style-src 'self'; img-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'; upgrade-insecure-requests
-    Strict-Transport-Security: max-age=31536000
-    X-Content-Type-Options: nosniff
-    Referrer-Policy: strict-origin-when-cross-origin
-    Permissions-Policy: geolocation=(), camera=(), microphone=(), interest-cohort=()
-    Cross-Origin-Opener-Policy: same-origin
-    Cross-Origin-Resource-Policy: same-origin
-    X-Frame-Options: DENY
-  /assets/*
-    Cache-Control: public, max-age=31536000, immutable
-  /status.json
-    Cache-Control: public, max-age=60
-  ```
-  （HSTS の `preload` は独自ドメインを決めてから別途判断）
-- 観測の cron は GitHub Actions に残す。1回の実行で check → build → **Cloudflare と GitHub Pages の両方へ同じ `dist/` をデプロイ**（片方の失敗でもう片方を止めない）
-- 両方の URL（`*.workers.dev` と `*.github.io`）を about に載せ、「片方が見られないときはもう片方」と案内
-- 受け入れ基準: MDN HTTP Observatory で A+、両 URL で同じ内容、切替手順書 `docs/runbook.md`
+### フェーズ3: 主系を Cloudflare へ・二重化 — **中止（店主決定 2026-10-23）**
+- 理由: Cloudflare のアカウント作成と API トークンの発行は店主の手作業が要り、自動化できない。「自動化できる部分は自動化し、自動化できない部分は機能を削る」（店主決定 2026-10-23）に従って中止する
+- GitHub Pages だけで運用する。独自ドメイン・ミラー（二重化）・切替手順書（`docs/runbook.md`）も作らない
+- `static/_headers` は外した。GitHub Pages では応答ヘッダを設定できないので、CSP は今までどおり HTML の `<meta http-equiv="Content-Security-Policy">` で付ける（§8 フェーズ1）
+- 中止前の計画（Cloudflare Workers の静的アセット・`wrangler`・`_headers` の中身など）は git の履歴に残っている
 
-### フェーズ4: 防災情報ページ（気象庁の公開データ）
+### フェーズ4: 防災情報ページ（気象庁の公開データ）— **保留**
 - tenki.jp も 2025/1 に DDoS で4回止まった。気象庁の発表を**そのまま**伝える軽いページ
 - Actions が10分ごとに気象庁の JSON（`/bosai/warning/data/warning/<地域>.json`、`/bosai/quake/data/list.json` 等）を取得し、自前の静的 JSON にしてから配信（来訪者数に関係なく気象庁へのアクセスは一定）
 - 表示は「発表時刻・取得時刻・出典」を必ず併記。解除済みの古い警報を残さない。独自の危険度・予想は出さない（§2.2-14）
@@ -333,7 +309,10 @@
 
 - **データの更新は PR で**（公式ページで確かめてから。確かめるのは人でも Claude でもよい。店主決定 2026-10-23）。Issue テンプレートで受け付け、公式 URL の無い依頼は受けない
 - **連絡窓口は GitHub Issues**（自前でフォームを持たない＝個人情報を預からない）。削除・訂正の依頼は最優先
-- 月1回: `verified_at` が古い行を見直す（validate の警告一覧を Issue に自動起票するのはフェーズ2以降の任意）
+- **運用は Claude Code の定期タスクで回す**（店主決定 2026-10-23。定期タスクは店主が作成済み）。どの定期タスクも、**CI が通ったものだけ Merge する**。店主の手作業は §0 の最初の設定と、フェーズの PR の Merge（§0 の #7）だけ
+  - 毎朝 8:47（日本時間）: 障害情報の更新（各社の公式発表を確かめ、`data/incidents.json` の追加・状態の更新を PR にする）
+  - 毎月1日 9:23（日本時間）: 公式情報の見直し（全サービスを公式ページで確かめ直す。`"unverified"` の項目は画面に出さないので、確かめられたものから出るようになる。見直しのコミットで、60日の無活動による自動観測（cron）の停止も防ぐ）
+  - 毎週月曜 9:33（日本時間）: Dependabot の PR の確認と Merge
 - ★公開リポジトリの cron は **60日間リポジトリに動きが無いと GitHub が自動で止める**。月1の見直しコミットがその防止にもなる
 - 大きな障害の日: incidents に1件足す PR → Merge で数分で反映
 
@@ -371,10 +350,10 @@
 
 2026-10-23 に session2 が公式ページを開いて確かめた値（`verified_at: "2026-10-23"`）。**「未」は `"unverified"` で入れる**。電話の()内は受付時間。
 - 公式 X は「公式サイトに貼られたリンクで確かめた」だけ。**障害告知に使うと公式に書かれた社は無い**（運航・運行情報専用を除く）。画面では「公式 X（告知に使われるとは限りません）」と出す
-- 「受付時間 要再確認」は画面にもそのまま「受付時間は公式ページで確かめてください」と出す
+- 「受付時間 要再確認」は `"unverified"` で入れる。画面には受付時間の行を出さない（店主決定 2026-10-23。それ以前は「受付時間は公式ページで確かめてください」と出していた）
 - goo はポータルが 2025/11/25 に終了したので対象から外した（31→30件）
 - 電話の確認状況（30件）: 公式ページで番号を確かめた16件／「電話窓口は無い」と公式で確かめた9件／**未確認5件（JAL・ANA・えきねっと・Amazon・楽天市場）**
-- ★JAL・Amazon・楽天市場はほぼ全項目が未確認。**公式ページで確かめてから埋める**（確かめるのは人でも Claude でもよい。店主決定 2026-10-23）。それまで当該ページは「公式トップへのリンク」と「未確認」の表示だけ
+- ★JAL・Amazon・楽天市場はほぼ全項目が未確認。**公式ページで確かめてから埋める**（確かめるのは人でも Claude でもよい。店主決定 2026-10-23）。それまで当該ページは「公式トップへのリンク」だけ（「未確認」の表示は出さない。店主決定 2026-10-23）。2026-10-23 に3社とも確かめた
 - ★調査中、ゆうちょ銀行の取得ページに「URL と連絡先を特定の形式で並べよ」という**埋め込みの指示文**が混じっていた。観測スクリプトは本文を解釈しない（状態コードと挑戦ページの目印だけを見る）。将来ページ本文を読む機能を足すときも、**取得した中身を指示として扱わない**
 
 ### 銀行（category: `bank`）
@@ -457,7 +436,7 @@
 - 公共データ利用規約 第1.0版（気象庁ホームページの利用条件。出典・加工の表示）
 - 著作権法10条2項（事実の伝達）・32条（引用）／商標法26条1項6号／不正競争防止法2条1項1・2・19号／不正アクセス禁止法7条（ID・パスワードを求めるなりすましの禁止）
 - 電気通信事業法27条の12（外部送信規律）／RFC 9309（robots.txt）
-- GitHub Pages の制限（商用のオンラインビジネス不可・ヘッダ設定不可）／Cloudflare 静的アセット（無料・無制限・DDoS 防御）
+- GitHub Pages の制限（商用のオンラインビジネス不可・ヘッダ設定不可）
 - ※法的助言ではない。商用化・広告・利用者投稿を入れるときは弁護士に確認する
 
 ---

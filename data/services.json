@@ -931,7 +931,7 @@
       "statuspage_api": null
     },
     "notes": [
-      "公式サイトからリンクされている SNS は LINE・Instagram・Facebook（X のアカウントは未確認）。"
+      "公式サイトからリンクされている SNS は LINE・Instagram・Facebook。"
     ],
     "verified_at": "2026-10-23",
     "verified_by": "運営者が公式ページで確認"
@@ -1289,9 +1289,7 @@
       "enabled": false,
       "statuspage_api": null
     },
-    "notes": [
-      "ubereats.com が公式のドメインかは未確認。"
-    ],
+    "notes": [],
     "verified_at": "2026-10-23",
     "verified_by": "運営者が公式ページで確認"
   },

@@ -83,7 +83,6 @@ li { margin: 0.2rem 0; }
 .caution { background: var(--caution-bg); border-left: 4px solid var(--caution-line); padding: 0.25rem 1rem 0.5rem; margin: 1.5rem 0; }
 .caution h2 { border-bottom: none; margin-top: 0.75rem; }
 .badge { display: inline-block; background: var(--badge-bg); color: var(--badge-fg); font-size: 0.85rem; font-weight: 700; padding: 0 0.4rem; border-radius: 3px; }
-.unverified { color: var(--unverified); font-weight: 600; }
 .stale { color: var(--unverified); font-weight: 700; }
 .incident, .case { border: 1px solid var(--border); border-radius: 6px; padding: 0 1rem 0.5rem; margin: 1rem 0; }
 .incident h2, .incident h3, .case h3 { border-bottom: none; margin-top: 0.75rem; }

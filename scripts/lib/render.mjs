@@ -45,21 +45,19 @@ export class Ctx {
   }
 }
 
-function unverified(text = '未確認') {
-  return html`<span class="unverified">${text}</span>`;
-}
-
+// 未確認（"unverified"）の項目は画面に出さない（店主決定 2026-10-23）。
+// データには "unverified" のまま残し、月1の見直しで確かめられたら出る。
 function verifiedDate(ctx, date) {
-  if (date === UNVERIFIED) return html`確認日: ${unverified()}`;
+  if (date === UNVERIFIED) return '';
   const stale = daysBetween(date, ctx.today) > STALE_DAYS;
   return html`確認日: ${date}${stale ? html` <span class="stale">要再確認（確認から${STALE_DAYS}日を過ぎています）</span>` : ''}`;
 }
 
+// 開けなかったページ（verified: false）は呼ぶ側で外す。公式トップだけは開けなくてもリンクを出すが、
+// 「開けなかった」のような確認できなかったことを示す注記は出さない（店主決定 2026-10-23）
 function linkItem(ctx, link, fallbackLabel) {
-  const notes = [];
-  if (!link.verified) notes.push(html`${unverified('このページは未確認')}`);
-  if (link.note) notes.push(link.note);
-  return html`<li>${ctx.ext(link.url, link.label ?? fallbackLabel)}${notes.length ? html`<span class="note">${notes.map((n, i) => html`${i ? '。' : ''}${n}`)}</span>` : ''}</li>`;
+  const note = link.verified ? link.note : null;
+  return html`<li>${ctx.ext(link.url, link.label ?? fallbackLabel)}${note ? html`<span class="note">${note}</span>` : ''}</li>`;
 }
 
 function domainText(entry) {
@@ -279,35 +277,36 @@ ${inner}
 
 function noticesSection(ctx, s) {
   let inner;
-  if (s.official_notices === UNVERIFIED) inner = html`<p>${unverified()}</p>`;
-  else if (s.official_notices === null) inner = html`<p>まとめたお知らせのページは無い（当サイトの確認）。</p>`;
-  else inner = html`<ul class="links">${s.official_notices.map((l) => linkItem(ctx, l, '公式のお知らせ'))}</ul>`;
+  if (s.official_notices === UNVERIFIED) return '';
+  if (s.official_notices === null) inner = html`<p>まとめたお知らせのページは無い（当サイトの確認）。</p>`;
+  else {
+    const links = s.official_notices.filter((l) => l.verified);
+    if (!links.length) return '';
+    inner = html`<ul class="links">${links.map((l) => linkItem(ctx, l, '公式のお知らせ'))}</ul>`;
+  }
   return html`<section aria-labelledby="notices"><h2 id="notices">まず見る: 公式のお知らせ</h2>${inner}</section>`;
 }
 
 function phoneDeskText(s) {
   if (s.phone_desk === 'none') return html`<p>電話の窓口は無い（公式のページで確認）。</p>`;
-  if (s.phone_desk === UNVERIFIED) return html`<p>電話の窓口: ${unverified()}</p>`;
   return '';
 }
 
 function alternativesSection(ctx, s) {
-  let inner;
-  if (s.official_alternatives === UNVERIFIED) {
-    inner = html`<p>${unverified()}</p>`;
-  } else {
-    inner = html`${s.official_alternatives.length ? html`<ul class="alts">${s.official_alternatives.map((a) => html`<li>
+  const alts = s.official_alternatives === UNVERIFIED ? [] : s.official_alternatives;
+  const phoneDesk = phoneDeskText(s);
+  if (!alts.length && !phoneDesk) return '';
+  const inner = html`${alts.length ? html`<ul class="alts">${alts.map((a) => html`<li>
 <p class="alt-label">${a.label}</p>
 ${a.detail ? html`<p>${a.detail}</p>` : ''}
 ${a.phones.length ? html`<ul class="phones">${a.phones.map((p) => html`<li><span class="phone">${p.number}</span>${p.note ? html`（${p.note}）` : ''}</li>`)}</ul>
-<p class="sub">${a.hours === UNVERIFIED ? '受付時間は公式ページで確かめてください' : `受付時間: ${a.hours}`}</p>` : ''}
+${a.hours === UNVERIFIED ? '' : html`<p class="sub">受付時間: ${a.hours}</p>`}` : ''}
 ${a.url ? html`<p class="sub">${a.phones.length ? '根拠のページ: ' : ''}${ctx.ext(a.url, a.phones.length ? '公式のページを開く' : `${a.label}の公式のページ`)}</p>` : ''}
 </li>`)}</ul>` : ''}`;
-  }
   return html`<section aria-labelledby="alts"><h2 id="alts">公式の代わりの窓口</h2>
 <p class="sub">会社が公表している代わりの手段だけを載せています。</p>
 ${inner}
-${phoneDeskText(s)}
+${phoneDesk}
 </section>`;
 }
 
@@ -321,10 +320,15 @@ function generalSection(ctx, s) {
 </section>`;
 }
 
+function topLink(ctx, s) {
+  return s.official_top === UNVERIFIED ? '' : html`<ul class="links">${linkItem(ctx, s.official_top, `${s.name}の公式トップ`)}</ul>`;
+}
+
 function siteSection(ctx, s) {
-  const top = s.official_top === UNVERIFIED ? html`<p>公式トップ: ${unverified()}</p>` : html`<ul class="links">${linkItem(ctx, s.official_top, `${s.name}の公式トップ`)}</ul>`;
+  const top = topLink(ctx, s);
+  if (!top && s.official_x === UNVERIFIED) return '';
   let x;
-  if (s.official_x === UNVERIFIED) x = html`${unverified()}`;
+  if (s.official_x === UNVERIFIED) x = null;
   else if (s.official_x === null) x = html`無い（当サイトの確認）`;
   else {
     const { handle, note, source_url: src } = s.official_x;
@@ -332,14 +336,14 @@ function siteSection(ctx, s) {
   }
   return html`<section aria-labelledby="site"><h2 id="site">公式のサイトと公式 X</h2>
 ${top}
-<p>公式 X（告知に使われるとは限りません）: ${x}</p>
+${x ? html`<p>公式 X（告知に使われるとは限りません）: ${x}</p>` : ''}
 ${s.official_x && s.official_x !== UNVERIFIED ? html`<p class="sub">公式サイトに貼られたリンクで確かめたアカウントです。X へのリンクは張っていません。</p>` : ''}
 </section>`;
 }
 
 function domainsSection(ctx, s) {
   const domains = s.official_domains === UNVERIFIED || s.mostly_unverified
-    ? html`<p>当サイトが確認した公式ドメイン: ${unverified()}</p>`
+    ? ''
     : html`<p>当サイトが確認した公式ドメイン（${verifiedDate(ctx, s.verified_at)}）</p><ul>${s.official_domains.map((d) => html`<li>${domainText(d)}</li>`)}</ul>`;
   return html`<aside class="caution" aria-labelledby="fake"><h2 id="fake">偽サイトに注意</h2>
 <p>障害に便乗した「代わりのサイト」の SMS・メールのリンクは開かないでください。アドレスが公式ドメインで終わっているかを確かめてください。</p>
@@ -371,17 +375,16 @@ ${incidents.map((i) => incidentCard(ctx, i, { headingLevel: 2, showService: fals
   const checked = html`<section aria-labelledby="checked"><h2 id="checked">このページの情報の確認</h2>
 <p>${verifiedDate(ctx, s.verified_at)}</p>
 <p class="sub">確かめ方: ${s.verified_by}</p>
-<p>運営会社の正式な名称: ${s.operator === UNVERIFIED ? unverified() : s.operator}</p>
+${s.operator === UNVERIFIED ? '' : html`<p>運営会社の正式な名称: ${s.operator}</p>`}
 <p>誤り・古い情報は「<a href="${ctx.href('about/')}">このサイトについて</a>」の連絡先からお知らせください。</p>
 </section>`;
 
   let body;
   if (s.mostly_unverified) {
-    const top = s.official_top === UNVERIFIED ? html`<p>公式トップ: ${unverified()}</p>` : html`<ul class="links">${linkItem(ctx, s.official_top, `${s.name}の公式トップ`)}</ul>`;
+    const top = topLink(ctx, s);
     body = html`${intro}
-<div class="caution"><p>このサービスの情報は、まだ大部分を確かめていません。確かめるまでは、公式トップへのリンクと「未確認」の表示だけを載せています。</p></div>
-<section aria-labelledby="site"><h2 id="site">公式のサイト</h2>${top}
-<p>公式のお知らせ・公式の代わりの窓口・電話の窓口・公式ドメイン: ${unverified()}</p></section>
+<div class="caution"><p>このサービスの情報は、まだ大部分を確かめていません。確かめるまでは、公式トップへのリンクだけを載せています。</p></div>
+${top ? html`<section aria-labelledby="site"><h2 id="site">公式のサイト</h2>${top}</section>` : ''}
 ${observationSection(ctx, s)}
 <p><a href="${ctx.href('phishing/')}">偽サイト・偽 SMS に注意</a></p>
 ${checked}`;
@@ -438,11 +441,10 @@ function generated(ctx, name, page) {
     case 'official-domains':
       return html`<p class="sub">各社のページで公式ドメインの一覧が公表されていれば、そちらが正です。サブドメイン（<code>www.</code> などが前に付いたもの）も公式です。</p>
 ${data.categories.map((cat) => {
-        const list = data.services.filter((s) => s.category === cat.id);
+        // 公式ドメインを確かめたサービスだけを載せる
+        const list = data.services.filter((s) => s.category === cat.id && s.official_domains !== UNVERIFIED && !s.mostly_unverified);
         if (!list.length) return '';
-        return html`<h3>${cat.name}</h3><ul class="domains">${list.map((s) => html`<li><a href="${ctx.href(`s/${s.id}/`)}">${s.name}</a>: ${s.official_domains === UNVERIFIED || s.mostly_unverified
-          ? unverified()
-          : html`${s.official_domains.map((d, i) => html`${i ? '、' : ''}${domainText(d)}`)}<span class="note">${verifiedDate(ctx, s.verified_at)}</span>`}</li>`)}</ul>`;
+        return html`<h3>${cat.name}</h3><ul class="domains">${list.map((s) => html`<li><a href="${ctx.href(`s/${s.id}/`)}">${s.name}</a>: ${s.official_domains.map((d, i) => html`${i ? '、' : ''}${domainText(d)}`)}<span class="note">${verifiedDate(ctx, s.verified_at)}</span></li>`)}</ul>`;
       })}`;
     case 'not-official': {
       const items = data.services.flatMap((s) => s.not_official.map((n) => ({ s, n })));
@@ -454,7 +456,7 @@ ${data.categories.map((cat) => {
 <p class="alt-label">${p.name}${p.phone ? html` <span class="phone">${p.phone}</span>` : ''}</p>
 <p>${p.detail}</p>
 ${p.url ? html`<p class="sub">${p.phone ? '根拠のページ: ' : ''}${ctx.ext(p.url, p.phone ? '案内のページを開く' : `${p.name}のサイト`)}</p>` : ''}
-<p class="sub">${p.phone || p.url ? '' : '連絡先は当サイトでは未確認のため載せていません。'}${verifiedDate(ctx, p.verified_at)}</p>
+${p.verified_at === UNVERIFIED ? '' : html`<p class="sub">${verifiedDate(ctx, p.verified_at)}</p>`}
 </li>`)}</ul>`;
     case 'monitored': {
       const list = data.services.filter((s) => s.monitor.enabled);
