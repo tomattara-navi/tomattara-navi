@@ -83,7 +83,7 @@
       "アプリへのリンク先の onelink.me は自社のドメインではないため、公式ドメインの一覧には入れていない。"
     ],
     "verified_at": "2026-10-23",
-    "verified_by": "session2 調査（公式ページで確認）"
+    "verified_by": "運営者が公式ページで確認"
   },
   {
     "id": "smbc",
@@ -154,7 +154,7 @@
     },
     "notes": [],
     "verified_at": "2026-10-23",
-    "verified_by": "session2 調査（公式ページで確認）"
+    "verified_by": "運営者が公式ページで確認"
   },
   {
     "id": "mizuho",
@@ -228,7 +228,7 @@
       "定例のメンテナンスは毎週土曜22時〜日曜8時。"
     ],
     "verified_at": "2026-10-23",
-    "verified_by": "session2 調査（公式ページで確認）"
+    "verified_by": "運営者が公式ページで確認"
   },
   {
     "id": "resona",
@@ -302,7 +302,7 @@
       "マイゲート（インターネットバンキング）は www2.resona-gr.co.jp にある。"
     ],
     "verified_at": "2026-10-23",
-    "verified_by": "session2 調査（公式ページで確認）"
+    "verified_by": "運営者が公式ページで確認"
   },
   {
     "id": "rakutenbank",
@@ -377,7 +377,7 @@
       "よくある質問は help-personal.rakuten-bank.net にある。"
     ],
     "verified_at": "2026-10-23",
-    "verified_by": "session2 調査（公式ページで確認）"
+    "verified_by": "運営者が公式ページで確認"
   },
   {
     "id": "yuchobank",
@@ -460,7 +460,7 @@
     },
     "notes": [],
     "verified_at": "2026-10-23",
-    "verified_by": "session2 調査（公式ページで確認）"
+    "verified_by": "運営者が公式ページで確認"
   },
   {
     "id": "jal",
@@ -489,7 +489,7 @@
     },
     "notes": [],
     "verified_at": "2026-10-23",
-    "verified_by": "session2 調査（公式ページで確認）"
+    "verified_by": "運営者が公式ページで確認"
   },
   {
     "id": "ana",
@@ -529,7 +529,7 @@
     },
     "notes": [],
     "verified_at": "2026-10-23",
-    "verified_by": "session2 調査（公式ページで確認）"
+    "verified_by": "運営者が公式ページで確認"
   },
   {
     "id": "ekinet",
@@ -588,7 +588,7 @@
       "よくある質問は委託先の secure.okbiz.jp/eki-net/ にある（当サイトはこのパスの下だけを公式として扱う）。"
     ],
     "verified_at": "2026-10-23",
-    "verified_by": "session2 調査（公式ページで確認）"
+    "verified_by": "運営者が公式ページで確認"
   },
   {
     "id": "e5489",
@@ -669,7 +669,7 @@
     },
     "notes": [],
     "verified_at": "2026-10-23",
-    "verified_by": "session2 調査（公式ページで確認）"
+    "verified_by": "運営者が公式ページで確認"
   },
   {
     "id": "smartex",
@@ -747,7 +747,7 @@
     },
     "notes": [],
     "verified_at": "2026-10-23",
-    "verified_by": "session2 調査（公式ページで確認）"
+    "verified_by": "運営者が公式ページで確認"
   },
   {
     "id": "yamato",
@@ -822,7 +822,7 @@
     },
     "notes": [],
     "verified_at": "2026-10-23",
-    "verified_by": "session2 調査（公式ページで確認）"
+    "verified_by": "運営者が公式ページで確認"
   },
   {
     "id": "sagawa",
@@ -886,7 +886,7 @@
       "公式サイトからリンクされている SNS は LINE・Instagram・Facebook（X のアカウントは未確認）。"
     ],
     "verified_at": "2026-10-23",
-    "verified_by": "session2 調査（公式ページで確認）"
+    "verified_by": "運営者が公式ページで確認"
   },
   {
     "id": "japanpost",
@@ -967,7 +967,7 @@
     },
     "notes": [],
     "verified_at": "2026-10-23",
-    "verified_by": "session2 調査（公式ページで確認）"
+    "verified_by": "運営者が公式ページで確認"
   },
   {
     "id": "amazon",
@@ -1007,7 +1007,7 @@
     },
     "notes": [],
     "verified_at": "2026-10-23",
-    "verified_by": "session2 調査（公式ページで確認）"
+    "verified_by": "運営者が公式ページで確認"
   },
   {
     "id": "rakutenichiba",
@@ -1051,7 +1051,7 @@
     },
     "notes": [],
     "verified_at": "2026-10-23",
-    "verified_by": "session2 調査（公式ページで確認）"
+    "verified_by": "運営者が公式ページで確認"
   },
   {
     "id": "yahooshopping",
@@ -1109,7 +1109,7 @@
       "ログインのページは login.yahoo.co.jp にある。"
     ],
     "verified_at": "2026-10-23",
-    "verified_by": "session2 調査（公式ページで確認）"
+    "verified_by": "運営者が公式ページで確認"
   },
   {
     "id": "demaecan",
@@ -1164,7 +1164,7 @@
     },
     "notes": [],
     "verified_at": "2026-10-23",
-    "verified_by": "session2 調査（公式ページで確認）"
+    "verified_by": "運営者が公式ページで確認"
   },
   {
     "id": "ubereats",
@@ -1213,7 +1213,7 @@
       "ubereats.com が公式のドメインかは未確認。"
     ],
     "verified_at": "2026-10-23",
-    "verified_by": "session2 調査（公式ページで確認）"
+    "verified_by": "運営者が公式ページで確認"
   },
   {
     "id": "docomo",
@@ -1304,7 +1304,7 @@
     },
     "notes": [],
     "verified_at": "2026-10-23",
-    "verified_by": "session2 調査（公式ページで確認）"
+    "verified_by": "運営者が公式ページで確認"
   },
   {
     "id": "au",
@@ -1390,7 +1390,7 @@
     },
     "notes": [],
     "verified_at": "2026-10-23",
-    "verified_by": "session2 調査（公式ページで確認）"
+    "verified_by": "運営者が公式ページで確認"
   },
   {
     "id": "softbank",
@@ -1469,7 +1469,7 @@
     },
     "notes": [],
     "verified_at": "2026-10-23",
-    "verified_by": "session2 調査（公式ページで確認）"
+    "verified_by": "運営者が公式ページで確認"
   },
   {
     "id": "rakutenmobile",
@@ -1556,7 +1556,7 @@
     },
     "notes": [],
     "verified_at": "2026-10-23",
-    "verified_by": "session2 調査（公式ページで確認）"
+    "verified_by": "運営者が公式ページで確認"
   },
   {
     "id": "yahoo",
@@ -1595,7 +1595,7 @@
       "全体のお知らせの一覧は無く、お知らせはサービスごとに分かれている。"
     ],
     "verified_at": "2026-10-23",
-    "verified_by": "session2 調査（公式ページで確認）"
+    "verified_by": "運営者が公式ページで確認"
   },
   {
     "id": "tenkijp",
@@ -1645,7 +1645,7 @@
       "よくある質問は委託先の tenkijp.tayori.com にある（当サイトはこのパスの下だけを公式として扱う）。"
     ],
     "verified_at": "2026-10-23",
-    "verified_by": "session2 調査（公式ページで確認）"
+    "verified_by": "運営者が公式ページで確認"
   },
   {
     "id": "weathernews",
@@ -1694,7 +1694,7 @@
       "個人向けの電話の窓口は無い。"
     ],
     "verified_at": "2026-10-23",
-    "verified_by": "session2 調査（公式ページで確認）"
+    "verified_by": "運営者が公式ページで確認"
   },
   {
     "id": "mynaportal",
@@ -1767,7 +1767,7 @@
     },
     "notes": [],
     "verified_at": "2026-10-23",
-    "verified_by": "session2 調査（公式ページで確認）"
+    "verified_by": "運営者が公式ページで確認"
   },
   {
     "id": "etax",
@@ -1839,7 +1839,7 @@
     },
     "notes": [],
     "verified_at": "2026-10-23",
-    "verified_by": "session2 調査（公式ページで確認）"
+    "verified_by": "運営者が公式ページで確認"
   },
   {
     "id": "cmoa",
@@ -1883,7 +1883,7 @@
       "cmoa.jp が公式のドメインかを当サイトでまだ確かめていないため、公式ドメインの一覧には運営会社の nttsolmare.com だけを載せている。"
     ],
     "verified_at": "2026-10-23",
-    "verified_by": "session2 調査（公式ページで確認）"
+    "verified_by": "運営者が公式ページで確認"
   },
   {
     "id": "niconico",
@@ -1930,6 +1930,6 @@
     },
     "notes": [],
     "verified_at": "2026-10-23",
-    "verified_by": "session2 調査（公式ページで確認）"
+    "verified_by": "運営者が公式ページで確認"
   }
 ]
