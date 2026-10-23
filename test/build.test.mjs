@@ -219,15 +219,45 @@ test('復旧から30日を過ぎた登録はトップから外れ、過去の事
   assert.ok(past.includes('ポータルがつながりにくい'));
 });
 
-test('「未確認」と「無い」を区別して表示する', () => {
+test('未確認（"unverified"）の項目は行ごと出さず、「無い」は出す（店主決定 2026-10-23）', () => {
   const page = (id) => site.htmlFiles.find((f) => f.file === join('s', id, 'index.html')).text;
-  assert.match(page('ana'), /電話の窓口: <span class="unverified">未確認<\/span>/);
+  const svc = (id) => site.data.services.find((s) => s.id === id);
+  // ANA: お知らせ・代わりの窓口・電話がすべて未確認 → その欄ごと出さない。公式トップ・公式ドメインは出す
+  assert.ok(!page('ana').includes('id="notices"') && !page('ana').includes('id="alts"') && !page('ana').includes('電話の窓口'));
+  assert.ok(page('ana').includes('href="https://www.ana.co.jp/"') && page('ana').includes('<code>ana.co.jp</code>'));
+  // 三井住友: 電話番号は出し、未確認の受付時間は出さない
+  assert.equal(svc('smbc').official_alternatives[0].hours, 'unverified');
+  assert.ok(page('smbc').includes('<span class="phone">0120-324-310</span>') && !page('smbc').includes('受付時間'));
+  // 運営会社名・公式 X が未確認なら、その行を出さない
+  assert.equal(svc('jal').operator, 'unverified');
+  assert.ok(!page('jal').includes('運営会社の正式な名称'));
+  assert.ok(page('mufg').includes('運営会社の正式な名称: 株式会社三菱UFJ銀行'));
+  assert.equal(svc('sagawa').official_x, 'unverified');
+  assert.ok(!page('sagawa').includes('公式 X（'));
+  // 開けなかったページ（verified: false）は出さない。公式トップだけは出す
+  assert.ok(!page('mizuho').includes('https://www.mizuhobank.co.jp/retail/products/direct/'));
+  assert.ok(page('mizuho').includes('href="https://www.mizuhobank.co.jp/"'));
+  // 「無い」と確かめたものは出す
   assert.match(page('sagawa'), /電話の窓口は無い（公式のページで確認）/);
-  assert.match(page('smbc'), /受付時間は公式ページで確かめてください/);
   assert.match(page('amazon'), /まとめたお知らせのページは無い（当サイトの確認）/);
 });
 
-test('「大部分が未確認」のサービスのページは、公式トップと「未確認」の表示だけ', () => {
+test('公開ページに「未確認」の表示が出ない', () => {
+  const unverifiedAll = buildInto((d) => {
+    d.services.find((s) => s.id === 'jal').mostly_unverified = true;
+    d.consultation[0].verified_at = 'unverified';
+  });
+  for (const { files, outDir } of [site, withIncidents, buildInto(), unverifiedAll]) {
+    for (const f of files.filter((p) => /\.(html|xml|txt|json)$/.test(p))) {
+      const text = readFileSync(f, 'utf8');
+      assert.ok(!text.includes('未確認'), `${relative(outDir, f)} に「未確認」があります`);
+      assert.ok(!text.includes('受付時間は公式ページで確かめてください'), relative(outDir, f));
+      assert.ok(!text.includes('class="unverified"'), relative(outDir, f));
+    }
+  }
+});
+
+test('「大部分が未確認」のサービスのページは、公式トップへのリンクだけ', () => {
   const { htmlFiles } = buildInto((d) => { d.incidents = []; d.services.find((s) => s.id === 'jal').mostly_unverified = true; });
   const text = htmlFiles.find((f) => f.file === join('s', 'jal', 'index.html')).text;
   assert.match(text, /大部分を確かめていません/);

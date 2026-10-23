@@ -192,6 +192,16 @@ async function main() {
       expect: 'fail',
       apply: (d) => replaceOnce(d, 'scripts/lib/status.mjs', "const REFUSED_CODES = new Set(['ECONNREFUSED']);", "const REFUSED_CODES = new Set(['ECONNREFUSED', 'ECONNRESET']);"),
     },
+    {
+      name: '23. 未確認の運営会社名を「未確認」と出す（変更前の動き）',
+      expect: 'fail',
+      apply: (d) => replaceOnce(d, 'scripts/lib/render.mjs', "${s.operator === UNVERIFIED ? '' : html`<p>運営会社の正式な名称: ${s.operator}</p>`}", "<p>運営会社の正式な名称: ${s.operator === UNVERIFIED ? '未確認' : s.operator}</p>"),
+    },
+    {
+      name: '24. 未確認の受付時間の案内を戻す（変更前の動き）',
+      expect: 'fail',
+      apply: (d) => replaceOnce(d, 'scripts/lib/render.mjs', "${a.hours === UNVERIFIED ? '' : html`<p class=\"sub\">受付時間: ${a.hours}</p>`}", "<p class=\"sub\">${a.hours === UNVERIFIED ? '受付時間は公式ページで確かめてください' : `受付時間: ${a.hours}`}</p>"),
+    },
   ];
 
   let bad = 0;
