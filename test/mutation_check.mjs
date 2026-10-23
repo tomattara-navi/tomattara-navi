@@ -98,6 +98,11 @@ async function main() {
       // このファイル自体が個人名の試験に当たらないよう、つないで作る
       apply: (d) => replaceOnce(d, 'README.md', 'https://tomattara-navi.github.io/tomattara-navi/', `https://${['ueda', 'takashi'].join('')}.github.io/tomattara-navi/`),
     },
+    {
+      name: '7. Search Console の確認用 meta を全ページに出す',
+      expect: 'fail',
+      apply: (d) => replaceOnce(d, 'scripts/lib/render.mjs', "${page.path === '' && site.google_site_verification ?", '${site.google_site_verification ?'),
+    },
   ];
 
   let bad = 0;

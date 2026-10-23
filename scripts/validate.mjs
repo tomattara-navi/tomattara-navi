@@ -8,6 +8,7 @@ import { isValidDate, isValidDateTime, daysBetween, jstDate } from './lib/time.m
 
 export const UNVERIFIED = 'unverified';
 export const STALE_DAYS = 180;
+export const GOOGLE_SITE_VERIFICATION_RE = /^[A-Za-z0-9_-]{20,100}$/;
 
 const SERVICE_KEYS = [
   'id', 'name', 'operator', 'category', 'mostly_unverified', 'official_domains', 'official_top',
@@ -352,10 +353,15 @@ export function validate(data, { today = jstDate(new Date()) } = {}) {
 
   // site
   if (c.isObject('site', data.site)) {
-    c.keys('site', data.site, ['name', 'url', 'description']);
+    c.keys('site', data.site, ['name', 'url', 'google_site_verification', 'description']);
     if (c.string('site.name', data.site.name)) c.officialWord('site.name', data.site.name);
     if (!parseHttpsUrl(data.site.url) || !data.site.url.endsWith('/')) c.error('site.url', 'https: で始まり / で終わる URL にしてください');
     c.string('site.description', data.site.description);
+    // Google Search Console の所有者の確認（トップの <head> に meta で出す。使わないなら null）
+    const gsv = data.site.google_site_verification;
+    if (gsv !== null && !(typeof gsv === 'string' && GOOGLE_SITE_VERIFICATION_RE.test(gsv))) {
+      c.error('site.google_site_verification', 'Search Console の確認コード（英数字・_・- だけ）か null にしてください');
+    }
   }
 
   // content（固定ページ）
