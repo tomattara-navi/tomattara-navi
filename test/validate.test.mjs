@@ -164,3 +164,18 @@ test('相談先のリンクは data/links.json の domains に一致するもの
   expectOk(data((d) => { d.consultation[0].url = null; }));
   expectError(data((d) => { d.consultation[0].url = 'https://example.com/'; }), /consultation\[police\]\.url: .* data\/links\.json の domains/);
 });
+
+test('past_cases の incident_id', () => {
+  const pc = (d) => d.past_cases.find((x) => x.id === '2026-09-sagawa');
+  expectOk(data((d) => { pc(d).incident_id = null; }));
+  expectError(data((d) => { pc(d).incident_id = '2026-10-15-cmoa'; }), /2026-09-sagawa\]\.incident_id: .*サービス "cmoa" が service_ids にありません/);
+  const { errors, warnings } = validate(data((d) => { d.incidents = []; }), { today: TODAY });
+  assert.deepEqual(errors, [], '登録が無くなっても失敗にはしない');
+  assert.ok(warnings.some((w) => /2026-09-sagawa\]\.incident_id: data\/incidents\.json に無い id/.test(w)));
+});
+
+test('account.rakuten.com だけを許可し、rakuten.com の他のホストは許可しない', () => {
+  const r = (d) => svc(d, 'rakutenichiba');
+  expectOk(data((d) => { r(d).official_alternatives[0].url = 'https://account.rakuten.com/'; }));
+  expectError(data((d) => { r(d).official_alternatives[0].url = 'https://www.rakuten.com/'; }), /rakutenichiba\]\.official_alternatives\[0\]\.url/);
+});

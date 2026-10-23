@@ -347,7 +347,14 @@ function checkIncident(c, inc, ctx) {
 function checkPastCase(c, pc, ctx) {
   const w = `past_cases[${pc?.id ?? '?'}]`;
   if (!c.isObject(w, pc)) return;
-  c.keys(w, pc, ['id', 'service_ids', 'name', 'period', 'cause', 'summary', 'alternatives_used', 'sources']);
+  c.keys(w, pc, ['id', 'service_ids', 'incident_id', 'name', 'period', 'cause', 'summary', 'alternatives_used', 'sources']);
+  // 同じ件の公式の登録。登録が無くなっても失敗にはしない（警告だけ。サービスのページに報道の事例が戻る）
+  if (pc.incident_id !== null) {
+    c.id(`${w}.incident_id`, pc.incident_id);
+    const inc = ctx.incidents.get(pc.incident_id);
+    if (!inc) c.warn(`${w}.incident_id`, `data/incidents.json に無い id "${pc.incident_id}"（サービスのページにこの報道の事例を出します）`);
+    else if (Array.isArray(pc.service_ids) && !pc.service_ids.includes(inc.service_id)) c.error(`${w}.incident_id`, `"${pc.incident_id}" のサービス "${inc.service_id}" が service_ids にありません`);
+  }
   c.id(`${w}.id`, pc.id);
   const allowed = new Map();
   if (!Array.isArray(pc.service_ids)) c.error(`${w}.service_ids`, '配列にしてください（無ければ []）');
@@ -436,7 +443,8 @@ export function validate(data, { today = jstDate(new Date()) } = {}) {
   if (!Array.isArray(data.services)) c.error('services', '配列にしてください');
   c.uniqueIds('services', data.services);
   const services = new Map(data.services.filter((s) => s && s.id).map((s) => [s.id, s]));
-  const ctx = { today, categoryIds, linkIds, services };
+  const incidents = new Map((Array.isArray(data.incidents) ? data.incidents : []).filter((i) => i && i.id).map((i) => [i.id, i]));
+  const ctx = { today, categoryIds, linkIds, services, incidents };
   for (const s of data.services) checkService(c, s, ctx);
 
   // incidents

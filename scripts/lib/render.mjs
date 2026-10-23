@@ -276,7 +276,8 @@ ${s.phishing_guide ? html`<p>会社が案内している見分け方</p><ul clas
 }
 
 function pastCasesSection(ctx, s) {
-  const cases = ctx.data.past_cases.filter((pc) => pc.service_ids.includes(s.id));
+  // 同じ件を公式発表で登録しているもの（incident_id）は、ここでは出さない（「過去の事例」のページには残す）
+  const cases = ctx.data.past_cases.filter((pc) => pc.service_ids.includes(s.id) && !ctx.data.incidents.some((i) => i.id === pc.incident_id));
   if (!cases.length) return '';
   return html`<section aria-labelledby="past"><h2 id="past">報道で伝えられた事例</h2>
 <p class="sub">当サイトが公式発表を確かめて登録した障害ではありません。</p>

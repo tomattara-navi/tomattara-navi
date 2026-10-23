@@ -1075,7 +1075,7 @@
     "official_domains": [
       "rakuten.co.jp",
       "rakuten.net",
-      "rakuten.com"
+      "account.rakuten.com"
     ],
     "official_top": {
       "url": "https://www.rakuten.co.jp/",
@@ -1121,7 +1121,7 @@
       "statuspage_api": null
     },
     "notes": [
-      "rakuten.com は、楽天市場のよくある質問のページで、楽天市場からのメールの送信元として account.rakuten.com が案内されていることによる。"
+      "account.rakuten.com は、楽天市場のよくある質問のページで、楽天市場からのメールの送信元として案内されていることによる（rakuten.com 全体は公式ドメインに入れていない）。"
     ],
     "verified_at": "2026-10-23",
     "verified_by": "運営者が公式ページで確認"
@@ -1936,7 +1936,12 @@
       "nttsolmare.com",
       "cmoa.jp"
     ],
-    "official_top": "unverified",
+    "official_top": {
+      "url": "https://www.cmoa.jp/",
+      "label": null,
+      "verified": true,
+      "note": "運営会社の事業紹介のページ（nttsolmare.com/about/）からのリンクで確認"
+    },
     "official_notices": [
       {
         "url": "https://www.nttsolmare.com/press/2026/1021.html",
@@ -1967,7 +1972,7 @@
       "statuspage_api": null
     },
     "notes": [
-      "cmoa.jp は、運営会社の事業紹介のページ（nttsolmare.com）からのリンクで公式のドメインと確かめた。",
+      "cmoa.jp と公式トップは、運営会社の事業紹介のページ（https://www.nttsolmare.com/about/）からのリンクで公式のものと確かめた。",
       "公式 X の @comic_cmoa も、同じページからのリンクで確かめた。"
     ],
     "verified_at": "2026-10-23",

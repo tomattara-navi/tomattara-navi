@@ -33,7 +33,21 @@ test('「大部分が未確認」のサービスは無い（JAL・Amazon・楽�
 });
 
 test('コミックシーモアの公式ドメインは nttsolmare.com と cmoa.jp（運営会社の事業紹介のページからのリンクで確認）', () => {
-  assert.deepEqual(data.services.find((s) => s.id === 'cmoa').official_domains, ['nttsolmare.com', 'cmoa.jp']);
+  const cmoa = data.services.find((s) => s.id === 'cmoa');
+  assert.deepEqual(cmoa.official_domains, ['nttsolmare.com', 'cmoa.jp']);
+  assert.equal(cmoa.official_top.url, 'https://www.cmoa.jp/');
+  assert.ok(cmoa.official_top.verified);
+});
+
+test('楽天市場の rakuten.com は account.rakuten.com だけ（rakuten.com 全体は入れない）', () => {
+  const domains = data.services.find((s) => s.id === 'rakutenichiba').official_domains;
+  assert.ok(domains.includes('account.rakuten.com'));
+  assert.ok(!domains.includes('rakuten.com'));
+});
+
+test('公式の登録と同じ件の報道の事例は incident_id でつなぐ（佐川急便・コミックシーモア）', () => {
+  const by = Object.fromEntries(data.past_cases.filter((pc) => pc.incident_id).map((pc) => [pc.id, pc.incident_id]));
+  assert.deepEqual(by, { '2026-09-sagawa': '2026-09-30-sagawa', '2026-10-cmoa': '2026-10-15-cmoa' });
 });
 
 test('data/schema/*.schema.json は JSON として読める', () => {

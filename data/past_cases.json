@@ -2,6 +2,7 @@
   {
     "id": "2024-06-niconico",
     "service_ids": ["niconico"],
+    "incident_id": null,
     "name": "ニコニコ動画（ドワンゴ）",
     "period": "2024年6月〜8月（約2か月）",
     "cause": "ランサムウェア",
@@ -12,6 +13,7 @@
   {
     "id": "2024-12-ddos-jal-banks",
     "service_ids": ["jal", "mufg", "resona", "mizuho"],
+    "incident_id": null,
     "name": "JAL・三菱UFJ銀行・りそな銀行・みずほ銀行",
     "period": "2024年12月26日〜31日（それぞれ数時間）",
     "cause": "DDoS攻撃",
@@ -25,6 +27,7 @@
   {
     "id": "2025-01-docomo-portal",
     "service_ids": ["docomo"],
+    "incident_id": null,
     "name": "goo・dメニューニュース（ドコモ）",
     "period": "2025年1月2日（約11時間）",
     "cause": "DDoS攻撃",
@@ -35,6 +38,7 @@
   {
     "id": "2025-01-tenkijp",
     "service_ids": ["tenkijp"],
+    "incident_id": null,
     "name": "tenki.jp（日本気象協会）",
     "period": "2025年1月（4回・それぞれ数時間）",
     "cause": "DDoS攻撃",
@@ -45,6 +49,7 @@
   {
     "id": "2025-10-askul",
     "service_ids": [],
+    "incident_id": null,
     "name": "ASKUL・LOHACO（無印良品・ロフトの通販も）",
     "period": "2025年10月〜2026年1月（約3か月）",
     "cause": "ランサムウェア",
@@ -58,6 +63,7 @@
   {
     "id": "2026-09-keio",
     "service_ids": [],
+    "incident_id": null,
     "name": "京王グループの店舗の決済・ホテルの予約",
     "period": "2026年9月26日〜（順に再開）",
     "cause": "ランサムウェア",
@@ -68,6 +74,7 @@
   {
     "id": "2026-09-sagawa",
     "service_ids": ["sagawa"],
+    "incident_id": "2026-09-30-sagawa",
     "name": "佐川急便の Web サービス（荷物の追跡など）",
     "period": "2026年9月30日〜（10月9日の時点でも一部停止）",
     "cause": "不正アクセス",
@@ -78,6 +85,7 @@
   {
     "id": "2026-10-idcf",
     "service_ids": [],
+    "incident_id": null,
     "name": "IDCF クラウド（茨城県などのサイトに影響）",
     "period": "2026年10月7日〜（長期）",
     "cause": "ランサムウェア",
@@ -88,6 +96,7 @@
   {
     "id": "2026-10-rideon",
     "service_ids": [],
+    "incident_id": null,
     "name": "銀のさら・釜寅（ライドオン）",
     "period": "2026年10月7日〜（長期）",
     "cause": "ランサムウェア",
@@ -98,6 +107,7 @@
   {
     "id": "2026-10-cmoa",
     "service_ids": ["cmoa"],
+    "incident_id": "2026-10-15-cmoa",
     "name": "コミックシーモア",
     "period": "2026年10月15日〜（再開は未定）",
     "cause": "不正アクセス",
@@ -111,6 +121,7 @@
   {
     "id": "2026-10-geo",
     "service_ids": [],
+    "incident_id": null,
     "name": "ゲオ・セカンドストリートの通販・アプリ",
     "period": "2026年10月17日〜（再開は未定）",
     "cause": "不正アクセス",

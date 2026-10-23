@@ -234,6 +234,21 @@ test('いまのデータの障害の登録（佐川急便・コミックシー�
   assert.match(top, /<dt>始まり<\/dt><dd>2026-09-30<\/dd>/, '時刻が公表されていなければ日付だけ');
   const cmoa = real.htmlFiles.find((f) => f.file === join('s', 'cmoa', 'index.html')).text;
   assert.ok(cmoa.includes('info@nttsolmare.com') && !cmoa.includes('mailto:'), 'メールアドレスは文字だけ');
+  assert.ok(cmoa.includes('href="https://www.cmoa.jp/"'), 'コミックシーモアの公式トップ');
+});
+
+test('公式の登録がある同じ件の報道の事例は、サービスのページに出さず「過去の事例」のページには残す', () => {
+  const real = buildInto();
+  const page = (file) => real.htmlFiles.find((f) => f.file === file).text;
+  for (const id of ['sagawa', 'cmoa']) {
+    const text = page(join('s', id, 'index.html'));
+    assert.ok(!text.includes('報道で伝えられた事例'), `${id}: 報道の事例を出さない`);
+    assert.match(text, /<span class="badge">/, `${id}: 公式の登録は出す`);
+  }
+  const past = page(join('past', 'index.html'));
+  for (const name of real.data.past_cases.filter((pc) => pc.incident_id).map((pc) => pc.name)) assert.ok(past.includes(`<h3>${name}</h3>`), name);
+  // 公式の登録が無ければ、サービスのページに報道の事例が戻る
+  assert.ok(site.htmlFiles.find((f) => f.file === join('s', 'sagawa', 'index.html')).text.includes('報道で伝えられた事例'));
 });
 
 test('確認から180日を過ぎると「要再確認」と出す', () => {
