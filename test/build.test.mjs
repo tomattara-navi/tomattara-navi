@@ -3,7 +3,7 @@ import { test, before } from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdtempSync, readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join, relative, posix } from 'node:path';
+import { join, relative, posix, basename } from 'node:path';
 import { build } from '../scripts/build.mjs';
 import { loadData } from '../scripts/lib/data.mjs';
 import { linkAllowlist, isAllowedLink } from '../scripts/lib/links.mjs';
@@ -241,6 +241,17 @@ test('sitemap.xml・robots.txt・404.html を出す', () => {
   const notFound = site.htmlFiles.find((f) => f.file === '404.html').text;
   assert.match(notFound, /<meta name="robots" content="noindex">/);
   assert.match(notFound, /href="\/tomattara-navi\/assets\/site\.css"/);
+});
+
+test('Search Console の確認用 meta はトップの <head> にだけ出し、確認用の HTML ファイルは置かない', () => {
+  const meta = `<meta name="google-site-verification" content="${site.data.site.google_site_verification}">`;
+  const top = site.htmlFiles.find((f) => f.file === 'index.html').text;
+  assert.equal(top.split(meta).length - 1, 1);
+  assert.ok(top.indexOf(meta) < top.indexOf('</head>'));
+  assert.deepEqual(site.htmlFiles.filter((f) => f.text.includes('name="google-site-verification"')).map((f) => f.file), ['index.html']);
+  assert.ok(!site.files.some((f) => /^google.*\.html$/i.test(basename(f))), 'google*.html を dist に置かない');
+  const noCode = buildInto((d) => { d.incidents = []; d.site.google_site_verification = null; });
+  assert.ok(!noCode.htmlFiles.some((f) => f.text.includes('name="google-site-verification"')), 'null なら出さない');
 });
 
 test('OGP の画像はサイト内のファイルを指す', () => {

@@ -130,3 +130,10 @@ test('§6-6 「公式」の使い方', () => {
   expectError(data((d) => { d.site.name = 'とまったらナビ公式'; }), /site\.name: 「公式」を単独で使わないでください/);
   expectError(data((d) => { d.content[0].meta.title = '【公式】このサイトについて'; }), /の title: 「公式」を単独で/);
 });
+
+test('site.google_site_verification（Search Console の確認コード）', () => {
+  expectOk(data((d) => { d.site.google_site_verification = null; }), 'null は通る');
+  for (const bad of ['', 'abc', 'uyMEBdfcwcXNhfVQlOb7LUV"><script>', 'uyMEBdfcwcXNhfVQlOb7LUV XiVr', 123]) {
+    expectError(data((d) => { d.site.google_site_verification = bad; }), /site\.google_site_verification: Search Console の確認コード/);
+  }
+});

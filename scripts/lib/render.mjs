@@ -116,7 +116,7 @@ export function layout(ctx, page) {
 <meta name="referrer" content="strict-origin-when-cross-origin">
 ${page.noindex ? raw('<meta name="robots" content="noindex">\n') : ''}<title>${title}</title>
 <meta name="description" content="${page.description}">
-<link rel="canonical" href="${canonical}">
+${page.path === '' && site.google_site_verification ? html`<meta name="google-site-verification" content="${site.google_site_verification}">\n` : ''}<link rel="canonical" href="${canonical}">
 <link rel="stylesheet" href="${ctx.root}assets/site.css">
 <link rel="icon" href="${ctx.root}assets/favicon.svg" type="image/svg+xml">
 <meta property="og:type" content="website">

@@ -34,6 +34,7 @@ node test/mutation_check.mjs  # 検算: わざと壊した版で検査が落ち�
 | `data/incidents.json` | 人が**公式発表を確かめて**登録する障害。`sources` に `type: "official"` が1つも無いと検査で落ちる |
 | `data/past_cases.json` | 「過去の事例」のページ（報道で伝えられた事例・出典つき） |
 | `data/categories.json` | カテゴリ |
+| `data/site.json` | サイト名・公開 URL・説明と、Google Search Console の確認コード（`google_site_verification`。トップの `<head>` に meta で出す。使わないなら `null`） |
 | `data/links.json` | サービス以外でリンクしてよい先（気象庁・このリポジトリ） |
 | `data/consultation.json` | 「偽サイトに注意」のページの相談先 |
 | `content/*.html` | 固定ページの本文（about・免責・プライバシー・bot・偽サイト注意・ガイド） |
