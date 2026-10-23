@@ -89,7 +89,7 @@
   {
     "id": "smbc",
     "name": "三井住友銀行",
-    "operator": "unverified",
+    "operator": "株式会社三井住友銀行",
     "category": "bank",
     "mostly_unverified": false,
     "official_domains": [
@@ -387,7 +387,7 @@
   {
     "id": "yuchobank",
     "name": "ゆうちょ銀行",
-    "operator": "unverified",
+    "operator": "株式会社ゆうちょ銀行",
     "category": "bank",
     "mostly_unverified": false,
     "official_domains": [
@@ -874,7 +874,7 @@
   {
     "id": "sagawa",
     "name": "佐川急便",
-    "operator": "unverified",
+    "operator": "佐川急便株式会社",
     "category": "delivery",
     "mostly_unverified": false,
     "official_domains": [
@@ -939,7 +939,7 @@
   {
     "id": "japanpost",
     "name": "日本郵便",
-    "operator": "unverified",
+    "operator": "日本郵便株式会社",
     "category": "delivery",
     "mostly_unverified": false,
     "official_domains": [
@@ -1150,7 +1150,11 @@
         "note": null
       }
     ],
-    "official_x": "unverified",
+    "official_x": {
+      "handle": "yahoo_shopping",
+      "note": null,
+      "source_url": "https://shopping.yahoo.co.jp/"
+    },
     "phone_desk": "none",
     "official_alternatives": [
       {
@@ -1386,7 +1390,7 @@
   {
     "id": "au",
     "name": "au（KDDI）",
-    "operator": "unverified",
+    "operator": "KDDI株式会社",
     "category": "mobile",
     "mostly_unverified": false,
     "official_domains": [
@@ -1553,7 +1557,7 @@
   {
     "id": "rakutenmobile",
     "name": "楽天モバイル",
-    "operator": "unverified",
+    "operator": "楽天モバイル株式会社",
     "category": "mobile",
     "mostly_unverified": false,
     "official_domains": [
