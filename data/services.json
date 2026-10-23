@@ -1,0 +1,1935 @@
+[
+  {
+    "id": "mufg",
+    "name": "三菱UFJ銀行",
+    "operator": "株式会社三菱UFJ銀行",
+    "category": "bank",
+    "mostly_unverified": false,
+    "official_domains": [
+      "bk.mufg.jp"
+    ],
+    "official_top": {
+      "url": "https://www.bk.mufg.jp/",
+      "label": null,
+      "verified": true,
+      "note": null
+    },
+    "official_notices": [
+      {
+        "url": "https://direct.bk.mufg.jp/info_news/index.html",
+        "label": null,
+        "verified": true,
+        "note": "障害だけを載せるページは無い"
+      }
+    ],
+    "official_x": {
+      "handle": "mufgbk_official",
+      "note": "キャンペーン用",
+      "source_url": null
+    },
+    "phone_desk": "listed",
+    "official_alternatives": [
+      {
+        "label": "ネットバンキング ヘルプデスク",
+        "detail": null,
+        "url": "https://www.bk.mufg.jp/faq/index.html",
+        "phones": [
+          {
+            "number": "0120-543-555",
+            "note": null
+          }
+        ],
+        "hours": "毎日9-21"
+      },
+      {
+        "label": "ダイレクト照会",
+        "detail": null,
+        "url": "https://www.bk.mufg.jp/faq/index.html",
+        "phones": [
+          {
+            "number": "0120-860-777",
+            "note": null
+          }
+        ],
+        "hours": "毎日9-21"
+      },
+      {
+        "label": "ATM・窓口",
+        "detail": null,
+        "url": null,
+        "phones": [],
+        "hours": null
+      }
+    ],
+    "general_alternatives": [
+      {
+        "text": "ATM・窓口",
+        "link": null
+      },
+      {
+        "text": "別の銀行の口座",
+        "link": null
+      }
+    ],
+    "not_official": [],
+    "monitor": {
+      "url": "https://www.bk.mufg.jp/",
+      "method": "HEAD",
+      "enabled": true,
+      "statuspage_api": null
+    },
+    "notes": [
+      "ログインのページは entry11.bk.mufg.jp・directg.s.bk.mufg.jp にある。",
+      "アプリへのリンク先の onelink.me は自社のドメインではないため、公式ドメインの一覧には入れていない。"
+    ],
+    "verified_at": "2026-10-23",
+    "verified_by": "session2 調査（公式ページで確認）"
+  },
+  {
+    "id": "smbc",
+    "name": "三井住友銀行",
+    "operator": "unverified",
+    "category": "bank",
+    "mostly_unverified": false,
+    "official_domains": [
+      "smbc.co.jp"
+    ],
+    "official_top": {
+      "url": "https://www.smbc.co.jp/",
+      "label": null,
+      "verified": true,
+      "note": null
+    },
+    "official_notices": [
+      {
+        "url": "https://www.smbc.co.jp/backnumber.html",
+        "label": null,
+        "verified": true,
+        "note": null
+      }
+    ],
+    "official_x": {
+      "handle": "smbc_midosuke",
+      "note": "キャラクター",
+      "source_url": null
+    },
+    "phone_desk": "listed",
+    "official_alternatives": [
+      {
+        "label": "電話の窓口",
+        "detail": null,
+        "url": "https://www.smbc.co.jp/kojin/portal/direct/tel/",
+        "phones": [
+          {
+            "number": "0120-324-310",
+            "note": null
+          }
+        ],
+        "hours": "unverified"
+      },
+      {
+        "label": "ATM・窓口",
+        "detail": null,
+        "url": null,
+        "phones": [],
+        "hours": null
+      }
+    ],
+    "general_alternatives": [
+      {
+        "text": "ATM・窓口",
+        "link": null
+      },
+      {
+        "text": "別の銀行の口座",
+        "link": null
+      }
+    ],
+    "not_official": [],
+    "monitor": {
+      "url": "https://www.smbc.co.jp/",
+      "method": "HEAD",
+      "enabled": true,
+      "statuspage_api": null
+    },
+    "notes": [],
+    "verified_at": "2026-10-23",
+    "verified_by": "session2 調査（公式ページで確認）"
+  },
+  {
+    "id": "mizuho",
+    "name": "みずほ銀行",
+    "operator": "unverified",
+    "category": "bank",
+    "mostly_unverified": false,
+    "official_domains": [
+      "mizuhobank.co.jp"
+    ],
+    "official_top": {
+      "url": "https://www.mizuhobank.co.jp/",
+      "label": null,
+      "verified": false,
+      "note": "確認のときに開けなかった（403）"
+    },
+    "official_notices": [
+      {
+        "url": "https://www.mizuhobank.co.jp/retail/products/direct/",
+        "label": "臨時メンテナンスの掲載先",
+        "verified": false,
+        "note": "公式のよくある質問に「臨時メンテナンスはこのページに載る」とある。ページそのものは未確認"
+      }
+    ],
+    "official_x": "unverified",
+    "phone_desk": "listed",
+    "official_alternatives": [
+      {
+        "label": "ダイレクト ヘルプデスク",
+        "detail": null,
+        "url": "https://www.faq.mizuhobank.co.jp/faq/show/2084",
+        "phones": [
+          {
+            "number": "0120-3242-99",
+            "note": null
+          }
+        ],
+        "hours": "9-17"
+      },
+      {
+        "label": "ATM・窓口",
+        "detail": null,
+        "url": null,
+        "phones": [],
+        "hours": null
+      }
+    ],
+    "general_alternatives": [
+      {
+        "text": "ATM・窓口",
+        "link": null
+      },
+      {
+        "text": "別の銀行の口座",
+        "link": null
+      }
+    ],
+    "not_official": [
+      {
+        "domain": "vb2.jp",
+        "note": "SMS に載る短縮URL（vb2.jp）は公式のものではない、と公式のよくある質問に書かれている"
+      }
+    ],
+    "monitor": {
+      "url": "https://www.mizuhobank.co.jp/",
+      "method": "HEAD",
+      "enabled": false,
+      "statuspage_api": null
+    },
+    "notes": [
+      "定例のメンテナンスは毎週土曜22時〜日曜8時。"
+    ],
+    "verified_at": "2026-10-23",
+    "verified_by": "session2 調査（公式ページで確認）"
+  },
+  {
+    "id": "resona",
+    "name": "りそな銀行",
+    "operator": "unverified",
+    "category": "bank",
+    "mostly_unverified": false,
+    "official_domains": [
+      "resonabank.co.jp",
+      "resona-gr.co.jp"
+    ],
+    "official_top": {
+      "url": "https://www.resonabank.co.jp/",
+      "label": null,
+      "verified": true,
+      "note": null
+    },
+    "official_notices": [
+      {
+        "url": "https://www.resonabank.co.jp/kojin/oshirase/",
+        "label": null,
+        "verified": true,
+        "note": null
+      }
+    ],
+    "official_x": {
+      "handle": "resona_pr",
+      "note": null,
+      "source_url": null
+    },
+    "phone_desk": "listed",
+    "official_alternatives": [
+      {
+        "label": "電話の窓口",
+        "detail": null,
+        "url": "https://www.resonabank.co.jp/kojin/contact/",
+        "phones": [
+          {
+            "number": "0120-24-3989",
+            "note": null
+          }
+        ],
+        "hours": "unverified"
+      },
+      {
+        "label": "ATM・窓口",
+        "detail": null,
+        "url": null,
+        "phones": [],
+        "hours": null
+      }
+    ],
+    "general_alternatives": [
+      {
+        "text": "ATM・窓口",
+        "link": null
+      },
+      {
+        "text": "別の銀行の口座",
+        "link": null
+      }
+    ],
+    "not_official": [],
+    "monitor": {
+      "url": "https://www.resonabank.co.jp/",
+      "method": "HEAD",
+      "enabled": true,
+      "statuspage_api": null
+    },
+    "notes": [
+      "マイゲート（インターネットバンキング）は www2.resona-gr.co.jp にある。"
+    ],
+    "verified_at": "2026-10-23",
+    "verified_by": "session2 調査（公式ページで確認）"
+  },
+  {
+    "id": "rakutenbank",
+    "name": "楽天銀行",
+    "operator": "unverified",
+    "category": "bank",
+    "mostly_unverified": false,
+    "official_domains": [
+      "rakuten-bank.co.jp",
+      "rakuten-bank.net"
+    ],
+    "official_top": {
+      "url": "https://www.rakuten-bank.co.jp/",
+      "label": null,
+      "verified": true,
+      "note": null
+    },
+    "official_notices": [
+      {
+        "url": "https://www.rakuten-bank.co.jp/info/",
+        "label": null,
+        "verified": true,
+        "note": null
+      }
+    ],
+    "official_x": "unverified",
+    "phone_desk": "listed",
+    "official_alternatives": [
+      {
+        "label": "電話の窓口",
+        "detail": null,
+        "url": "https://www.rakuten-bank.co.jp/support/contact/howto/others.html",
+        "phones": [
+          {
+            "number": "0120-776-910",
+            "note": null
+          },
+          {
+            "number": "0570-064-924",
+            "note": "携帯電話から"
+          }
+        ],
+        "hours": "9-17"
+      },
+      {
+        "label": "提携ATM",
+        "detail": null,
+        "url": null,
+        "phones": [],
+        "hours": null
+      }
+    ],
+    "general_alternatives": [
+      {
+        "text": "提携ATM",
+        "link": null
+      },
+      {
+        "text": "別の銀行の口座",
+        "link": null
+      }
+    ],
+    "not_official": [],
+    "monitor": {
+      "url": "https://www.rakuten-bank.co.jp/",
+      "method": "HEAD",
+      "enabled": true,
+      "statuspage_api": null
+    },
+    "notes": [
+      "実店舗は無い。",
+      "よくある質問は help-personal.rakuten-bank.net にある。"
+    ],
+    "verified_at": "2026-10-23",
+    "verified_by": "session2 調査（公式ページで確認）"
+  },
+  {
+    "id": "yuchobank",
+    "name": "ゆうちょ銀行",
+    "operator": "unverified",
+    "category": "bank",
+    "mostly_unverified": false,
+    "official_domains": [
+      "jp-bank.japanpost.jp"
+    ],
+    "official_top": {
+      "url": "https://www.jp-bank.japanpost.jp/",
+      "label": null,
+      "verified": true,
+      "note": null
+    },
+    "official_notices": [
+      {
+        "url": "https://www.jp-bank.japanpost.jp/news/2026/news_2026.html",
+        "label": "2026年のお知らせ",
+        "verified": true,
+        "note": null
+      }
+    ],
+    "official_x": {
+      "handle": "jpbank_official",
+      "note": null,
+      "source_url": null
+    },
+    "phone_desk": "listed",
+    "official_alternatives": [
+      {
+        "label": "ゆうちょダイレクト サポートデスク",
+        "detail": null,
+        "url": "https://www.jp-bank.japanpost.jp/direct/pc/contact/dr_pc_ct_index.html",
+        "phones": [
+          {
+            "number": "0120-992-504",
+            "note": null
+          }
+        ],
+        "hours": "平日9-19・土日9-17"
+      },
+      {
+        "label": "カードを紛失したとき",
+        "detail": null,
+        "url": "https://www.jp-bank.japanpost.jp/direct/pc/contact/dr_pc_ct_index.html",
+        "phones": [
+          {
+            "number": "0120-794889",
+            "note": null
+          }
+        ],
+        "hours": "24時間"
+      },
+      {
+        "label": "ATM・郵便局の窓口",
+        "detail": null,
+        "url": null,
+        "phones": [],
+        "hours": null
+      }
+    ],
+    "general_alternatives": [
+      {
+        "text": "ATM・郵便局の窓口",
+        "link": null
+      },
+      {
+        "text": "別の銀行の口座",
+        "link": null
+      }
+    ],
+    "not_official": [],
+    "monitor": {
+      "url": "https://www.jp-bank.japanpost.jp/",
+      "method": "HEAD",
+      "enabled": true,
+      "statuspage_api": null
+    },
+    "notes": [],
+    "verified_at": "2026-10-23",
+    "verified_by": "session2 調査（公式ページで確認）"
+  },
+  {
+    "id": "jal",
+    "name": "JAL（日本航空）",
+    "operator": "unverified",
+    "category": "travel",
+    "mostly_unverified": true,
+    "official_domains": "unverified",
+    "official_top": "unverified",
+    "official_notices": "unverified",
+    "official_x": "unverified",
+    "phone_desk": "unverified",
+    "official_alternatives": "unverified",
+    "general_alternatives": [
+      {
+        "text": "空港の有人カウンター",
+        "link": null
+      }
+    ],
+    "not_official": [],
+    "monitor": {
+      "url": null,
+      "method": "HEAD",
+      "enabled": false,
+      "statuspage_api": null
+    },
+    "notes": [],
+    "verified_at": "2026-10-23",
+    "verified_by": "session2 調査（公式ページで確認）"
+  },
+  {
+    "id": "ana",
+    "name": "ANA（全日空）",
+    "operator": "unverified",
+    "category": "travel",
+    "mostly_unverified": false,
+    "official_domains": [
+      "ana.co.jp"
+    ],
+    "official_top": {
+      "url": "https://www.ana.co.jp/",
+      "label": null,
+      "verified": true,
+      "note": null
+    },
+    "official_notices": "unverified",
+    "official_x": {
+      "handle": "ANA_flight_info",
+      "note": "運航情報",
+      "source_url": "https://www.ana.co.jp/ja/jp/guide/website/social/"
+    },
+    "phone_desk": "unverified",
+    "official_alternatives": "unverified",
+    "general_alternatives": [
+      {
+        "text": "空港のカウンター",
+        "link": null
+      }
+    ],
+    "not_official": [],
+    "monitor": {
+      "url": "https://www.ana.co.jp/",
+      "method": "HEAD",
+      "enabled": true,
+      "statuspage_api": null
+    },
+    "notes": [],
+    "verified_at": "2026-10-23",
+    "verified_by": "session2 調査（公式ページで確認）"
+  },
+  {
+    "id": "ekinet",
+    "name": "えきねっと（JR東日本）",
+    "operator": "unverified",
+    "category": "travel",
+    "mostly_unverified": false,
+    "official_domains": [
+      "eki-net.com",
+      "secure.okbiz.jp/eki-net/"
+    ],
+    "official_top": {
+      "url": "https://www.eki-net.com/",
+      "label": null,
+      "verified": false,
+      "note": "確認のときに開けなかった（403）"
+    },
+    "official_notices": [
+      {
+        "url": "https://secure.okbiz.jp/eki-net/faq/show/3706",
+        "label": "臨時メンテナンス（よくある質問）",
+        "verified": true,
+        "note": null
+      }
+    ],
+    "official_x": "unverified",
+    "phone_desk": "unverified",
+    "official_alternatives": [
+      {
+        "label": "指定席券売機・みどりの窓口",
+        "detail": "公式のよくある質問で案内されている",
+        "url": "https://secure.okbiz.jp/eki-net/faq/show/1937",
+        "phones": [],
+        "hours": null
+      }
+    ],
+    "general_alternatives": [
+      {
+        "text": "駅の窓口",
+        "link": null
+      },
+      {
+        "text": "券売機",
+        "link": null
+      }
+    ],
+    "not_official": [],
+    "monitor": {
+      "url": "https://www.eki-net.com/",
+      "method": "HEAD",
+      "enabled": false,
+      "statuspage_api": null
+    },
+    "notes": [
+      "毎日 23:50〜0:10 と 1:50〜5:00 は停止する。",
+      "よくある質問は委託先の secure.okbiz.jp/eki-net/ にある（当サイトはこのパスの下だけを公式として扱う）。"
+    ],
+    "verified_at": "2026-10-23",
+    "verified_by": "session2 調査（公式ページで確認）"
+  },
+  {
+    "id": "e5489",
+    "name": "e5489（JR西日本）",
+    "operator": "unverified",
+    "category": "travel",
+    "mostly_unverified": false,
+    "official_domains": [
+      "jr-odekake.net"
+    ],
+    "official_top": {
+      "url": "https://www.jr-odekake.net/goyoyaku/e5489/",
+      "label": null,
+      "verified": true,
+      "note": null
+    },
+    "official_notices": [
+      {
+        "url": "https://www.jr-odekake.net/mainte.html",
+        "label": null,
+        "verified": true,
+        "note": null
+      },
+      {
+        "url": "https://www.jr-odekake.net/goyoyaku/e5489/trouble/",
+        "label": null,
+        "verified": true,
+        "note": null
+      }
+    ],
+    "official_x": {
+      "handle": null,
+      "note": "路線別の運行情報アカウントがある",
+      "source_url": "https://www.jr-odekake.net/railroad/traffic_twitter/"
+    },
+    "phone_desk": "listed",
+    "official_alternatives": [
+      {
+        "label": "e5489サポート",
+        "detail": null,
+        "url": "https://www.jr-odekake.net/goyoyaku/e5489/support/",
+        "phones": [
+          {
+            "number": "0570-00-5490",
+            "note": null
+          },
+          {
+            "number": "06-4960-9866",
+            "note": null
+          }
+        ],
+        "hours": "8-22"
+      },
+      {
+        "label": "みどりの窓口",
+        "detail": null,
+        "url": null,
+        "phones": [],
+        "hours": null
+      }
+    ],
+    "general_alternatives": [
+      {
+        "text": "駅の窓口",
+        "link": null
+      },
+      {
+        "text": "券売機",
+        "link": null
+      }
+    ],
+    "not_official": [],
+    "monitor": {
+      "url": "https://www.jr-odekake.net/goyoyaku/e5489/",
+      "method": "HEAD",
+      "enabled": true,
+      "statuspage_api": null
+    },
+    "notes": [],
+    "verified_at": "2026-10-23",
+    "verified_by": "session2 調査（公式ページで確認）"
+  },
+  {
+    "id": "smartex",
+    "name": "スマートEX・EXサービス（JR東海）",
+    "operator": "unverified",
+    "category": "travel",
+    "mostly_unverified": false,
+    "official_domains": [
+      "smart-ex.jp",
+      "expy.jp"
+    ],
+    "official_top": {
+      "url": "https://smart-ex.jp/",
+      "label": null,
+      "verified": true,
+      "note": null
+    },
+    "official_notices": [
+      {
+        "url": "https://smart-ex.jp/topics/",
+        "label": null,
+        "verified": true,
+        "note": null
+      },
+      {
+        "url": "https://expy.jp/topics/",
+        "label": null,
+        "verified": true,
+        "note": null
+      }
+    ],
+    "official_x": {
+      "handle": "JRC_Shinkan_jp",
+      "note": "新幹線の運行情報",
+      "source_url": null
+    },
+    "phone_desk": "listed",
+    "official_alternatives": [
+      {
+        "label": "スマートEXカスタマーセンター",
+        "detail": null,
+        "url": "https://faq.expy.jp/faq/show/381",
+        "phones": [
+          {
+            "number": "0570-00-8574",
+            "note": null
+          }
+        ],
+        "hours": "5:30-23:30"
+      },
+      {
+        "label": "駅の窓口・券売機",
+        "detail": null,
+        "url": null,
+        "phones": [],
+        "hours": null
+      }
+    ],
+    "general_alternatives": [
+      {
+        "text": "駅の窓口",
+        "link": null
+      },
+      {
+        "text": "券売機",
+        "link": null
+      }
+    ],
+    "not_official": [],
+    "monitor": {
+      "url": "https://smart-ex.jp/",
+      "method": "HEAD",
+      "enabled": true,
+      "statuspage_api": null
+    },
+    "notes": [],
+    "verified_at": "2026-10-23",
+    "verified_by": "session2 調査（公式ページで確認）"
+  },
+  {
+    "id": "yamato",
+    "name": "ヤマト運輸",
+    "operator": "unverified",
+    "category": "delivery",
+    "mostly_unverified": false,
+    "official_domains": [
+      "kuronekoyamato.co.jp"
+    ],
+    "official_top": {
+      "url": "https://www.kuronekoyamato.co.jp/",
+      "label": null,
+      "verified": true,
+      "note": null
+    },
+    "official_notices": [
+      {
+        "url": "https://www.kuronekoyamato.co.jp/ytc/chien/chien_hp.html",
+        "label": "遅延情報",
+        "verified": true,
+        "note": null
+      }
+    ],
+    "official_x": {
+      "handle": "yamato_19191129",
+      "note": null,
+      "source_url": null
+    },
+    "phone_desk": "listed",
+    "official_alternatives": [
+      {
+        "label": "電話の窓口",
+        "detail": null,
+        "url": "https://www.kuronekoyamato.co.jp/ytc/info/info_260916_1.html",
+        "phones": [
+          {
+            "number": "0570-200-000",
+            "note": null
+          },
+          {
+            "number": "050-3786-3333",
+            "note": "IP電話から"
+          }
+        ],
+        "hours": "有人の受付 平日8-21・土日祝8-19"
+      },
+      {
+        "label": "営業所・アプリ・LINE",
+        "detail": null,
+        "url": null,
+        "phones": [],
+        "hours": null
+      }
+    ],
+    "general_alternatives": [
+      {
+        "text": "営業所",
+        "link": null
+      },
+      {
+        "text": "電話",
+        "link": null
+      }
+    ],
+    "not_official": [],
+    "monitor": {
+      "url": "https://www.kuronekoyamato.co.jp/",
+      "method": "HEAD",
+      "enabled": true,
+      "statuspage_api": null
+    },
+    "notes": [],
+    "verified_at": "2026-10-23",
+    "verified_by": "session2 調査（公式ページで確認）"
+  },
+  {
+    "id": "sagawa",
+    "name": "佐川急便",
+    "operator": "unverified",
+    "category": "delivery",
+    "mostly_unverified": false,
+    "official_domains": [
+      "sagawa-exp.co.jp"
+    ],
+    "official_top": {
+      "url": "https://www.sagawa-exp.co.jp/",
+      "label": null,
+      "verified": true,
+      "note": null
+    },
+    "official_notices": [
+      {
+        "url": "https://www2.sagawa-exp.co.jp/information/list/",
+        "label": null,
+        "verified": true,
+        "note": null
+      }
+    ],
+    "official_x": "unverified",
+    "phone_desk": "none",
+    "official_alternatives": [
+      {
+        "label": "担当の営業所",
+        "detail": "全国共通の電話番号は無く、担当の営業所へ問い合わせる",
+        "url": "https://www2.sagawa-exp.co.jp/branch_search/",
+        "phones": [],
+        "hours": null
+      },
+      {
+        "label": "営業所・LINE・チャット",
+        "detail": null,
+        "url": null,
+        "phones": [],
+        "hours": null
+      }
+    ],
+    "general_alternatives": [
+      {
+        "text": "営業所",
+        "link": null
+      },
+      {
+        "text": "電話",
+        "link": null
+      }
+    ],
+    "not_official": [],
+    "monitor": {
+      "url": "https://www.sagawa-exp.co.jp/",
+      "method": "HEAD",
+      "enabled": true,
+      "statuspage_api": null
+    },
+    "notes": [
+      "公式サイトからリンクされている SNS は LINE・Instagram・Facebook（X のアカウントは未確認）。"
+    ],
+    "verified_at": "2026-10-23",
+    "verified_by": "session2 調査（公式ページで確認）"
+  },
+  {
+    "id": "japanpost",
+    "name": "日本郵便",
+    "operator": "unverified",
+    "category": "delivery",
+    "mostly_unverified": false,
+    "official_domains": [
+      "post.japanpost.jp"
+    ],
+    "official_top": {
+      "url": "https://www.post.japanpost.jp/",
+      "label": null,
+      "verified": true,
+      "note": null
+    },
+    "official_notices": [
+      {
+        "url": "https://www.post.japanpost.jp/service/unkou.html",
+        "label": null,
+        "verified": true,
+        "note": null
+      },
+      {
+        "url": "https://www.post.japanpost.jp/newsrelease/",
+        "label": "ニュースリリース",
+        "verified": true,
+        "note": null
+      }
+    ],
+    "official_x": {
+      "handle": "yupack_official",
+      "note": null,
+      "source_url": null
+    },
+    "phone_desk": "listed",
+    "official_alternatives": [
+      {
+        "label": "電話の窓口",
+        "detail": null,
+        "url": "https://www.post.japanpost.jp/question/contact-us/index2.html",
+        "phones": [
+          {
+            "number": "0120-23-28-86",
+            "note": "固定電話からのみ"
+          },
+          {
+            "number": "0570-046-666",
+            "note": "携帯電話から"
+          }
+        ],
+        "hours": "8-21"
+      },
+      {
+        "label": "郵便局の窓口・LINE",
+        "detail": null,
+        "url": null,
+        "phones": [],
+        "hours": null
+      }
+    ],
+    "general_alternatives": [
+      {
+        "text": "郵便局の窓口",
+        "link": null
+      },
+      {
+        "text": "電話",
+        "link": null
+      }
+    ],
+    "not_official": [],
+    "monitor": {
+      "url": "https://www.post.japanpost.jp/",
+      "method": "HEAD",
+      "enabled": true,
+      "statuspage_api": null
+    },
+    "notes": [],
+    "verified_at": "2026-10-23",
+    "verified_by": "session2 調査（公式ページで確認）"
+  },
+  {
+    "id": "amazon",
+    "name": "Amazon.co.jp",
+    "operator": "unverified",
+    "category": "shopping",
+    "mostly_unverified": true,
+    "official_domains": [
+      "amazon.co.jp"
+    ],
+    "official_top": {
+      "url": "https://www.amazon.co.jp/",
+      "label": null,
+      "verified": true,
+      "note": null
+    },
+    "official_notices": "unverified",
+    "official_x": "unverified",
+    "phone_desk": "unverified",
+    "official_alternatives": "unverified",
+    "general_alternatives": [
+      {
+        "text": "他社の通販サイト",
+        "link": null
+      },
+      {
+        "text": "実店舗",
+        "link": null
+      }
+    ],
+    "not_official": [],
+    "monitor": {
+      "url": "https://www.amazon.co.jp/",
+      "method": "HEAD",
+      "enabled": false,
+      "statuspage_api": null
+    },
+    "notes": [],
+    "verified_at": "2026-10-23",
+    "verified_by": "session2 調査（公式ページで確認）"
+  },
+  {
+    "id": "rakutenichiba",
+    "name": "楽天市場",
+    "operator": "unverified",
+    "category": "shopping",
+    "mostly_unverified": true,
+    "official_domains": [
+      "rakuten.co.jp",
+      "rakuten.net"
+    ],
+    "official_top": "unverified",
+    "official_notices": "unverified",
+    "official_x": "unverified",
+    "phone_desk": "unverified",
+    "official_alternatives": [
+      {
+        "label": "ヘルプ",
+        "detail": "チャット・電話・メールの案内がある（電話番号の記載は無い）",
+        "url": "https://ichiba.faq.rakuten.net/",
+        "phones": [],
+        "hours": null
+      }
+    ],
+    "general_alternatives": [
+      {
+        "text": "他社の通販サイト",
+        "link": null
+      },
+      {
+        "text": "実店舗",
+        "link": null
+      }
+    ],
+    "not_official": [],
+    "monitor": {
+      "url": null,
+      "method": "HEAD",
+      "enabled": false,
+      "statuspage_api": null
+    },
+    "notes": [],
+    "verified_at": "2026-10-23",
+    "verified_by": "session2 調査（公式ページで確認）"
+  },
+  {
+    "id": "yahooshopping",
+    "name": "Yahoo!ショッピング",
+    "operator": "unverified",
+    "category": "shopping",
+    "mostly_unverified": false,
+    "official_domains": [
+      "yahoo.co.jp",
+      "yahoo-net.jp"
+    ],
+    "official_top": {
+      "url": "https://shopping.yahoo.co.jp/",
+      "label": null,
+      "verified": true,
+      "note": null
+    },
+    "official_notices": [
+      {
+        "url": "https://topics.shopping.yahoo.co.jp/notice/maintenance/",
+        "label": null,
+        "verified": true,
+        "note": null
+      }
+    ],
+    "official_x": "unverified",
+    "phone_desk": "none",
+    "official_alternatives": [
+      {
+        "label": "AI・チャットでの問い合わせ",
+        "detail": null,
+        "url": null,
+        "phones": [],
+        "hours": null
+      }
+    ],
+    "general_alternatives": [
+      {
+        "text": "他社の通販サイト",
+        "link": null
+      },
+      {
+        "text": "実店舗",
+        "link": null
+      }
+    ],
+    "not_official": [],
+    "monitor": {
+      "url": "https://shopping.yahoo.co.jp/",
+      "method": "HEAD",
+      "enabled": true,
+      "statuspage_api": null
+    },
+    "notes": [
+      "ログインのページは login.yahoo.co.jp にある。"
+    ],
+    "verified_at": "2026-10-23",
+    "verified_by": "session2 調査（公式ページで確認）"
+  },
+  {
+    "id": "demaecan",
+    "name": "出前館",
+    "operator": "unverified",
+    "category": "shopping",
+    "mostly_unverified": false,
+    "official_domains": [
+      "demae-can.com",
+      "demae-can.co.jp"
+    ],
+    "official_top": "unverified",
+    "official_notices": [
+      {
+        "url": "https://corporate.demae-can.co.jp/pr/info/",
+        "label": null,
+        "verified": true,
+        "note": null
+      }
+    ],
+    "official_x": {
+      "handle": "demaecan",
+      "note": null,
+      "source_url": null
+    },
+    "phone_desk": "none",
+    "official_alternatives": [
+      {
+        "label": "問い合わせフォーム",
+        "detail": "電話の窓口は無く、フォームでの問い合わせのみ",
+        "url": null,
+        "phones": [],
+        "hours": null
+      }
+    ],
+    "general_alternatives": [
+      {
+        "text": "お店へ直接電話して注文する",
+        "link": null
+      },
+      {
+        "text": "持ち帰り",
+        "link": null
+      }
+    ],
+    "not_official": [],
+    "monitor": {
+      "url": null,
+      "method": "HEAD",
+      "enabled": false,
+      "statuspage_api": null
+    },
+    "notes": [],
+    "verified_at": "2026-10-23",
+    "verified_by": "session2 調査（公式ページで確認）"
+  },
+  {
+    "id": "ubereats",
+    "name": "Uber Eats",
+    "operator": "unverified",
+    "category": "shopping",
+    "mostly_unverified": false,
+    "official_domains": [
+      "uber.com"
+    ],
+    "official_top": "unverified",
+    "official_notices": "unverified",
+    "official_x": {
+      "handle": "uber",
+      "note": "会社全体",
+      "source_url": null
+    },
+    "phone_desk": "none",
+    "official_alternatives": [
+      {
+        "label": "ヘルプ",
+        "detail": "電話の窓口は提供していない、と公式に書かれている",
+        "url": "https://help.uber.com/ja-JP/ubereats",
+        "phones": [],
+        "hours": null
+      }
+    ],
+    "general_alternatives": [
+      {
+        "text": "お店へ直接電話して注文する",
+        "link": null
+      },
+      {
+        "text": "持ち帰り",
+        "link": null
+      }
+    ],
+    "not_official": [],
+    "monitor": {
+      "url": null,
+      "method": "HEAD",
+      "enabled": false,
+      "statuspage_api": null
+    },
+    "notes": [
+      "ubereats.com が公式のドメインかは未確認。"
+    ],
+    "verified_at": "2026-10-23",
+    "verified_by": "session2 調査（公式ページで確認）"
+  },
+  {
+    "id": "docomo",
+    "name": "ドコモ",
+    "operator": "unverified",
+    "category": "mobile",
+    "mostly_unverified": false,
+    "official_domains": [
+      "docomo.ne.jp"
+    ],
+    "official_top": {
+      "url": "https://www.docomo.ne.jp/",
+      "label": null,
+      "verified": true,
+      "note": null
+    },
+    "official_notices": [
+      {
+        "url": "https://www.docomo.ne.jp/info/network/",
+        "label": null,
+        "verified": true,
+        "note": null
+      }
+    ],
+    "official_x": {
+      "handle": "docomo",
+      "note": null,
+      "source_url": null
+    },
+    "phone_desk": "listed",
+    "official_alternatives": [
+      {
+        "label": "問い合わせ",
+        "detail": null,
+        "url": "https://www.docomo.ne.jp/support/inquiry/charge/",
+        "phones": [
+          {
+            "number": "151",
+            "note": "ドコモの携帯電話から"
+          },
+          {
+            "number": "0120-800-000",
+            "note": "一般の電話から"
+          }
+        ],
+        "hours": "unverified"
+      },
+      {
+        "label": "故障の問い合わせ",
+        "detail": null,
+        "url": "https://www.docomo.ne.jp/support/promotion/repair.html",
+        "phones": [
+          {
+            "number": "113",
+            "note": null
+          }
+        ],
+        "hours": "unverified"
+      },
+      {
+        "label": "ドコモショップ",
+        "detail": null,
+        "url": null,
+        "phones": [],
+        "hours": null
+      }
+    ],
+    "general_alternatives": [
+      {
+        "text": "固定電話",
+        "link": null
+      },
+      {
+        "text": "Wi-Fi",
+        "link": null
+      },
+      {
+        "text": "ショップ",
+        "link": null
+      }
+    ],
+    "not_official": [],
+    "monitor": {
+      "url": "https://www.docomo.ne.jp/",
+      "method": "HEAD",
+      "enabled": true,
+      "statuspage_api": null
+    },
+    "notes": [],
+    "verified_at": "2026-10-23",
+    "verified_by": "session2 調査（公式ページで確認）"
+  },
+  {
+    "id": "au",
+    "name": "au（KDDI）",
+    "operator": "unverified",
+    "category": "mobile",
+    "mostly_unverified": false,
+    "official_domains": [
+      "au.com",
+      "kddi.com"
+    ],
+    "official_top": {
+      "url": "https://www.au.com/",
+      "label": null,
+      "verified": true,
+      "note": null
+    },
+    "official_notices": [
+      {
+        "url": "https://www.au.com/information/notice_mobile/network/",
+        "label": null,
+        "verified": true,
+        "note": null
+      },
+      {
+        "url": "https://www.kddi.com/personal/notice/",
+        "label": null,
+        "verified": true,
+        "note": null
+      }
+    ],
+    "official_x": {
+      "handle": "au_official",
+      "note": null,
+      "source_url": null
+    },
+    "phone_desk": "listed",
+    "official_alternatives": [
+      {
+        "label": "問い合わせ",
+        "detail": null,
+        "url": "https://www.au.com/support/inquiry/",
+        "phones": [
+          {
+            "number": "0077-7046",
+            "note": null
+          },
+          {
+            "number": "0120-977-033",
+            "note": "つながらないとき"
+          }
+        ],
+        "hours": "9-20"
+      },
+      {
+        "label": "auショップ",
+        "detail": null,
+        "url": null,
+        "phones": [],
+        "hours": null
+      }
+    ],
+    "general_alternatives": [
+      {
+        "text": "固定電話",
+        "link": null
+      },
+      {
+        "text": "Wi-Fi",
+        "link": null
+      },
+      {
+        "text": "ショップ",
+        "link": null
+      }
+    ],
+    "not_official": [],
+    "monitor": {
+      "url": "https://www.au.com/",
+      "method": "HEAD",
+      "enabled": true,
+      "statuspage_api": null
+    },
+    "notes": [],
+    "verified_at": "2026-10-23",
+    "verified_by": "session2 調査（公式ページで確認）"
+  },
+  {
+    "id": "softbank",
+    "name": "ソフトバンク",
+    "operator": "unverified",
+    "category": "mobile",
+    "mostly_unverified": false,
+    "official_domains": [
+      "softbank.jp"
+    ],
+    "official_top": {
+      "url": "https://www.softbank.jp/",
+      "label": null,
+      "verified": true,
+      "note": null
+    },
+    "official_notices": [
+      {
+        "url": "https://www.softbank.jp/mobile/info/personal/important/",
+        "label": null,
+        "verified": true,
+        "note": null
+      }
+    ],
+    "official_x": {
+      "handle": "SoftBank",
+      "note": null,
+      "source_url": null
+    },
+    "phone_desk": "listed",
+    "official_alternatives": [
+      {
+        "label": "問い合わせ",
+        "detail": null,
+        "url": "https://www.softbank.jp/support/faq/view/12224",
+        "phones": [
+          {
+            "number": "157",
+            "note": "ソフトバンクの携帯電話から"
+          },
+          {
+            "number": "0800-919-0157",
+            "note": null
+          }
+        ],
+        "hours": "unverified"
+      },
+      {
+        "label": "ソフトバンクショップ",
+        "detail": null,
+        "url": null,
+        "phones": [],
+        "hours": null
+      }
+    ],
+    "general_alternatives": [
+      {
+        "text": "固定電話",
+        "link": null
+      },
+      {
+        "text": "Wi-Fi",
+        "link": null
+      },
+      {
+        "text": "ショップ",
+        "link": null
+      }
+    ],
+    "not_official": [],
+    "monitor": {
+      "url": "https://www.softbank.jp/",
+      "method": "HEAD",
+      "enabled": true,
+      "statuspage_api": null
+    },
+    "notes": [],
+    "verified_at": "2026-10-23",
+    "verified_by": "session2 調査（公式ページで確認）"
+  },
+  {
+    "id": "rakutenmobile",
+    "name": "楽天モバイル",
+    "operator": "unverified",
+    "category": "mobile",
+    "mostly_unverified": false,
+    "official_domains": [
+      "network.mobile.rakuten.co.jp"
+    ],
+    "official_top": {
+      "url": "https://network.mobile.rakuten.co.jp/",
+      "label": null,
+      "verified": true,
+      "note": null
+    },
+    "official_notices": [
+      {
+        "url": "https://network.mobile.rakuten.co.jp/information/",
+        "label": null,
+        "verified": true,
+        "note": null
+      }
+    ],
+    "official_x": {
+      "handle": "Rakuten_Mobile",
+      "note": null,
+      "source_url": null
+    },
+    "phone_desk": "listed",
+    "official_alternatives": [
+      {
+        "label": "問い合わせ",
+        "detail": null,
+        "url": "https://network.mobile.rakuten.co.jp/support/inquiry/",
+        "phones": [
+          {
+            "number": "050-5434-4653",
+            "note": null
+          }
+        ],
+        "hours": "9-17"
+      },
+      {
+        "label": "紛失したとき",
+        "detail": null,
+        "url": "https://network.mobile.rakuten.co.jp/support/inquiry/",
+        "phones": [
+          {
+            "number": "0800-600-0500",
+            "note": null
+          }
+        ],
+        "hours": "24時間"
+      },
+      {
+        "label": "楽天モバイルショップ",
+        "detail": null,
+        "url": null,
+        "phones": [],
+        "hours": null
+      }
+    ],
+    "general_alternatives": [
+      {
+        "text": "固定電話",
+        "link": null
+      },
+      {
+        "text": "Wi-Fi",
+        "link": null
+      },
+      {
+        "text": "ショップ",
+        "link": null
+      }
+    ],
+    "not_official": [],
+    "monitor": {
+      "url": "https://network.mobile.rakuten.co.jp/",
+      "method": "HEAD",
+      "enabled": true,
+      "statuspage_api": null
+    },
+    "notes": [],
+    "verified_at": "2026-10-23",
+    "verified_by": "session2 調査（公式ページで確認）"
+  },
+  {
+    "id": "yahoo",
+    "name": "Yahoo! JAPAN",
+    "operator": "unverified",
+    "category": "info",
+    "mostly_unverified": false,
+    "official_domains": [
+      "yahoo.co.jp",
+      "yahoo-net.jp"
+    ],
+    "official_top": {
+      "url": "https://www.yahoo.co.jp/",
+      "label": null,
+      "verified": true,
+      "note": null
+    },
+    "official_notices": null,
+    "official_x": "unverified",
+    "phone_desk": "none",
+    "official_alternatives": [],
+    "general_alternatives": [
+      {
+        "text": "他のポータルサイト",
+        "link": null
+      }
+    ],
+    "not_official": [],
+    "monitor": {
+      "url": "https://www.yahoo.co.jp/",
+      "method": "HEAD",
+      "enabled": true,
+      "statuspage_api": null
+    },
+    "notes": [
+      "全体のお知らせの一覧は無く、お知らせはサービスごとに分かれている。"
+    ],
+    "verified_at": "2026-10-23",
+    "verified_by": "session2 調査（公式ページで確認）"
+  },
+  {
+    "id": "tenkijp",
+    "name": "tenki.jp",
+    "operator": "unverified",
+    "category": "info",
+    "mostly_unverified": false,
+    "official_domains": [
+      "tenki.jp",
+      "tenkijp.tayori.com/q/tenkijp-faq/"
+    ],
+    "official_top": {
+      "url": "https://tenki.jp/",
+      "label": null,
+      "verified": true,
+      "note": null
+    },
+    "official_notices": [
+      {
+        "url": "https://tenkijp.tayori.com/q/tenkijp-faq/",
+        "label": "よくある質問",
+        "verified": true,
+        "note": null
+      }
+    ],
+    "official_x": {
+      "handle": "tenkijp",
+      "note": null,
+      "source_url": null
+    },
+    "phone_desk": "none",
+    "official_alternatives": [],
+    "general_alternatives": [
+      {
+        "text": "気象庁の発表",
+        "link": "jma"
+      }
+    ],
+    "not_official": [],
+    "monitor": {
+      "url": "https://tenki.jp/",
+      "method": "HEAD",
+      "enabled": true,
+      "statuspage_api": null
+    },
+    "notes": [
+      "よくある質問は委託先の tenkijp.tayori.com にある（当サイトはこのパスの下だけを公式として扱う）。"
+    ],
+    "verified_at": "2026-10-23",
+    "verified_by": "session2 調査（公式ページで確認）"
+  },
+  {
+    "id": "weathernews",
+    "name": "ウェザーニュース",
+    "operator": "unverified",
+    "category": "info",
+    "mostly_unverified": false,
+    "official_domains": [
+      "weathernews.jp"
+    ],
+    "official_top": {
+      "url": "https://weathernews.jp/",
+      "label": null,
+      "verified": true,
+      "note": null
+    },
+    "official_notices": [
+      {
+        "url": "https://weathernews.jp/s/faq_v2/menu00.html",
+        "label": "よくある質問",
+        "verified": true,
+        "note": null
+      }
+    ],
+    "official_x": {
+      "handle": "wni_jp",
+      "note": null,
+      "source_url": null
+    },
+    "phone_desk": "none",
+    "official_alternatives": [],
+    "general_alternatives": [
+      {
+        "text": "気象庁の発表",
+        "link": "jma"
+      }
+    ],
+    "not_official": [],
+    "monitor": {
+      "url": "https://weathernews.jp/",
+      "method": "HEAD",
+      "enabled": true,
+      "statuspage_api": null
+    },
+    "notes": [
+      "個人向けの電話の窓口は無い。"
+    ],
+    "verified_at": "2026-10-23",
+    "verified_by": "session2 調査（公式ページで確認）"
+  },
+  {
+    "id": "mynaportal",
+    "name": "マイナポータル",
+    "operator": "unverified",
+    "category": "gov",
+    "mostly_unverified": false,
+    "official_domains": [
+      "myna.go.jp",
+      "digital.go.jp"
+    ],
+    "official_top": {
+      "url": "https://myna.go.jp/",
+      "label": null,
+      "verified": true,
+      "note": null
+    },
+    "official_notices": [
+      {
+        "url": "https://myna.go.jp/html/info/index.html",
+        "label": null,
+        "verified": true,
+        "note": null
+      }
+    ],
+    "official_x": {
+      "handle": "digital_jpn",
+      "note": "デジタル庁",
+      "source_url": null
+    },
+    "phone_desk": "listed",
+    "official_alternatives": [
+      {
+        "label": "マイナンバー総合フリーダイヤル",
+        "detail": null,
+        "url": "https://www.digital.go.jp/policies/mynumber_contact",
+        "phones": [
+          {
+            "number": "0120-95-0178",
+            "note": null
+          }
+        ],
+        "hours": "平日9:30-20・土日祝9:30-17:30"
+      },
+      {
+        "label": "市区町村の窓口",
+        "detail": null,
+        "url": null,
+        "phones": [],
+        "hours": null
+      }
+    ],
+    "general_alternatives": [
+      {
+        "text": "市区町村の窓口",
+        "link": null
+      }
+    ],
+    "not_official": [
+      {
+        "domain": "mynaportal.go.jp",
+        "note": "旧 mynaportal.go.jp は公式のドメインではない"
+      }
+    ],
+    "monitor": {
+      "url": "https://myna.go.jp/",
+      "method": "HEAD",
+      "enabled": true,
+      "statuspage_api": null
+    },
+    "notes": [],
+    "verified_at": "2026-10-23",
+    "verified_by": "session2 調査（公式ページで確認）"
+  },
+  {
+    "id": "etax",
+    "name": "e-Tax",
+    "operator": "unverified",
+    "category": "gov",
+    "mostly_unverified": false,
+    "official_domains": [
+      "e-tax.nta.go.jp",
+      "nta.go.jp"
+    ],
+    "official_top": {
+      "url": "https://www.e-tax.nta.go.jp/",
+      "label": null,
+      "verified": true,
+      "note": null
+    },
+    "official_notices": [
+      {
+        "url": "https://www.e-tax.nta.go.jp/topics/index.htm",
+        "label": null,
+        "verified": true,
+        "note": null
+      }
+    ],
+    "official_x": {
+      "handle": "NTA_Japan",
+      "note": "国税庁",
+      "source_url": null
+    },
+    "phone_desk": "listed",
+    "official_alternatives": [
+      {
+        "label": "e-Tax ヘルプデスク",
+        "detail": null,
+        "url": "https://www.e-tax.nta.go.jp/toiawase/toiawase2.htm",
+        "phones": [
+          {
+            "number": "0570-01-5901",
+            "note": null
+          },
+          {
+            "number": "03-5638-5171",
+            "note": null
+          }
+        ],
+        "hours": "平日9-17"
+      },
+      {
+        "label": "紙の申告書を税務署へ出す",
+        "detail": null,
+        "url": null,
+        "phones": [],
+        "hours": null
+      }
+    ],
+    "general_alternatives": [
+      {
+        "text": "税務署の窓口",
+        "link": null
+      }
+    ],
+    "not_official": [],
+    "monitor": {
+      "url": "https://www.e-tax.nta.go.jp/",
+      "method": "HEAD",
+      "enabled": true,
+      "statuspage_api": null
+    },
+    "notes": [],
+    "verified_at": "2026-10-23",
+    "verified_by": "session2 調査（公式ページで確認）"
+  },
+  {
+    "id": "cmoa",
+    "name": "コミックシーモア",
+    "operator": "unverified",
+    "category": "media",
+    "mostly_unverified": false,
+    "official_domains": [
+      "nttsolmare.com"
+    ],
+    "official_top": "unverified",
+    "official_notices": [
+      {
+        "url": "https://www.nttsolmare.com/press/2026/1021.html",
+        "label": "運営会社のお知らせ（第4報）",
+        "verified": true,
+        "note": null
+      }
+    ],
+    "official_x": {
+      "handle": "nttsolmare",
+      "note": "運営会社",
+      "source_url": null
+    },
+    "phone_desk": "none",
+    "official_alternatives": [],
+    "general_alternatives": [
+      {
+        "text": "他の電子書籍ストア",
+        "link": null
+      }
+    ],
+    "not_official": [],
+    "monitor": {
+      "url": null,
+      "method": "HEAD",
+      "enabled": false,
+      "statuspage_api": null
+    },
+    "notes": [
+      "cmoa.jp が公式のドメインかを当サイトでまだ確かめていないため、公式ドメインの一覧には運営会社の nttsolmare.com だけを載せている。"
+    ],
+    "verified_at": "2026-10-23",
+    "verified_by": "session2 調査（公式ページで確認）"
+  },
+  {
+    "id": "niconico",
+    "name": "ニコニコ",
+    "operator": "unverified",
+    "category": "media",
+    "mostly_unverified": false,
+    "official_domains": [
+      "nicovideo.jp"
+    ],
+    "official_top": {
+      "url": "https://www.nicovideo.jp/",
+      "label": null,
+      "verified": true,
+      "note": null
+    },
+    "official_notices": [
+      {
+        "url": "https://blog.nicovideo.jp/niconews/category/ge_maintenance/",
+        "label": null,
+        "verified": true,
+        "note": null
+      }
+    ],
+    "official_x": {
+      "handle": "nico_nico_info",
+      "note": null,
+      "source_url": null
+    },
+    "phone_desk": "none",
+    "official_alternatives": [],
+    "general_alternatives": [
+      {
+        "text": "他社の動画サイト",
+        "link": null
+      }
+    ],
+    "not_official": [],
+    "monitor": {
+      "url": "https://www.nicovideo.jp/",
+      "method": "HEAD",
+      "enabled": true,
+      "statuspage_api": null
+    },
+    "notes": [],
+    "verified_at": "2026-10-23",
+    "verified_by": "session2 調査（公式ページで確認）"
+  }
+]

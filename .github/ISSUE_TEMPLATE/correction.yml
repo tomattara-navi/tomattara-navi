@@ -1,0 +1,35 @@
+name: 訂正・削除の依頼
+description: 掲載している情報の誤り・古い情報の指摘、掲載している会社・団体からの削除・訂正の依頼
+title: "[訂正] "
+labels: ["correction"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        掲載している会社・団体からの削除・訂正の依頼には最優先で対応します。
+        ここに書いた内容は誰でも読めます。**個人情報は書かないでください。**
+  - type: input
+    id: page
+    attributes:
+      label: 対象のページの URL
+      placeholder: https://
+    validations:
+      required: true
+  - type: dropdown
+    id: kind
+    attributes:
+      label: 依頼の種類
+      options:
+        - 情報が誤っている・古い
+        - 掲載している会社・団体からの訂正の依頼
+        - 掲載している会社・団体からの削除の依頼
+        - その他
+    validations:
+      required: true
+  - type: textarea
+    id: detail
+    attributes:
+      label: 内容
+      description: 正しい情報の根拠になる公式のページの URL があれば書いてください。
+    validations:
+      required: true

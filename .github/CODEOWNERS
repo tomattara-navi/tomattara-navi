@@ -1,0 +1,4 @@
+# .github/ と data/ の変更は店主のレビューを必須にする
+# （効かせるには main のブランチ保護で「Require review from Code Owners」を ON にする）
+/.github/ @UedaTakashi
+/data/ @UedaTakashi

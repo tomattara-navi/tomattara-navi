@@ -1,0 +1,23 @@
+[
+  {
+    "id": "jma",
+    "name": "気象庁",
+    "url": "https://www.jma.go.jp/",
+    "domains": ["jma.go.jp"],
+    "basis": "docs/PLAN.md 付録A（tenki.jp の行の一般論）"
+  },
+  {
+    "id": "repo",
+    "name": "このサイトの GitHub リポジトリ",
+    "url": "https://github.com/UedaTakashi/tomattara-navi",
+    "domains": ["github.com/UedaTakashi/tomattara-navi/"],
+    "basis": "docs/PLAN.md §9（連絡窓口は GitHub Issues）"
+  },
+  {
+    "id": "issues",
+    "name": "訂正・削除の依頼（GitHub Issues）",
+    "url": "https://github.com/UedaTakashi/tomattara-navi/issues/new/choose",
+    "domains": ["github.com/UedaTakashi/tomattara-navi/"],
+    "basis": "docs/PLAN.md §9（連絡窓口は GitHub Issues）"
+  }
+]

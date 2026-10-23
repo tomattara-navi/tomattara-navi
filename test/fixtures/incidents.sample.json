@@ -1,0 +1,29 @@
+[
+  {
+    "id": "test-ongoing-sagawa",
+    "service_id": "sagawa",
+    "title": "試験用の例: Web のサービスが停止（運営発表）",
+    "status": "ongoing",
+    "started_at": "2026-09-30T09:00+09:00",
+    "resolved_at": null,
+    "summary": "これは試験のためのデータです。実際のサイトには載りません。",
+    "what_you_can_do": ["試験用の例: 担当の営業所へ電話する"],
+    "sources": [
+      { "url": "https://www2.sagawa-exp.co.jp/information/list/", "type": "official" },
+      { "url": "https://ecnomikata.com/ecnews/51852/", "type": "press" }
+    ],
+    "updated_at": "2026-10-21"
+  },
+  {
+    "id": "test-resolved-docomo",
+    "service_id": "docomo",
+    "title": "試験用の例: ポータルがつながりにくい（運営発表）",
+    "status": "resolved",
+    "started_at": "2026-09-01T00:00+09:00",
+    "resolved_at": "2026-09-01T11:00+09:00",
+    "summary": "これは試験のためのデータです。実際のサイトには載りません。",
+    "what_you_can_do": [],
+    "sources": [{ "url": "https://www.docomo.ne.jp/info/notice/page/250102_03_m.html", "type": "official" }],
+    "updated_at": "2026-09-02"
+  }
+]

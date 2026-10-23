@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "data/incidents.json",
+  "description": "人が公式発表を見て登録する障害（docs/PLAN.md §5.2）。「障害中」と書けるのはここに登録したものだけ。検査は scripts/validate.mjs。",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["id", "service_id", "title", "status", "started_at", "resolved_at", "summary", "what_you_can_do", "sources", "updated_at"],
+    "properties": {
+      "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$", "description": "例: 2026-10-15-cmoa" },
+      "service_id": { "type": "string" },
+      "title": { "type": "string", "description": "例: 電子書籍の購入・閲覧が停止（運営発表）" },
+      "status": { "enum": ["ongoing", "partially_restored", "resolved"] },
+      "started_at": { "type": "string", "description": "例: 2026-10-15T11:35+09:00" },
+      "resolved_at": { "type": ["string", "null"], "description": "resolved のときだけ日時、それ以外は null。復旧から30日を過ぎるとトップから外れ「過去の事例」へ" },
+      "summary": { "type": "string", "description": "自分の言葉で2〜3文（全文を転載しない）" },
+      "what_you_can_do": { "type": "array", "items": { "type": "string" }, "description": "会社が案内した代わりの手段" },
+      "sources": {
+        "type": "array",
+        "minItems": 1,
+        "description": "type: \"official\" が1つ以上必要（報道だけでは登録できない）。official の URL はそのサービスの official_domains に一致すること",
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["url", "type"],
+          "properties": { "url": { "type": "string", "pattern": "^https://" }, "type": { "enum": ["official", "press"] } }
+        }
+      },
+      "updated_at": { "type": "string", "format": "date" }
+    }
+  }
+}
