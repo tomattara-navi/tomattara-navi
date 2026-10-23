@@ -3,7 +3,7 @@
 このサイト（とまったらナビ）やこのリポジトリのセキュリティの問題を見つけたときは、**公開の Issue には書かず**、GitHub の Private vulnerability reporting で知らせてください。
 
 - リポジトリの「Security」タブ →「Report a vulnerability」
-- https://github.com/UedaTakashi/tomattara-navi/security/advisories/new
+- https://github.com/tomattara-navi/tomattara-navi/security/advisories/new
 
 このサイトは静的なページだけで、入力欄・Cookie・外部のスクリプトを持ちません。それでも次のようなものは報告してください。
 

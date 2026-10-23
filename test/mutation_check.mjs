@@ -92,6 +92,12 @@ async function main() {
       expect: 'fail',
       apply: (d) => replaceOnce(d, 'content/about.html', '<h2>このサイトがやること</h2>', '<input name="q">\n<h2>このサイトがやること</h2>'),
     },
+    {
+      name: '6. 移管前の公開 URL（個人名入り）を README に戻す',
+      expect: 'fail',
+      // このファイル自体が個人名の試験に当たらないよう、つないで作る
+      apply: (d) => replaceOnce(d, 'README.md', 'https://tomattara-navi.github.io/tomattara-navi/', `https://${['ueda', 'takashi'].join('')}.github.io/tomattara-navi/`),
+    },
   ];
 
   let bad = 0;

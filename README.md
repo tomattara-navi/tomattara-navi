@@ -4,7 +4,7 @@
 
 > このサイトは各社とは無関係の非公式の案内です。最新・正確な情報は必ず各社の公式発表で確かめてください。
 
-- 公開先: https://uedatakashi.github.io/tomattara-navi/ （GitHub Pages）
+- 公開先: https://tomattara-navi.github.io/tomattara-navi/ （GitHub Pages）
 - 計画書・仕様: [docs/PLAN.md](docs/PLAN.md)
 
 ## やること・やらないこと
@@ -67,7 +67,7 @@ node test/mutation_check.mjs  # 検算: わざと壊した版で検査が落ち�
 
 ## 連絡
 
-- 訂正・削除の依頼、障害情報の追加: [Issues](https://github.com/UedaTakashi/tomattara-navi/issues/new/choose)（個人情報は書かないでください）
+- 訂正・削除の依頼、障害情報の追加: [Issues](https://github.com/tomattara-navi/tomattara-navi/issues/new/choose)（個人情報は書かないでください）
 - セキュリティの問題: [SECURITY.md](SECURITY.md)
 
 ## ライセンス

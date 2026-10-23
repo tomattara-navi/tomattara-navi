@@ -46,7 +46,7 @@ function buildInto(edit) {
   const outDir = mkdtempSync(join(tmpdir(), 'tomattara-build-'));
   const data = loadData();
   edit?.(data);
-  build({ outDir, now: NOW, data, siteUrl: 'https://uedatakashi.github.io/tomattara-navi/' });
+  build({ outDir, now: NOW, data, siteUrl: 'https://tomattara-navi.github.io/tomattara-navi/' });
   const files = walk(outDir);
   const htmlFiles = files.filter((f) => f.endsWith('.html')).map((f) => ({ file: relative(outDir, f), text: readFileSync(f, 'utf8') }));
   return { outDir, files, htmlFiles, data };
@@ -235,9 +235,9 @@ test('sitemap.xml・robots.txt・404.html を出す', () => {
   const sitemap = readFileSync(join(site.outDir, 'sitemap.xml'), 'utf8');
   const locs = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
   assert.equal(locs.length, site.htmlFiles.length - 1);
-  assert.ok(locs.every((l) => l.startsWith('https://uedatakashi.github.io/tomattara-navi/')));
-  assert.ok(locs.includes('https://uedatakashi.github.io/tomattara-navi/s/mufg/'));
-  assert.match(readFileSync(join(site.outDir, 'robots.txt'), 'utf8'), /Sitemap: https:\/\/uedatakashi\.github\.io\/tomattara-navi\/sitemap\.xml/);
+  assert.ok(locs.every((l) => l.startsWith('https://tomattara-navi.github.io/tomattara-navi/')));
+  assert.ok(locs.includes('https://tomattara-navi.github.io/tomattara-navi/s/mufg/'));
+  assert.match(readFileSync(join(site.outDir, 'robots.txt'), 'utf8'), /Sitemap: https:\/\/tomattara-navi\.github\.io\/tomattara-navi\/sitemap\.xml/);
   const notFound = site.htmlFiles.find((f) => f.file === '404.html').text;
   assert.match(notFound, /<meta name="robots" content="noindex">/);
   assert.match(notFound, /href="\/tomattara-navi\/assets\/site\.css"/);
@@ -245,6 +245,6 @@ test('sitemap.xml・robots.txt・404.html を出す', () => {
 
 test('OGP の画像はサイト内のファイルを指す', () => {
   const text = site.htmlFiles.find((f) => f.file === 'index.html').text;
-  assert.match(text, /<meta property="og:image" content="https:\/\/uedatakashi\.github\.io\/tomattara-navi\/assets\/og\.png">/);
+  assert.match(text, /<meta property="og:image" content="https:\/\/tomattara-navi\.github\.io\/tomattara-navi\/assets\/og\.png">/);
   assert.ok(existsSync(join(site.outDir, 'assets', 'og.png')));
 });

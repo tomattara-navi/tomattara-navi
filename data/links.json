@@ -9,15 +9,15 @@
   {
     "id": "repo",
     "name": "このサイトの GitHub リポジトリ",
-    "url": "https://github.com/UedaTakashi/tomattara-navi",
-    "domains": ["github.com/UedaTakashi/tomattara-navi/"],
+    "url": "https://github.com/tomattara-navi/tomattara-navi",
+    "domains": ["github.com/tomattara-navi/tomattara-navi/"],
     "basis": "docs/PLAN.md §9（連絡窓口は GitHub Issues）"
   },
   {
     "id": "issues",
     "name": "訂正・削除の依頼（GitHub Issues）",
-    "url": "https://github.com/UedaTakashi/tomattara-navi/issues/new/choose",
-    "domains": ["github.com/UedaTakashi/tomattara-navi/"],
+    "url": "https://github.com/tomattara-navi/tomattara-navi/issues/new/choose",
+    "domains": ["github.com/tomattara-navi/tomattara-navi/"],
     "basis": "docs/PLAN.md §9（連絡窓口は GitHub Issues）"
   }
 ]
