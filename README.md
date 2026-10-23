@@ -35,6 +35,7 @@ STATUS_FILE=.cache/status.json node scripts/build.mjs  # 観測の結果を画�
 
 - 本番では `.github/workflows/deploy.yml` の cron（毎時 7分・37分）だけが観測します。main への push・手動の実行では観測せず、公開中の結果を引き継ぎます。PR の CI（`ci.yml`）は観測しません
 - 前回の値は公開中の `status.json` から取ります（状態のためのコミットは作りません）。`robots.txt` は Actions の cache（`actions/cache`）に24時間持ちます
+- `HEAD` では本文が無いので、挑戦ページ（ボット対策の確認画面）は Cloudflare の `cf-mitigated` ヘッダでしか見分けられません。確認画面が出ていそうなサービスは、`monitor.method` を `GET` にします（本文の目印でも見分けます）
 - 観測するのは `data/services.json` の `monitor.enabled` が `true` のサービスだけ。手元で試すときも、むやみに実行しないでください（試験は偽の fetch で行い、本物のサイトへはつなぎません）
 
 ## データの更新のしかた

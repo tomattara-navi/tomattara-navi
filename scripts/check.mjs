@@ -21,7 +21,9 @@ export const MAX_RETRY_WAIT_MS = 120_000; // Retry-After がこれより長け�
 export const MAX_SKIP_MS = 24 * 60 * 60 * 1000; // Retry-After で観測を控えるのは最長24時間
 export const BODY_MAX_BYTES = 64 * 1024; // GET の本文は 64KB で読むのを打ち切る
 export const ROBOTS_TTL_MS = 24 * 60 * 60 * 1000; // robots.txt は24時間キャッシュ
-export const ROBOTS_KEEP_MS = 7 * 24 * 60 * 60 * 1000; // 使われなくなったキャッシュは7日で捨てる
+// robots.txt が読めない（5xx・429・つながらない）ときは、7日以内に読めたキャッシュに従う（RFC 9309 §2.4。店主決定 2026-10-23）。
+// 7日より古いキャッシュは使わず、キャッシュの一覧からも捨てる
+export const ROBOTS_KEEP_MS = 7 * 24 * 60 * 60 * 1000;
 export const MAX_REQUESTS_PER_HOST = 2; // 1回の実行で1ホストへ（robots を除き、再試行込みで）最大2回
 export const MAX_CONCURRENCY = 4; // 同時接続は1ホスト1本、全体で4本まで
 export const PREVIOUS_MAX_BYTES = 2 * 1024 * 1024;
@@ -121,13 +123,18 @@ async function robotsDecision(ctx, url) {
   const origin = u.origin;
   let entry = ctx.robotsCache[origin];
   const now = ctx.now();
+  const wellFormed = entry && (entry.kind === 'unavailable' || (entry.kind === 'ok' && typeof entry.body === 'string'));
+  const age = wellFormed ? now.getTime() - Date.parse(entry.fetched_at) : NaN;
   // 24時間より古い・形の違うキャッシュは使わず取り直す
-  const usable = entry && (entry.kind === 'unavailable' || (entry.kind === 'ok' && typeof entry.body === 'string')) && now.getTime() - Date.parse(entry.fetched_at) < ROBOTS_TTL_MS;
-  if (!usable) {
+  if (!(age < ROBOTS_TTL_MS)) {
     const got = await fetchRobots(ctx.requester, origin);
-    if (got.kind === 'unreachable') return 'unreachable';
-    entry = { fetched_at: now.toISOString(), kind: got.kind, ...(got.kind === 'ok' ? { body: got.body } : {}) };
-    ctx.robotsCache[origin] = entry;
+    if (got.kind === 'unreachable') {
+      // 読めないときは、7日以内に読めたキャッシュに従う（取得の時刻は更新しない＝次の回もまた取り直す）
+      if (!(age < ROBOTS_KEEP_MS)) return 'unreachable';
+    } else {
+      entry = { fetched_at: now.toISOString(), kind: got.kind, ...(got.kind === 'ok' ? { body: got.body } : {}) };
+      ctx.robotsCache[origin] = entry;
+    }
   }
   if (entry.kind === 'unavailable') return 'allowed';
   return isAllowedByRobots(parseRobots(entry.body), PRODUCT_TOKEN, u.pathname + u.search) ? 'allowed' : 'disallowed';

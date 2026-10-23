@@ -177,6 +177,21 @@ async function main() {
       expect: 'fail',
       apply: (d) => replaceOnce(d, 'scripts/lib/status.mjs', "if (isObserverFailure(status, now)) return { kind: 'observer_failure', entry: e };", ''),
     },
+    {
+      name: '20. robots.txt が読めないとき、7日より古いキャッシュにも従う',
+      expect: 'fail',
+      apply: (d) => replaceOnce(d, 'scripts/check.mjs', "if (!(age < ROBOTS_KEEP_MS)) return 'unreachable';", "if (!(age < Infinity)) return 'unreachable';"),
+    },
+    {
+      name: '21. robots.txt が読めないとき、7日以内のキャッシュがあっても観測しない（変更前の動き）',
+      expect: 'fail',
+      apply: (d) => replaceOnce(d, 'scripts/check.mjs', "if (!(age < ROBOTS_KEEP_MS)) return 'unreachable';", "return 'unreachable';"),
+    },
+    {
+      name: '22. ECONNRESET を ng に分類する',
+      expect: 'fail',
+      apply: (d) => replaceOnce(d, 'scripts/lib/status.mjs', "const REFUSED_CODES = new Set(['ECONNREFUSED']);", "const REFUSED_CODES = new Set(['ECONNREFUSED', 'ECONNRESET']);"),
+    },
   ];
 
   let bad = 0;

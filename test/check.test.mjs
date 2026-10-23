@@ -173,6 +173,11 @@ test('DNS 失敗・接続拒否・TLS 失敗 → ng', async () => {
   }
 });
 
+test('ECONNRESET（接続を途中で切られた）→ unknown（データセンターからの接続を弾く WAF でも起きるため ng にしない）', async () => {
+  const { e } = await one({ 'https://www.example.jp/': throwsCode('ECONNRESET') });
+  assert.deepEqual([e.state, e.reason], ['unknown', 'exception']);
+});
+
 test('分類できない例外 → unknown（ok に倒さない）', async () => {
   for (const h of [throwsCode('ECONNRESET'), () => { throw new Error('何か'); }, () => ({ status: 'x' }), () => null]) {
     const { e } = await one({ 'https://www.example.jp/': h });
@@ -248,6 +253,35 @@ test('robots.txt は24時間キャッシュする（その間は取り直さな�
   assert.equal(second.calls.filter((x) => x.robots).length, 0, '24時間以内は取り直さない');
   const third = await one(routes, undefined, { robotsCache: first.robotsCache, clock: clock(T0 + 24 * 3600 * 1000) });
   assert.equal(third.calls.filter((x) => x.robots).length, 1, '24時間たったら取り直す');
+});
+
+test('robots.txt が 5xx・429・つながらないとき、7日以内のキャッシュがあればそれに従って観測を続ける（RFC 9309 §2.4）', async () => {
+  const DAY = 24 * 3600 * 1000;
+  const cacheAt = (ms, body) => ({ 'https://www.example.jp': { fetched_at: new Date(T0 - ms).toISOString(), kind: 'ok', body } });
+  for (const robots of [res(500), res(503), res(429), throwsCode('ENOTFOUND'), throwsCode('ECONNREFUSED')]) {
+    // 3日前のキャッシュ（制限なし）→ 観測を続ける。サイトも落ちていれば ng になる
+    const down = await one({ 'https://www.example.jp/robots.txt': robots, 'https://www.example.jp/': res(503) }, undefined, { robotsCache: cacheAt(3 * DAY, 'User-agent: *\nDisallow: /private/') });
+    assert.deepEqual([down.e.state, down.e.reason], ['ng', 'http_5xx']);
+    assert.equal(down.calls.filter((c) => c.robots).length, 1, '取り直しは試みる');
+    assert.equal(down.nonRobots.length, 2, 'リクエストの上限（robots を除き2回）は変わらない');
+    assert.equal(down.robotsCache['https://www.example.jp'].fetched_at, new Date(T0 - 3 * DAY).toISOString(), '取得の時刻は更新しない');
+    // 古いキャッシュの禁止にも従う
+    const disallow = await one({ 'https://www.example.jp/robots.txt': robots, 'https://www.example.jp/': res(200) }, undefined, { robotsCache: cacheAt(3 * DAY, 'User-agent: *\nDisallow: /') });
+    assert.deepEqual([disallow.e.state, disallow.e.reason], ['unknown', 'robots_disallow']);
+    assert.equal(disallow.nonRobots.length, 0);
+    // 7日ちょうど・8日前のキャッシュ → 使わずに unknown（観測しない）
+    for (const age of [7 * DAY, 8 * DAY]) {
+      const old = await one({ 'https://www.example.jp/robots.txt': robots, 'https://www.example.jp/': res(200) }, undefined, { robotsCache: cacheAt(age, '') });
+      assert.deepEqual([old.e.state, old.e.reason], ['unknown', 'robots_unreachable'], `${age / DAY}日前`);
+      assert.equal(old.nonRobots.length, 0);
+    }
+  }
+  // 「robots.txt が無い（404）」と分かったキャッシュも7日以内なら使う
+  const unavailable = await one({ 'https://www.example.jp/robots.txt': res(503), 'https://www.example.jp/': res(200) }, undefined, { robotsCache: { 'https://www.example.jp': { fetched_at: new Date(T0 - 6 * DAY).toISOString(), kind: 'unavailable' } } });
+  assert.equal(unavailable.e.state, 'ok');
+  // 形の壊れたキャッシュは、読めないときにも使わない
+  const broken = await one({ 'https://www.example.jp/robots.txt': res(503), 'https://www.example.jp/': res(200) }, undefined, { robotsCache: { 'https://www.example.jp': { fetched_at: new Date(T0 - DAY * 2).toISOString(), kind: 'ok' } } });
+  assert.equal(broken.e.reason, 'robots_unreachable');
 });
 
 test('robots.txt のキャッシュが壊れていれば取り直す', async () => {

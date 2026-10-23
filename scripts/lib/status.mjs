@@ -61,6 +61,7 @@ export function classifyResponse({ status, headers, bodyText = null, requestUrl,
 // ---- 例外（つながらなかった）の分類 ----
 const DNS_CODES = new Set(['ENOTFOUND', 'EAI_AGAIN', 'EAI_NONAME', 'EAI_NODATA', 'EAI_FAIL']);
 const REFUSED_CODES = new Set(['ECONNREFUSED']);
+// ECONNRESET（接続を途中で切られた）は ng にしない: データセンターからの接続を弾く WAF でも起きるため（店主決定 2026-10-23）
 const TIMEOUT_CODES = new Set(['ETIMEDOUT', 'UND_ERR_CONNECT_TIMEOUT', 'UND_ERR_HEADERS_TIMEOUT', 'UND_ERR_BODY_TIMEOUT']);
 const TLS_CODES = new Set([
   'CERT_HAS_EXPIRED', 'CERT_NOT_YET_VALID', 'CERT_REVOKED', 'CERT_UNTRUSTED', 'CERT_REJECTED',
