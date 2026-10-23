@@ -103,6 +103,21 @@ async function main() {
       expect: 'fail',
       apply: (d) => replaceOnce(d, 'scripts/lib/render.mjs', "${page.path === '' && site.google_site_verification ?", '${site.google_site_verification ?'),
     },
+    {
+      name: '8. verified_by を内部の呼び名（session2 調査）に戻す',
+      expect: 'fail',
+      apply: (d) => {
+        const path = join(d, 'data', 'services.json');
+        const services = JSON.parse(readFileSync(path, 'utf8'));
+        services.find((s) => s.id === 'mufg').verified_by = 'session2 調査（公式ページで確認）';
+        writeFileSync(path, JSON.stringify(services, null, 2) + '\n');
+      },
+    },
+    {
+      name: '9. 描画の側で内部の呼び名を足す（データの検査をすり抜ける形）',
+      expect: 'fail',
+      apply: (d) => replaceOnce(d, 'scripts/lib/render.mjs', '確かめた人・方法: ${s.verified_by}', '確かめた人・方法: ${s.verified_by}（Opus）'),
+    },
   ];
 
   let bad = 0;

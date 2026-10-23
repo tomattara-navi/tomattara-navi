@@ -137,3 +137,12 @@ test('site.google_site_verification（Search Console の確認コード）', () 
     expectError(data((d) => { d.site.google_site_verification = bad; }), /site\.google_site_verification: Search Console の確認コード/);
   }
 });
+
+test('作業の内部の呼び名（session1・Opus など）を data/ と content/ に書かない', () => {
+  for (const bad of ['session2 調査（公式ページで確認）', 'Session 1 で確認', 'セッション2で確認', 'Opus が確認', 'Claude 調べ']) {
+    expectError(data((d) => { svc(d, 'mufg').verified_by = bad; }), /services\[mufg\]\.verified_by: 作業の内部の呼び名/);
+  }
+  expectError(data((d) => { svc(d, 'mufg').notes.push('session1 のメモ'); }), /services\[mufg\]\.notes\[\d+\]: 作業の内部の呼び名/);
+  expectError(data((d) => { d.content[0].body += '<p>Opus</p>'; }), /content\[[^\]]+\]\.body: 作業の内部の呼び名/);
+  expectOk(data((d) => { svc(d, 'mufg').verified_by = '運営者が公式ページで確認'; }));
+});

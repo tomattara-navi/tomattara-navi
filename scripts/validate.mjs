@@ -9,6 +9,15 @@ import { isValidDate, isValidDateTime, daysBetween, jstDate } from './lib/time.m
 export const UNVERIFIED = 'unverified';
 export const STALE_DAYS = 180;
 export const GOOGLE_SITE_VERIFICATION_RE = /^[A-Za-z0-9_-]{20,100}$/;
+// 作業の内部の呼び名（session1・Opus など）。公開ページに出さないため、data/ と content/ のどの文字列にも書かない。
+export const INTERNAL_NAME_RE = /\bsession\s*\d|セッション\s*\d|\b(?:opus|sonnet|haiku|claude|anthropic)\b/i;
+
+// 入れ子の値の中の文字列をすべて、場所（services[mufg].verified_by など）とともに渡す
+function eachString(value, where, fn) {
+  if (typeof value === 'string') fn(where, value);
+  else if (Array.isArray(value)) value.forEach((v, i) => eachString(v, `${where}[${v?.id ?? v?.file ?? i}]`, fn));
+  else if (value && typeof value === 'object') for (const [k, v] of Object.entries(value)) eachString(v, `${where}.${k}`, fn);
+}
 
 const SERVICE_KEYS = [
   'id', 'name', 'operator', 'category', 'mostly_unverified', 'official_domains', 'official_top',
@@ -429,6 +438,14 @@ export function validate(data, { today = jstDate(new Date()) } = {}) {
   // past_cases
   c.uniqueIds('past_cases', data.past_cases);
   for (const pc of data.past_cases) checkPastCase(c, pc, ctx);
+
+  // 内部の呼び名を書かない（data/ と content/ の全部）
+  for (const [name, value] of Object.entries(data)) {
+    eachString(value, name, (where, text) => {
+      const m = text.match(INTERNAL_NAME_RE);
+      if (m) c.error(where, `作業の内部の呼び名「${m[0]}」を書かないでください（例: 「運営者が公式ページで確認」）`);
+    });
+  }
 
   return { errors: c.errors, warnings: c.warnings };
 }
