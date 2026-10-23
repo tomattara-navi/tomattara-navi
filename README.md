@@ -31,7 +31,7 @@ node test/mutation_check.mjs  # 検算: わざと壊した版で検査が落ち�
 | ファイル | 中身 |
 |---|---|
 | `data/services.json` | 見張る対象のサービス（docs/PLAN.md 付録A）。形は `data/schema/services.schema.json` |
-| `data/incidents.json` | 人が**公式発表を確かめて**登録する障害。`sources` に `type: "official"` が1つも無いと検査で落ちる |
+| `data/incidents.json` | **公式発表を確かめて**登録する障害（確かめるのは人でも Claude でもよい）。`sources` に `type: "official"` が1つも無いと検査で落ちる |
 | `data/past_cases.json` | 「過去の事例」のページ（報道で伝えられた事例・出典つき）。同じ件を `data/incidents.json` に登録したら `incident_id` にその id を書く（サービスのページではその報道の事例を出さない） |
 | `data/categories.json` | カテゴリ |
 | `data/site.json` | サイト名・公開 URL・説明と、Google Search Console の確認コード（`google_site_verification`。トップの `<head>` に meta で出す。使わないなら `null`） |
