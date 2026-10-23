@@ -92,7 +92,7 @@
 ### 2.3 自動アクセスの作法（岡崎市立図書館事件の教訓）
 15. 1サービスにつき **30分に1回・1リクエスト**（公開トップページなど軽い URL。ログイン後の URL は見ない）。同時接続は1ホスト1本、全体で4本まで
 16. タイムアウト 10秒。失敗時の再試行は1回だけ（30秒後）。`Retry-After` に従う。**攻撃で落ちているサイトに追加の負荷をかけない**
-17. `robots.txt` を24時間キャッシュして守る（RFC 9309。取得が 5xx なら観測しない＝`unknown`）
+17. `robots.txt` を24時間キャッシュして守る（RFC 9309）。取得が 5xx・429・接続不可のときは、**7日以内に読めた古いキャッシュがあればそれに従って観測を続ける**（RFC 9309 §2.4）。キャッシュが無い・7日より古いときは観測しない＝`unknown`（店主決定 2026-10-23。それ以前は「取得が 5xx なら観測しない」としていた）
 18. User-Agent は `TomattaraNaviMonitor/1.0 (+https://<サイトのURL>/bot/)`。**個人のメールアドレス・氏名をヘッダ・コード・コミットに入れない**
 19. 公式のステータス API（Atlassian Statuspage の `/api/v2/status.json` など）がある社はそちらを優先する
 
@@ -215,11 +215,13 @@
   "services": {
     "mufg": { "state": "ok|ng|unknown", "consecutive_ng": 0, "http_status": 200,
               "reason": "timeout|dns|tls|http_5xx|http_403|http_429|robots_disallow|challenge|...",
-              "checked_at": "...", "last_ok_at": "...", "history": [ {"t":"...","s":"ok"} ] }
+              "checked_at": "...", "last_ok_at": "...", "retry_after_until": "...（あるときだけ）",
+              "history": [ {"t":"...","s":"ok"} ] }
   }
 }
 ```
 - `history` は直近48件（24時間分）だけ持つ
+- `retry_after_until`: `Retry-After` で長く待つよう求められたとき、その期限（最長24時間）。期限までは観測せず `unknown`/`retry_after`（店主決定 2026-10-23）
 
 ---
 
@@ -238,7 +240,8 @@
 
 - 対象: `monitor.enabled` が true のサービス
 - 手順（1サービス）:
-  1. `robots.txt` を確認（24時間キャッシュ。キャッシュは Actions の cache を使い、無ければ取り直す）。不可なら `unknown`/`robots_disallow`
+  1. `robots.txt` を確認（24時間キャッシュ。キャッシュは Actions の cache を使い、無ければ取り直す）。不可なら `unknown`/`robots_disallow`。
+     取得が 5xx・429・接続不可なら、7日以内のキャッシュに従う。それも無ければ `unknown`/`robots_unreachable`（店主決定 2026-10-23。§2.3-17）
   2. `statuspage_api` があればそれを読む（`indicator` が none→ok、それ以外→公式の障害表示として `ng`、読めない→`unknown`）
   3. 無ければ `monitor.url` へ HEAD（405/501 なら GET に切り替え、本文は 64KB で読むのを打ち切る）
 - 判定:
@@ -246,6 +249,7 @@
   - `ng`: 5xx（503 を含む）・接続拒否・DNS 失敗・TLS 失敗・タイムアウト
   - `unknown`: 403・429・その他の 4xx・WAF の挑戦ページ（Cloudflare/Akamai の目印）・robots 不可・リダイレクト先が公式ドメイン外・観測側の例外
   - ★分類できない例外はすべて `unknown`（`ok` に倒さない）
+  - 接続を途中で切られた（`ECONNRESET`）は `unknown`。データセンターからの接続を弾く WAF でも起きるため、`ng` にしない（店主決定 2026-10-23）
 - 前回値: 公開中の `https://<サイト>/status.json` を取得。取れなければ前回値なしとして扱う（`consecutive_ng` は 0 から）
 - 表示ルールは §2.2。`consecutive_ng >= 2` のときだけ「応答がありませんでした」を出す
 - 観測が全滅（全サービスが `unknown`/`ng`）のときは観測側の故障を疑い、**画面に「観測側の不調の可能性」**を出す（各社の障害と言わない）

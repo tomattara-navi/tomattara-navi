@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "status.json（自動観測の結果。scripts/check.mjs が書き、dist/status.json として公開する。コミットしない）",
+  "description": "docs/PLAN.md §5.3。検査は scripts/lib/status.mjs の sanitizeStatus（形の合わない項目は捨てる）",
+  "type": "object",
+  "required": ["generated_at", "services"],
+  "properties": {
+    "generated_at": { "type": "string", "description": "観測した時刻（2026-10-23T10:07:12+09:00）" },
+    "services": {
+      "type": "object",
+      "description": "キーは data/services.json の id。monitor.enabled が true のものだけ",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["state", "consecutive_ng", "http_status", "reason", "checked_at", "last_ok_at", "history"],
+        "properties": {
+          "state": { "enum": ["ok", "ng", "unknown"] },
+          "consecutive_ng": { "type": "integer", "minimum": 0, "description": "続けて ng だった回数。2以上で画面に「応答がありませんでした」" },
+          "http_status": { "type": ["integer", "null"] },
+          "reason": { "type": "string", "description": "http_2xx・http_3xx・http_403・http_429・http_4xx・http_5xx・timeout・dns・refused・tls・challenge・robots_disallow・robots_unreachable・redirect_offsite・retry_after・host_budget・statuspage_*・exception など" },
+          "checked_at": { "type": "string" },
+          "last_ok_at": { "type": ["string", "null"] },
+          "retry_after_until": { "type": "string", "description": "Retry-After で求められた、観測を控える期限（あるときだけ。§5.3 の例に足した項目）" },
+          "history": {
+            "type": "array",
+            "maxItems": 48,
+            "items": { "type": "object", "required": ["t", "s"], "properties": { "t": { "type": "string" }, "s": { "enum": ["ok", "ng", "unknown"] } } }
+          }
+        }
+      }
+    }
+  }
+}
