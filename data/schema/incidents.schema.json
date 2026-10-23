@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "data/incidents.json",
-  "description": "人が公式発表を見て登録する障害（docs/PLAN.md §5.2）。「障害中」と書けるのはここに登録したものだけ。検査は scripts/validate.mjs。",
+  "description": "公式発表を確かめて登録する障害（docs/PLAN.md §5.2。確かめるのは人でも Claude でもよい）。「障害中」と書けるのはここに登録したものだけ。検査は scripts/validate.mjs。",
   "type": "array",
   "items": {
     "type": "object",

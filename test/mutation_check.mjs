@@ -119,7 +119,7 @@ async function main() {
     {
       name: '9. 描画の側で内部の呼び名を足す（データの検査をすり抜ける形）',
       expect: 'fail',
-      apply: (d) => replaceOnce(d, 'scripts/lib/render.mjs', '確かめた人・方法: ${s.verified_by}', '確かめた人・方法: ${s.verified_by}（Opus）'),
+      apply: (d) => replaceOnce(d, 'scripts/lib/render.mjs', '確かめ方: ${s.verified_by}', '確かめ方: ${s.verified_by}（Opus）'),
     },
   ];
 

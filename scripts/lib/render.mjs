@@ -295,7 +295,7 @@ export function servicePage(ctx, s) {
 ${incidents.map((i) => incidentCard(ctx, i, { headingLevel: 2, showService: false }))}`;
   const checked = html`<section aria-labelledby="checked"><h2 id="checked">このページの情報の確認</h2>
 <p>${verifiedDate(ctx, s.verified_at)}</p>
-<p class="sub">確かめた人・方法: ${s.verified_by}</p>
+<p class="sub">確かめ方: ${s.verified_by}</p>
 <p>運営会社の正式な名称: ${s.operator === UNVERIFIED ? unverified() : s.operator}</p>
 <p>誤り・古い情報は「<a href="${ctx.href('about/')}">このサイトについて</a>」の連絡先からお知らせください。</p>
 </section>`;
