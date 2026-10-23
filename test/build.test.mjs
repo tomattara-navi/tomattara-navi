@@ -36,6 +36,20 @@ function tags(htmlText) {
 function textOf(htmlText, tag) {
   return [...htmlText.matchAll(new RegExp(`<${tag}[^>]*>([\\s\\S]*?)</${tag}>`, 'g'))].map((m) => decode(m[1].replace(/<[^>]+>/g, '')));
 }
+// ページの <a href> を new URL() で取り出し、完全一致で比べる（URL を文字列の部分一致で調べない）
+function linkHrefs(htmlText) {
+  return tags(htmlText).filter((t) => t.name === 'a' && t.attrs.href).flatMap((t) => {
+    try {
+      return [new URL(t.attrs.href).href];
+    } catch {
+      return []; // サイト内の相対リンク
+    }
+  });
+}
+function hasLink(htmlText, url) {
+  const target = new URL(url).href;
+  return linkHrefs(htmlText).some((h) => h === target);
+}
 function walk(dir) {
   return readdirSync(dir).flatMap((f) => {
     const p = join(dir, f);
@@ -206,7 +220,7 @@ test('公式発表の出典つきの登録があると、トップとサービ�
   const sagawa = withIncidents.htmlFiles.find((f) => f.file === join('s', 'sagawa', 'index.html')).text;
   for (const text of [top, sagawa]) {
     assert.match(text, /障害中（公式発表）/);
-    assert.ok(text.includes('href="https://www2.sagawa-exp.co.jp/information/list/"'));
+    assert.ok(hasLink(text, 'https://www2.sagawa-exp.co.jp/information/list/'));
   }
   const pages = withIncidents.htmlFiles.filter((f) => f.text.includes('<span class="badge">障害中（公式発表）</span>')).map((f) => f.file).sort();
   assert.deepEqual(pages, ['index.html', join('s', 'sagawa', 'index.html')]);
@@ -224,7 +238,7 @@ test('未確認（"unverified"）の項目は行ごと出さず、「無い」�
   const svc = (id) => site.data.services.find((s) => s.id === id);
   // ANA: お知らせ・代わりの窓口・電話がすべて未確認 → その欄ごと出さない。公式トップ・公式ドメインは出す
   assert.ok(!page('ana').includes('id="notices"') && !page('ana').includes('id="alts"') && !page('ana').includes('電話の窓口'));
-  assert.ok(page('ana').includes('href="https://www.ana.co.jp/"') && page('ana').includes('<code>ana.co.jp</code>'));
+  assert.ok(hasLink(page('ana'), 'https://www.ana.co.jp/') && page('ana').includes('<code>ana.co.jp</code>'));
   // 三井住友: 電話番号は出し、未確認の受付時間は出さない
   assert.equal(svc('smbc').official_alternatives[0].hours, 'unverified');
   assert.ok(page('smbc').includes('<span class="phone">0120-324-310</span>') && !page('smbc').includes('受付時間'));
@@ -235,14 +249,14 @@ test('未確認（"unverified"）の項目は行ごと出さず、「無い」�
   assert.equal(svc('sagawa').official_x, 'unverified');
   assert.ok(!page('sagawa').includes('公式 X（'));
   // 開けなかったページ（verified: false）は出さない。公式トップだけは出す
-  assert.ok(!page('mizuho').includes('https://www.mizuhobank.co.jp/retail/products/direct/'));
-  assert.ok(page('mizuho').includes('href="https://www.mizuhobank.co.jp/"'));
+  assert.ok(!hasLink(page('mizuho'), 'https://www.mizuhobank.co.jp/retail/products/direct/'));
+  assert.ok(hasLink(page('mizuho'), 'https://www.mizuhobank.co.jp/'));
   // 「無い」と確かめたものは出す
   assert.match(page('sagawa'), /電話の窓口は無い（公式のページで確認）/);
   assert.match(page('amazon'), /まとめたお知らせのページは無い（当サイトの確認）/);
 });
 
-test('公開ページに「未確認」の表示が出ない', () => {
+test('公開ページに「未確認」や、確認できなかったことを示す注記が出ない', () => {
   const unverifiedAll = buildInto((d) => {
     d.services.find((s) => s.id === 'jal').mostly_unverified = true;
     d.consultation[0].verified_at = 'unverified';
@@ -252,6 +266,7 @@ test('公開ページに「未確認」の表示が出ない', () => {
       const text = readFileSync(f, 'utf8');
       assert.ok(!text.includes('未確認'), `${relative(outDir, f)} に「未確認」があります`);
       assert.ok(!text.includes('受付時間は公式ページで確かめてください'), relative(outDir, f));
+      assert.ok(!text.includes('開けなかった'), `${relative(outDir, f)} に確認できなかったことを示す注記があります`);
       assert.ok(!text.includes('class="unverified"'), relative(outDir, f));
     }
   }
@@ -270,8 +285,8 @@ test('JAL・Amazon・楽天市場のページ（2026-10-23 の確認）', () => 
   const page = (id) => site.htmlFiles.find((f) => f.file === join('s', id, 'index.html')).text;
   assert.match(page('jal'), /<span class="phone">0570-025-022<\/span>/);
   assert.match(page('jal'), /<span class="handle">@JAL_flight_info<\/span>（運航情報）/);
-  assert.ok(page('amazon').includes('href="https://www.amazon.co.jp/gp/help/customer/display.html?nodeId=G4YFYCCNUSENA23B"'), '詐欺の見分け方');
-  assert.ok(page('rakutenichiba').includes('href="https://www.rakuten.co.jp/aboutus/am/notice.html"'));
+  assert.ok(hasLink(page('amazon'), 'https://www.amazon.co.jp/gp/help/customer/display.html?nodeId=G4YFYCCNUSENA23B'), '詐欺の見分け方');
+  assert.ok(hasLink(page('rakutenichiba'), 'https://www.rakuten.co.jp/aboutus/am/notice.html'));
   for (const id of ['jal', 'amazon', 'rakutenichiba']) assert.ok(!page(id).includes('大部分を確かめていません'), id);
 });
 
@@ -284,7 +299,7 @@ test('いまのデータの障害の登録（佐川急便・コミックシー�
   assert.match(top, /<dt>始まり<\/dt><dd>2026-09-30<\/dd>/, '時刻が公表されていなければ日付だけ');
   const cmoa = real.htmlFiles.find((f) => f.file === join('s', 'cmoa', 'index.html')).text;
   assert.ok(cmoa.includes('info@nttsolmare.com') && !cmoa.includes('mailto:'), 'メールアドレスは文字だけ');
-  assert.ok(cmoa.includes('href="https://www.cmoa.jp/"'), 'コミックシーモアの公式トップ');
+  assert.ok(hasLink(cmoa, 'https://www.cmoa.jp/'), 'コミックシーモアの公式トップ');
 });
 
 test('公式の登録がある同じ件の報道の事例は、サービスのページに出さず「過去の事例」のページには残す', () => {
@@ -322,17 +337,17 @@ test('偽サイトのページに公式ドメインの一覧と相談先を出�
   for (const d of ['bk.mufg.jp', 'kuronekoyamato.co.jp', 'secure.okbiz.jp/eki-net/', 'myna.go.jp', 'vb2.jp', 'mynaportal.go.jp']) assert.ok(text.includes(`<code>${d}</code>`), d);
   for (const s of ['#9110', '188', 'フィッシング対策協議会']) assert.ok(text.includes(s), s);
   for (const u of ['https://www.npa.go.jp/bureau/safetylife/sos47/manga/dial/', 'https://www.caa.go.jp/policies/policy/local_cooperation/local_consumer_administration/hotline/', 'https://www.antiphishing.jp/']) {
-    assert.ok(text.includes(`href="${u}"`), u);
+    assert.ok(hasLink(text, u), u);
   }
   assert.ok(!text.includes('連絡先は当サイトでは未確認'));
 });
 
 test('sitemap.xml・robots.txt・404.html を出す', () => {
   const sitemap = readFileSync(join(site.outDir, 'sitemap.xml'), 'utf8');
-  const locs = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
+  const locs = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => new URL(m[1]));
   assert.equal(locs.length, site.htmlFiles.length - 1);
-  assert.ok(locs.every((l) => l.startsWith('https://tomattara-navi.github.io/tomattara-navi/')));
-  assert.ok(locs.includes('https://tomattara-navi.github.io/tomattara-navi/s/mufg/'));
+  assert.ok(locs.every((u) => u.origin === 'https://tomattara-navi.github.io' && u.pathname.startsWith('/tomattara-navi/')));
+  assert.ok(locs.some((u) => u.href === 'https://tomattara-navi.github.io/tomattara-navi/s/mufg/'));
   assert.match(readFileSync(join(site.outDir, 'robots.txt'), 'utf8'), /Sitemap: https:\/\/tomattara-navi\.github\.io\/tomattara-navi\/sitemap\.xml/);
   const notFound = site.htmlFiles.find((f) => f.file === '404.html').text;
   assert.match(notFound, /<meta name="robots" content="noindex">/);

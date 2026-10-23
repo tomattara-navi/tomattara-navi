@@ -53,9 +53,11 @@ function verifiedDate(ctx, date) {
   return html`確認日: ${date}${stale ? html` <span class="stale">要再確認（確認から${STALE_DAYS}日を過ぎています）</span>` : ''}`;
 }
 
-// 開けなかったページ（verified: false）は呼ぶ側で外す。公式トップだけは開けなくてもリンクを出す
+// 開けなかったページ（verified: false）は呼ぶ側で外す。公式トップだけは開けなくてもリンクを出すが、
+// 「開けなかった」のような確認できなかったことを示す注記は出さない（店主決定 2026-10-23）
 function linkItem(ctx, link, fallbackLabel) {
-  return html`<li>${ctx.ext(link.url, link.label ?? fallbackLabel)}${link.note ? html`<span class="note">${link.note}</span>` : ''}</li>`;
+  const note = link.verified ? link.note : null;
+  return html`<li>${ctx.ext(link.url, link.label ?? fallbackLabel)}${note ? html`<span class="note">${note}</span>` : ''}</li>`;
 }
 
 function domainText(entry) {

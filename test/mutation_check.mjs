@@ -202,6 +202,11 @@ async function main() {
       expect: 'fail',
       apply: (d) => replaceOnce(d, 'scripts/lib/render.mjs', "${a.hours === UNVERIFIED ? '' : html`<p class=\"sub\">受付時間: ${a.hours}</p>`}", "<p class=\"sub\">${a.hours === UNVERIFIED ? '受付時間は公式ページで確かめてください' : `受付時間: ${a.hours}`}</p>"),
     },
+    {
+      name: '25. 開けなかった公式トップに「開けなかった」の注記を出す（変更前の動き）',
+      expect: 'fail',
+      apply: (d) => replaceOnce(d, 'scripts/lib/render.mjs', 'const note = link.verified ? link.note : null;', 'const note = link.note;'),
+    },
   ];
 
   let bad = 0;

@@ -126,7 +126,9 @@ test('dist/status.json を置く（次の観測の前回値）。壊れた結果
   assert.equal(out.generated_at, status.generated_at);
   assert.ok(!('nosuch' in out.services) && !('mufg' in out.services));
   assert.equal(out.services.smbc.state, 'ok');
-  assert.ok(!readFileSync(join(outDir, 'sitemap.xml'), 'utf8').includes('status.json'));
+  // sitemap の URL は new URL() で取り出してパスで比べる
+  const locs = [...readFileSync(join(outDir, 'sitemap.xml'), 'utf8').matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => new URL(m[1]));
+  assert.ok(locs.length > 0 && !locs.some((u) => u.pathname.endsWith('/status.json')));
 });
 
 test('帯は直近24時間・最大48件。24時間より古いものは出さない', () => {
