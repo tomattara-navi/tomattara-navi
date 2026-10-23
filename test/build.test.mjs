@@ -204,8 +204,36 @@ test('「未確認」と「無い」を区別して表示する', () => {
   assert.match(page('ana'), /電話の窓口: <span class="unverified">未確認<\/span>/);
   assert.match(page('sagawa'), /電話の窓口は無い（公式のページで確認）/);
   assert.match(page('smbc'), /受付時間は公式ページで確かめてください/);
-  assert.match(page('jal'), /大部分を確かめていません/);
-  assert.ok(!page('jal').includes('空港'), 'JAL のページは公式トップと「未確認」の表示だけ');
+  assert.match(page('amazon'), /まとめたお知らせのページは無い（当サイトの確認）/);
+});
+
+test('「大部分が未確認」のサービスのページは、公式トップと「未確認」の表示だけ', () => {
+  const { htmlFiles } = buildInto((d) => { d.incidents = []; d.services.find((s) => s.id === 'jal').mostly_unverified = true; });
+  const text = htmlFiles.find((f) => f.file === join('s', 'jal', 'index.html')).text;
+  assert.match(text, /大部分を確かめていません/);
+  assert.ok(!text.includes('空港') && !text.includes('0570-025-022'));
+  const phishing = htmlFiles.find((f) => f.file === join('phishing', 'index.html')).text;
+  assert.ok(!phishing.includes('<code>jal.co.jp</code>'), '大部分が未確認のサービスのドメインは載せない');
+});
+
+test('JAL・Amazon・楽天市場のページ（2026-10-23 の確認）', () => {
+  const page = (id) => site.htmlFiles.find((f) => f.file === join('s', id, 'index.html')).text;
+  assert.match(page('jal'), /<span class="phone">0570-025-022<\/span>/);
+  assert.match(page('jal'), /<span class="handle">@JAL_flight_info<\/span>（運航情報）/);
+  assert.ok(page('amazon').includes('href="https://www.amazon.co.jp/gp/help/customer/display.html?nodeId=G4YFYCCNUSENA23B"'), '詐欺の見分け方');
+  assert.ok(page('rakutenichiba').includes('href="https://www.rakuten.co.jp/aboutus/am/notice.html"'));
+  for (const id of ['jal', 'amazon', 'rakutenichiba']) assert.ok(!page(id).includes('大部分を確かめていません'), id);
+});
+
+test('いまのデータの障害の登録（佐川急便・コミックシーモア）を出す', () => {
+  const real = buildInto();
+  const top = real.htmlFiles.find((f) => f.file === 'index.html').text;
+  assert.match(top, /<span class="badge">一部復旧（公式発表）<\/span> 佐川急便: /);
+  assert.match(top, /<span class="badge">障害中（公式発表）<\/span> コミックシーモア: /);
+  assert.match(top, /佐川急便<\/a> <span class="badge">一部復旧（公式発表）<\/span>/, '一覧のバッジも状態どおり');
+  assert.match(top, /<dt>始まり<\/dt><dd>2026-09-30<\/dd>/, '時刻が公表されていなければ日付だけ');
+  const cmoa = real.htmlFiles.find((f) => f.file === join('s', 'cmoa', 'index.html')).text;
+  assert.ok(cmoa.includes('info@nttsolmare.com') && !cmoa.includes('mailto:'), 'メールアドレスは文字だけ');
 });
 
 test('確認から180日を過ぎると「要再確認」と出す', () => {
@@ -227,8 +255,11 @@ test('値はエスケープされる', () => {
 test('偽サイトのページに公式ドメインの一覧と相談先を出す', () => {
   const text = site.htmlFiles.find((f) => f.file === join('phishing', 'index.html')).text;
   for (const d of ['bk.mufg.jp', 'kuronekoyamato.co.jp', 'secure.okbiz.jp/eki-net/', 'myna.go.jp', 'vb2.jp', 'mynaportal.go.jp']) assert.ok(text.includes(`<code>${d}</code>`), d);
-  assert.ok(!text.includes('<code>amazon.co.jp</code>'), '大部分が未確認のサービスのドメインは載せない');
   for (const s of ['#9110', '188', 'フィッシング対策協議会']) assert.ok(text.includes(s), s);
+  for (const u of ['https://www.npa.go.jp/bureau/safetylife/sos47/manga/dial/', 'https://www.caa.go.jp/policies/policy/local_cooperation/local_consumer_administration/hotline/', 'https://www.antiphishing.jp/']) {
+    assert.ok(text.includes(`href="${u}"`), u);
+  }
+  assert.ok(!text.includes('連絡先は当サイトでは未確認'));
 });
 
 test('sitemap.xml・robots.txt・404.html を出す', () => {

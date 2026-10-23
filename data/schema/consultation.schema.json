@@ -6,11 +6,12 @@
   "items": {
     "type": "object",
     "additionalProperties": false,
-    "required": ["id", "name", "phone", "detail", "verified_at"],
+    "required": ["id", "name", "phone", "url", "detail", "verified_at"],
     "properties": {
       "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
       "name": { "type": "string" },
       "phone": { "type": ["string", "null"] },
+      "url": { "type": ["string", "null"], "description": "案内のページ（電話番号の根拠）や団体のサイト。data/links.json の domains に一致するものだけ" },
       "detail": { "type": "string" },
       "verified_at": { "type": "string", "description": "YYYY-MM-DD か \"unverified\"" }
     }

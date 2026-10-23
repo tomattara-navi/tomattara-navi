@@ -22,7 +22,7 @@ function eachString(value, where, fn) {
 const SERVICE_KEYS = [
   'id', 'name', 'operator', 'category', 'mostly_unverified', 'official_domains', 'official_top',
   'official_notices', 'official_x', 'phone_desk', 'official_alternatives', 'general_alternatives',
-  'not_official', 'monitor', 'notes', 'verified_at', 'verified_by',
+  'not_official', 'phishing_guide', 'monitor', 'notes', 'verified_at', 'verified_by',
 ];
 const INCIDENT_KEYS = [
   'id', 'service_id', 'title', 'status', 'started_at', 'resolved_at', 'summary', 'what_you_can_do',
@@ -107,6 +107,10 @@ class Checker {
   }
   dateTime(where, v) {
     if (!isValidDateTime(v)) this.error(where, `日時は 2026-10-15T11:35+09:00 の形にしてください（${JSON.stringify(v)}）`);
+  }
+  // 時刻が公表されていないときは日付だけでもよい
+  dateOrDateTime(where, v) {
+    if (!isValidDate(v) && !isValidDateTime(v)) this.error(where, `日時は 2026-10-15T11:35+09:00、時刻が公表されていなければ 2026-10-15 の形にしてください（${JSON.stringify(v)}）`);
   }
   // https: で、許可の一覧に一致する URL か
   url(where, v, allow, { label = 'official_domains' } = {}) {
@@ -263,6 +267,9 @@ function checkService(c, s, ctx) {
     });
   }
 
+  // 偽メール・詐欺の見分け方の公式の案内（無ければ null）
+  if (s.phishing_guide !== null) checkLink(c, `${w}.phishing_guide`, s.phishing_guide, allow);
+
   // 観測の設定（フェーズ2で使う）
   const mw = `${w}.monitor`;
   if (c.isObject(mw, s.monitor)) {
@@ -325,8 +332,8 @@ function checkIncident(c, inc, ctx) {
   if (!service) c.error(`${w}.service_id`, `services に無い id "${inc.service_id}"`);
   if (c.string(`${w}.title`, inc.title)) c.officialWord(`${w}.title`, inc.title);
   c.oneOf(`${w}.status`, inc.status, INCIDENT_STATUSES);
-  c.dateTime(`${w}.started_at`, inc.started_at);
-  if (inc.status === 'resolved') c.dateTime(`${w}.resolved_at`, inc.resolved_at);
+  c.dateOrDateTime(`${w}.started_at`, inc.started_at);
+  if (inc.status === 'resolved') c.dateOrDateTime(`${w}.resolved_at`, inc.resolved_at);
   else if (inc.resolved_at !== null) c.error(`${w}.resolved_at`, '"resolved" 以外のときは null にしてください');
   c.string(`${w}.summary`, inc.summary);
   c.stringArray(`${w}.what_you_can_do`, inc.what_you_can_do);
@@ -410,12 +417,14 @@ export function validate(data, { today = jstDate(new Date()) } = {}) {
     }
   }
 
-  // consultation（相談先）
+  // consultation（相談先）。リンク先は data/links.json の domains に一致するものだけ
+  const linkDomains = (Array.isArray(data.links) ? data.links : []).flatMap((l) => (Array.isArray(l?.domains) ? l.domains : []));
   c.uniqueIds('consultation', data.consultation);
   for (const p of data.consultation) {
     const w = `consultation[${p?.id ?? '?'}]`;
     if (!c.isObject(w, p)) continue;
-    c.keys(w, p, ['id', 'name', 'phone', 'detail', 'verified_at']);
+    c.keys(w, p, ['id', 'name', 'phone', 'url', 'detail', 'verified_at']);
+    if (p.url !== null) c.url(`${w}.url`, p.url, linkDomains, { label: 'data/links.json の domains' });
     c.id(`${w}.id`, p.id);
     c.string(`${w}.name`, p.name);
     c.string(`${w}.detail`, p.detail);

@@ -29,8 +29,11 @@ async function main() {
     if (count !== 1) throw new Error(`検算の書き換え先が ${file} に ${count} 個あります（1個のはず）: ${from}`);
     writeFileSync(path, text.replace(from, to));
   }
-  function setIncidents(dir, incidents) {
-    writeFileSync(join(dir, 'data', 'incidents.json'), JSON.stringify(incidents, null, 2) + '\n');
+  // いまの登録はそのまま残し、後ろに足す（いまの登録を前提にした試験を壊さないため）
+  function addIncidents(dir, incidents) {
+    const path = join(dir, 'data', 'incidents.json');
+    const current = JSON.parse(readFileSync(path, 'utf8'));
+    writeFileSync(path, JSON.stringify([...current, ...incidents], null, 2) + '\n');
   }
 
   const STEPS = [
@@ -80,12 +83,12 @@ async function main() {
     {
       name: '4. incidents から official の出典を消す（報道の出典だけの登録）',
       expect: 'fail',
-      apply: (d) => setIncidents(d, [{ ...SAMPLE, sources: SAMPLE.sources.filter((s) => s.type !== 'official') }]),
+      apply: (d) => addIncidents(d, [{ ...SAMPLE, sources: SAMPLE.sources.filter((s) => s.type !== 'official') }]),
     },
     {
       name: '4の対照. official の出典がある同じ登録は通る',
       expect: 'pass',
-      apply: (d) => setIncidents(d, [SAMPLE]),
+      apply: (d) => addIncidents(d, [SAMPLE]),
     },
     {
       name: '5. <input> を1つ足す（このサイトについて）',

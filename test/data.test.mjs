@@ -21,19 +21,19 @@ test('付録A の30件（goo は入れない）', () => {
   });
 });
 
-test('電話の確認状況: 番号あり16件・窓口なし9件・未確認5件（JAL・ANA・えきねっと・Amazon・楽天市場）', () => {
+test('電話の確認状況: 番号あり17件・窓口なし11件・未確認2件（ANA・えきねっと）', () => {
   const by = (v) => data.services.filter((s) => s.phone_desk === v).map((s) => s.id).sort();
-  assert.equal(by('listed').length, 16);
-  assert.equal(by('none').length, 9);
-  assert.deepEqual(by('unverified'), ['amazon', 'ana', 'ekinet', 'jal', 'rakutenichiba']);
+  assert.equal(by('listed').length, 17);
+  assert.equal(by('none').length, 11);
+  assert.deepEqual(by('unverified'), ['ana', 'ekinet']);
 });
 
-test('JAL・Amazon・楽天市場は「大部分が未確認」', () => {
-  assert.deepEqual(data.services.filter((s) => s.mostly_unverified).map((s) => s.id).sort(), ['amazon', 'jal', 'rakutenichiba']);
+test('「大部分が未確認」のサービスは無い（JAL・Amazon・楽天市場は 2026-10-23 に確認）', () => {
+  assert.deepEqual(data.services.filter((s) => s.mostly_unverified).map((s) => s.id), []);
 });
 
-test('コミックシーモアの公式ドメインは確かめるまで nttsolmare.com だけ', () => {
-  assert.deepEqual(data.services.find((s) => s.id === 'cmoa').official_domains, ['nttsolmare.com']);
+test('コミックシーモアの公式ドメインは nttsolmare.com と cmoa.jp（運営会社の事業紹介のページからのリンクで確認）', () => {
+  assert.deepEqual(data.services.find((s) => s.id === 'cmoa').official_domains, ['nttsolmare.com', 'cmoa.jp']);
 });
 
 test('data/schema/*.schema.json は JSON として読める', () => {

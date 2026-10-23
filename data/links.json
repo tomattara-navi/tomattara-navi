@@ -19,5 +19,26 @@
     "url": "https://github.com/tomattara-navi/tomattara-navi/issues/new/choose",
     "domains": ["github.com/tomattara-navi/tomattara-navi/"],
     "basis": "docs/PLAN.md §9（連絡窓口は GitHub Issues）"
+  },
+  {
+    "id": "npa-9110",
+    "name": "警察相談専用電話（#9110）の案内（警察庁）",
+    "url": "https://www.npa.go.jp/bureau/safetylife/sos47/manga/dial/",
+    "domains": ["npa.go.jp"],
+    "basis": "相談先（data/consultation.json）の根拠。2026-10-23 に運営者が開いて確認"
+  },
+  {
+    "id": "caa-188",
+    "name": "消費者ホットライン（188）の案内（消費者庁）",
+    "url": "https://www.caa.go.jp/policies/policy/local_cooperation/local_consumer_administration/hotline/",
+    "domains": ["caa.go.jp"],
+    "basis": "相談先（data/consultation.json）の根拠。2026-10-23 に運営者が開いて確認"
+  },
+  {
+    "id": "antiphishing",
+    "name": "フィッシング対策協議会",
+    "url": "https://www.antiphishing.jp/",
+    "domains": ["antiphishing.jp"],
+    "basis": "相談先（data/consultation.json）のリンク先。2026-10-23 に運営者が開いて確認"
   }
 ]

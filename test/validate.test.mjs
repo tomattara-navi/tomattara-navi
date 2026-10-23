@@ -47,7 +47,7 @@ test('§6-1 報道の URL は出典（type: "press"）にだけ使える', () =>
   }), /incidents\[test-ongoing-sagawa\]\.sources\[0\]\.url/);
 });
 test('§6-1 公式ドメインが未確認のサービスには URL を載せられない', () => {
-  expectError(data((d) => { svc(d, 'jal').official_top = { url: 'https://www.jal.co.jp/', label: null, verified: true, note: null }; }), /jal\]\.official_top\.url: 公式ドメインが未確認/);
+  expectError(data((d) => { svc(d, 'jal').official_domains = 'unverified'; }), /jal\]\.official_top\.url: 公式ドメインが未確認/);
 });
 test('§6-1 パスつきの許可（委託先）はそのパスの下だけ', () => {
   expectOk(data((d) => { svc(d, 'ekinet').official_notices[0].url = 'https://secure.okbiz.jp/eki-net/faq/show/1'; }));
@@ -145,4 +145,22 @@ test('作業の内部の呼び名（session1・Opus など）を data/ と conte
   expectError(data((d) => { svc(d, 'mufg').notes.push('session1 のメモ'); }), /services\[mufg\]\.notes\[\d+\]: 作業の内部の呼び名/);
   expectError(data((d) => { d.content[0].body += '<p>Opus</p>'; }), /content\[[^\]]+\]\.body: 作業の内部の呼び名/);
   expectOk(data((d) => { svc(d, 'mufg').verified_by = '運営者が公式ページで確認'; }));
+});
+
+test('障害の始まり・復旧は、時刻が公表されていなければ日付だけでもよい', () => {
+  expectOk(data((d) => { d.incidents = [{ ...SAMPLE_INCIDENTS[0], started_at: '2026-09-30' }]; }));
+  expectOk(data((d) => { d.incidents = [{ ...SAMPLE_INCIDENTS[1], started_at: '2026-09-01', resolved_at: '2026-09-02' }]; }));
+  for (const bad of ['2026/09/30', '2026-09-31', '2026-09-30 09:00']) {
+    expectError(data((d) => { d.incidents = [{ ...SAMPLE_INCIDENTS[0], started_at: bad }]; }), /started_at: 日時は/);
+  }
+});
+
+test('偽メール・詐欺の見分け方（phishing_guide）は公式ドメインの URL だけ', () => {
+  expectOk(data((d) => { svc(d, 'mufg').phishing_guide = { url: 'https://www.bk.mufg.jp/', label: null, verified: true, note: null }; }));
+  expectError(data((d) => { svc(d, 'mufg').phishing_guide = { url: 'https://example.com/', label: null, verified: true, note: null }; }), /mufg\]\.phishing_guide\.url/);
+});
+
+test('相談先のリンクは data/links.json の domains に一致するものだけ', () => {
+  expectOk(data((d) => { d.consultation[0].url = null; }));
+  expectError(data((d) => { d.consultation[0].url = 'https://example.com/'; }), /consultation\[police\]\.url: .* data\/links\.json の domains/);
 });

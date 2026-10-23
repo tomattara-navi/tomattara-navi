@@ -3,21 +3,24 @@
     "id": "police",
     "name": "警察相談専用電話",
     "phone": "#9110",
+    "url": "https://www.npa.go.jp/bureau/safetylife/sos47/manga/dial/",
     "detail": "緊急ではない警察への相談（詐欺の被害にあったかもしれない、など。緊急のときは110番）",
-    "verified_at": "unverified"
+    "verified_at": "2026-10-23"
   },
   {
     "id": "consumer",
     "name": "消費者ホットライン",
     "phone": "188",
+    "url": "https://www.caa.go.jp/policies/policy/local_cooperation/local_consumer_administration/hotline/",
     "detail": "買い物・契約のトラブルの相談（近くの消費生活センター等につながる）",
-    "verified_at": "unverified"
+    "verified_at": "2026-10-23"
   },
   {
     "id": "antiphishing",
     "name": "フィッシング対策協議会",
     "phone": null,
+    "url": "https://www.antiphishing.jp/",
     "detail": "フィッシング（偽サイト・偽メール・偽SMS）の情報を集めている団体",
-    "verified_at": "unverified"
+    "verified_at": "2026-10-23"
   }
 ]

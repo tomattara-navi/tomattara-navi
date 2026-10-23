@@ -6,7 +6,7 @@
   "items": {
     "type": "object",
     "additionalProperties": false,
-    "required": ["id", "name", "operator", "category", "mostly_unverified", "official_domains", "official_top", "official_notices", "official_x", "phone_desk", "official_alternatives", "general_alternatives", "not_official", "monitor", "notes", "verified_at", "verified_by"],
+    "required": ["id", "name", "operator", "category", "mostly_unverified", "official_domains", "official_top", "official_notices", "official_x", "phone_desk", "official_alternatives", "general_alternatives", "not_official", "phishing_guide", "monitor", "notes", "verified_at", "verified_by"],
     "properties": {
       "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
       "name": { "type": "string", "description": "サービス名。「公式」を単独で使わない" },
@@ -101,6 +101,7 @@
           "statuspage_api": { "type": ["string", "null"] }
         }
       },
+      "phishing_guide": { "description": "会社が案内している偽メール・詐欺の見分け方のページ（無ければ null）。「偽サイトに注意」の欄に出す", "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/link" }] },
       "notes": { "type": "array", "items": { "type": "string" } },
       "verified_at": { "type": "string", "format": "date", "description": "180日を過ぎると画面に「要再確認」" },
       "verified_by": { "type": "string" }
