@@ -1,1 +1,49 @@
-[]
+[
+  {
+    "id": "2026-09-30-sagawa",
+    "service_id": "sagawa",
+    "title": "不正アクセスで一部の Web サービスを停止（荷物の問い合わせは再開）",
+    "status": "partially_restored",
+    "started_at": "2026-09-30",
+    "resolved_at": null,
+    "summary": "9月30日に「お荷物問い合わせサービス」への不正アクセスが確認され、一部の Web サービスが止められました。10月23日に荷物の問い合わせ（追跡）は再開しましたが、お荷物問い合わせ API・飛脚宅配便受付・飛脚往復便受付（ゴルフを含む）・商品回収返金サービス・受取先変更・回収くんは、まだ止まっています。個人情報が流出したおそれがあると発表されているので、佐川急便を名乗るメール・SMS・電話に注意してください。",
+    "what_you_can_do": [
+      "荷物のことは、最寄りの営業所へ問い合わせる",
+      "この件の専用コールセンター: 0120-28-3449（午前9時〜午後5時。土日祝も受付）"
+    ],
+    "sources": [
+      {
+        "url": "https://www2.sagawa-exp.co.jp/information/detail/430/",
+        "type": "official"
+      },
+      {
+        "url": "https://www2.sagawa-exp.co.jp/information/detail/419/",
+        "type": "official"
+      }
+    ],
+    "updated_at": "2026-10-23"
+  },
+  {
+    "id": "2026-10-15-cmoa",
+    "service_id": "cmoa",
+    "title": "不正アクセスのおそれでサービスを停止",
+    "status": "ongoing",
+    "started_at": "2026-10-15",
+    "resolved_at": null,
+    "summary": "10月15日、外部から不正にアクセスされたおそれが高いとして、サービスが止められました。10月21日の第4報では、侵入の経路は特定して遮断したものの、再開の時期は調整中とされています。再開は購入済みの作品の WEB での閲覧と読み放題の閲覧が最優先で、購入や決済は安全を確かめられたものから順に再開する予定です。会員情報の一部（メールアドレスなど）の流出が確認されているので、同じパスワードを使っている他のサービスではパスワードを変え、不審なメールに注意してください。",
+    "what_you_can_do": [
+      "問い合わせはメールだけ: info@nttsolmare.com（電話の窓口は無い）"
+    ],
+    "sources": [
+      {
+        "url": "https://www.nttsolmare.com/press/2026/1021.html",
+        "type": "official"
+      },
+      {
+        "url": "https://www.nttsolmare.com/press/2026/0616-1.html",
+        "type": "official"
+      }
+    ],
+    "updated_at": "2026-10-23"
+  }
+]

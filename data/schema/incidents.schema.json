@@ -12,8 +12,8 @@
       "service_id": { "type": "string" },
       "title": { "type": "string", "description": "例: 電子書籍の購入・閲覧が停止（運営発表）" },
       "status": { "enum": ["ongoing", "partially_restored", "resolved"] },
-      "started_at": { "type": "string", "description": "例: 2026-10-15T11:35+09:00" },
-      "resolved_at": { "type": ["string", "null"], "description": "resolved のときだけ日時、それ以外は null。復旧から30日を過ぎるとトップから外れ「過去の事例」へ" },
+      "started_at": { "type": "string", "description": "例: 2026-10-15T11:35+09:00。時刻が公表されていなければ日付だけ（2026-10-15）" },
+      "resolved_at": { "type": ["string", "null"], "description": "resolved のときだけ日時（時刻が公表されていなければ日付だけ）、それ以外は null。復旧から30日を過ぎるとトップから外れ「過去の事例」へ" },
       "summary": { "type": "string", "description": "自分の言葉で2〜3文（全文を転載しない）" },
       "what_you_can_do": { "type": "array", "items": { "type": "string" }, "description": "会社が案内した代わりの手段" },
       "sources": {

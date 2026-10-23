@@ -6,10 +6,11 @@
   "items": {
     "type": "object",
     "additionalProperties": false,
-    "required": ["id", "service_ids", "name", "period", "cause", "summary", "alternatives_used", "sources"],
+    "required": ["id", "service_ids", "incident_id", "name", "period", "cause", "summary", "alternatives_used", "sources"],
     "properties": {
       "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
       "service_ids": { "type": "array", "items": { "type": "string" }, "description": "このサイトで扱っているサービスの id（無ければ []）" },
+      "incident_id": { "type": ["string", "null"], "description": "同じ件を公式発表で登録した data/incidents.json の id（無ければ null）。あるとき、サービスのページではこの報道の事例を出さない（「過去の事例」のページには残す）" },
       "name": { "type": "string" },
       "period": { "type": "string" },
       "cause": { "type": "string" },

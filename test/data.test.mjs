@@ -5,6 +5,7 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { loadData, ROOT } from '../scripts/lib/data.mjs';
 import { validate } from '../scripts/validate.mjs';
+import { matchesAllowEntry } from '../scripts/lib/url.mjs';
 
 const data = loadData();
 
@@ -21,19 +22,38 @@ test('付録A の30件（goo は入れない）', () => {
   });
 });
 
-test('電話の確認状況: 番号あり16件・窓口なし9件・未確認5件（JAL・ANA・えきねっと・Amazon・楽天市場）', () => {
+test('電話の確認状況: 番号あり17件・窓口なし11件・未確認2件（ANA・えきねっと）', () => {
   const by = (v) => data.services.filter((s) => s.phone_desk === v).map((s) => s.id).sort();
-  assert.equal(by('listed').length, 16);
-  assert.equal(by('none').length, 9);
-  assert.deepEqual(by('unverified'), ['amazon', 'ana', 'ekinet', 'jal', 'rakutenichiba']);
+  assert.equal(by('listed').length, 17);
+  assert.equal(by('none').length, 11);
+  assert.deepEqual(by('unverified'), ['ana', 'ekinet']);
 });
 
-test('JAL・Amazon・楽天市場は「大部分が未確認」', () => {
-  assert.deepEqual(data.services.filter((s) => s.mostly_unverified).map((s) => s.id).sort(), ['amazon', 'jal', 'rakutenichiba']);
+test('「大部分が未確認」のサービスは無い（JAL・Amazon・楽天市場は 2026-10-23 に確認）', () => {
+  assert.deepEqual(data.services.filter((s) => s.mostly_unverified).map((s) => s.id), []);
 });
 
-test('コミックシーモアの公式ドメインは確かめるまで nttsolmare.com だけ', () => {
-  assert.deepEqual(data.services.find((s) => s.id === 'cmoa').official_domains, ['nttsolmare.com']);
+test('コミックシーモアの公式ドメインは nttsolmare.com と cmoa.jp（運営会社の事業紹介のページからのリンクで確認）', () => {
+  const cmoa = data.services.find((s) => s.id === 'cmoa');
+  assert.deepEqual(cmoa.official_domains, ['nttsolmare.com', 'cmoa.jp']);
+  assert.equal(cmoa.official_top.url, 'https://www.cmoa.jp/');
+  assert.ok(cmoa.official_top.verified);
+});
+
+test('楽天市場の rakuten.com は account.rakuten.com だけ（rakuten.com 全体は入れない）', () => {
+  const domains = data.services.find((s) => s.id === 'rakutenichiba').official_domains;
+  // 文字列の部分一致ではなく、new URL() で取り出したホスト名を許可の規則（完全一致かサブドメイン）で比べる
+  const allowed = (url) => domains.some((d) => matchesAllowEntry(new URL(url), d));
+  assert.ok(allowed('https://account.rakuten.com/'));
+  assert.ok(allowed('https://login.account.rakuten.com/'), 'account.rakuten.com のサブドメインは許可');
+  for (const url of ['https://rakuten.com/', 'https://www.rakuten.com/', 'https://evil-account.rakuten.com/', 'https://account.rakuten.com.example.com/']) {
+    assert.ok(!allowed(url), url);
+  }
+});
+
+test('公式の登録と同じ件の報道の事例は incident_id でつなぐ（佐川急便・コミックシーモア）', () => {
+  const by = Object.fromEntries(data.past_cases.filter((pc) => pc.incident_id).map((pc) => [pc.id, pc.incident_id]));
+  assert.deepEqual(by, { '2026-09-sagawa': '2026-09-30-sagawa', '2026-10-cmoa': '2026-10-15-cmoa' });
 });
 
 test('data/schema/*.schema.json は JSON として読める', () => {

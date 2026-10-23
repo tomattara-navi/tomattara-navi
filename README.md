@@ -32,11 +32,11 @@ node test/mutation_check.mjs  # 検算: わざと壊した版で検査が落ち�
 |---|---|
 | `data/services.json` | 見張る対象のサービス（docs/PLAN.md 付録A）。形は `data/schema/services.schema.json` |
 | `data/incidents.json` | 人が**公式発表を確かめて**登録する障害。`sources` に `type: "official"` が1つも無いと検査で落ちる |
-| `data/past_cases.json` | 「過去の事例」のページ（報道で伝えられた事例・出典つき） |
+| `data/past_cases.json` | 「過去の事例」のページ（報道で伝えられた事例・出典つき）。同じ件を `data/incidents.json` に登録したら `incident_id` にその id を書く（サービスのページではその報道の事例を出さない） |
 | `data/categories.json` | カテゴリ |
 | `data/site.json` | サイト名・公開 URL・説明と、Google Search Console の確認コード（`google_site_verification`。トップの `<head>` に meta で出す。使わないなら `null`） |
-| `data/links.json` | サービス以外でリンクしてよい先（気象庁・このリポジトリ） |
-| `data/consultation.json` | 「偽サイトに注意」のページの相談先 |
+| `data/links.json` | サービス以外でリンクしてよい先（気象庁・このリポジトリ・相談先の案内のページ） |
+| `data/consultation.json` | 「偽サイトに注意」のページの相談先（`url` は `data/links.json` の domains に一致するものだけ） |
 | `content/*.html` | 固定ページの本文（about・免責・プライバシー・bot・偽サイト注意・ガイド） |
 
 決まりごと（検査で機械的に確かめます）:
@@ -64,6 +64,8 @@ node test/mutation_check.mjs  # 検算: わざと壊した版で検査が落ち�
   "updated_at": "2026-10-21"
 }
 ```
+
+時刻が公表されていないときは、`started_at`・`resolved_at` を日付だけ（`"2026-09-30"`）にします。メールアドレスなどの連絡先は文字だけで書き、`mailto:` のリンクにはしません。
 
 `status` が `resolved` になって30日を過ぎたものは、トップから外れて「過去の事例」のページに移ります。
 

@@ -194,7 +194,7 @@ ${data.categories.map((cat) => {
     const list = data.services.filter((s) => s.category === cat.id);
     if (!list.length) return '';
     return html`<h3>${cat.name}</h3>
-<ul class="services">${list.map((s) => html`<li><a href="${ctx.href(`s/${s.id}/`)}">${s.name}</a>${active.some((i) => i.service_id === s.id) ? html` <span class="badge">${STATUS_LABEL.ongoing}</span>` : ''}</li>`)}</ul>`;
+<ul class="services">${list.map((s) => html`<li><a href="${ctx.href(`s/${s.id}/`)}">${s.name}</a>${active.filter((i) => i.service_id === s.id).slice(0, 1).map((i) => html` <span class="badge">${STATUS_LABEL[i.status]}</span>`)}</li>`)}</ul>`;
   })}
 </section>`;
   return { path: '', h1: 'サービスが止まったときの公式情報と代わりの手段', description: ctx.site.description, body };
@@ -270,12 +270,14 @@ function domainsSection(ctx, s) {
 <p>障害に便乗した「代わりのサイト」の SMS・メールのリンクは開かないでください。アドレスが公式ドメインで終わっているかを確かめてください。</p>
 ${domains}
 ${s.not_official.length ? html`<p>公式ではないと案内されているもの</p><ul>${s.not_official.map((n) => html`<li><code>${n.domain}</code>: ${n.note}</li>`)}</ul>` : ''}
+${s.phishing_guide ? html`<p>会社が案内している見分け方</p><ul class="links">${linkItem(ctx, s.phishing_guide, `${s.name}の偽メール・詐欺の見分け方`)}</ul>` : ''}
 <p><a href="${ctx.href('phishing/')}">偽サイト・偽 SMS の手口と相談先</a></p>
 </aside>`;
 }
 
 function pastCasesSection(ctx, s) {
-  const cases = ctx.data.past_cases.filter((pc) => pc.service_ids.includes(s.id));
+  // 同じ件を公式発表で登録しているもの（incident_id）は、ここでは出さない（「過去の事例」のページには残す）
+  const cases = ctx.data.past_cases.filter((pc) => pc.service_ids.includes(s.id) && !ctx.data.incidents.some((i) => i.id === pc.incident_id));
   if (!cases.length) return '';
   return html`<section aria-labelledby="past"><h2 id="past">報道で伝えられた事例</h2>
 <p class="sub">当サイトが公式発表を確かめて登録した障害ではありません。</p>
@@ -374,7 +376,8 @@ ${data.categories.map((cat) => {
       return html`<ul class="alts">${data.consultation.map((p) => html`<li>
 <p class="alt-label">${p.name}${p.phone ? html` <span class="phone">${p.phone}</span>` : ''}</p>
 <p>${p.detail}</p>
-<p class="sub">${p.phone ? '' : '連絡先は当サイトでは未確認のため載せていません。'}${verifiedDate(ctx, p.verified_at)}</p>
+${p.url ? html`<p class="sub">${p.phone ? '根拠のページ: ' : ''}${ctx.ext(p.url, p.phone ? '案内のページを開く' : `${p.name}のサイト`)}</p>` : ''}
+<p class="sub">${p.phone || p.url ? '' : '連絡先は当サイトでは未確認のため載せていません。'}${verifiedDate(ctx, p.verified_at)}</p>
 </li>`)}</ul>`;
     case 'category-services': {
       const list = data.services.filter((s) => s.category === page.meta.category);
