@@ -2,7 +2,8 @@
 import { html, raw, SafeHtml } from './escape.mjs';
 import { displayUrl, isPathEntry } from './url.mjs';
 import { isAllowedLink } from './links.mjs';
-import { daysBetween, formatWhen, jstDate } from './time.mjs';
+import { daysBetween, formatWhen, jstDate, jstDateTime } from './time.mjs';
+import { observationView, historyCells, isObserverFailure, isStale, reasonLabel } from './status.mjs';
 
 export const BANNER_TEXT = 'このサイトは各社とは無関係の非公式の案内です。最新・正確な情報は必ず各社の公式発表で確かめてください。';
 export const TITLE_SUFFIX = '（非公式）';
@@ -20,13 +21,15 @@ const STATUS_LABEL = {
 // ---- 部品 ----
 
 export class Ctx {
-  constructor({ data, allowlist, root, today, generatedAt }) {
+  constructor({ data, allowlist, root, today, generatedAt, now = new Date(), status = null }) {
     this.data = data;
     this.site = data.site;
     this.allowlist = allowlist;
     this.root = root; // ページから見たサイトの根（'' や '../../'、404 では '/tomattara-navi/'）
     this.today = today;
     this.generatedAt = generatedAt;
+    this.now = now; // 生成の時刻（観測が古いかの判断に使う）
+    this.status = status; // 観測の結果（status.json）。無ければ null
   }
   // サイト内のリンク先
   href(path) {
@@ -177,6 +180,8 @@ ${active.length
 </section>
 ${recent.length ? html`<section aria-labelledby="recent"><h2 id="recent">最近、復旧が発表されたもの</h2>${recent.map((i) => incidentCard(ctx, i))}</section>` : ''}
 
+${observationSummary(ctx)}
+
 <section aria-labelledby="guides">
 <h2 id="guides">止まったときにまずすること</h2>
 <ul class="cards">${guides.map((g) => html`<li><a href="${ctx.href(g.path)}">${g.meta.title}</a></li>`)}</ul>
@@ -194,10 +199,80 @@ ${data.categories.map((cat) => {
     const list = data.services.filter((s) => s.category === cat.id);
     if (!list.length) return '';
     return html`<h3>${cat.name}</h3>
-<ul class="services">${list.map((s) => html`<li><a href="${ctx.href(`s/${s.id}/`)}">${s.name}</a>${active.filter((i) => i.service_id === s.id).slice(0, 1).map((i) => html` <span class="badge">${STATUS_LABEL[i.status]}</span>`)}</li>`)}</ul>`;
+<ul class="services">${list.map((s) => html`<li><a href="${ctx.href(`s/${s.id}/`)}">${s.name}</a>${active.filter((i) => i.service_id === s.id).slice(0, 1).map((i) => html` <span class="badge">${STATUS_LABEL[i.status]}</span>`)}${observationView(s, ctx.status, ctx.now).kind === 'ng' ? html` <span class="obs-mark">当サイトからの観測: 応答なし</span>` : ''}</li>`)}</ul>`;
   })}
 </section>`;
   return { path: '', h1: 'サービスが止まったときの公式情報と代わりの手段', description: ctx.site.description, body };
+}
+
+// ---- 当サイトからの観測（§2.2-10〜13、§7） ----
+
+export const OBS_TEXT = {
+  ok: '当サイトからの観測: 応答がありました',
+  ng: '当サイトからの観測: 応答がありませんでした（公式発表ではありません）',
+  retrying: '当サイトからの観測: 判定を保留しています（次の観測で確かめます）',
+  unknown: '当サイトからの観測: 判定できませんでした',
+  stale: '観測が止まっています',
+  observer_failure: '観測側の不調の可能性があります',
+  none: '当サイトからの観測: 結果はまだありません',
+  disabled: '当サイトからの観測: このサービスは、いまは自動の観測をしていません',
+};
+const OBSERVER_FAILURE_TEXT = '観測したすべてのサービスで応答を確かめられませんでした。当サイトの観測の側の不調の可能性があり、各社の障害を示すものではありません。';
+const CELL_LABEL = { ok: '応答あり', ng: '応答なし', retrying: '判定を保留', unknown: '判定できない' };
+
+function when(iso) {
+  return `${jstDateTime(new Date(iso))}（日本時間）`;
+}
+
+function band(ctx, entry) {
+  const cells = historyCells(entry.history, ctx.now);
+  if (!cells.length) return '';
+  const count = (k) => cells.filter((c) => c.kind === k).length;
+  const summary = ['ok', 'unknown', 'retrying', 'ng'].filter((k) => count(k)).map((k) => `${CELL_LABEL[k]} ${count(k)}回`).join('・');
+  return html`<p class="sub">直近24時間の観測（${cells.length}回: ${summary}）。左が古く右が新しい。高い棒が応答あり、中くらいの棒が判定できない・保留、低い棒が応答なし（2回続いたもの）。</p>
+<ol class="band">${cells.map((c) => html`<li class="b-${c.kind}"><span class="vh">${jstDateTime(new Date(c.t)).slice(11)} ${CELL_LABEL[c.kind]}</span></li>`)}</ol>`;
+}
+
+export function observationSection(ctx, s) {
+  const v = observationView(s, ctx.status, ctx.now);
+  const e = v.entry;
+  let inner;
+  if (v.kind === 'disabled' || v.kind === 'none') {
+    inner = html`<p class="obs obs-none">${OBS_TEXT[v.kind]}。</p>`;
+  } else if (v.kind === 'stale') {
+    inner = html`<p class="obs obs-stale">${OBS_TEXT.stale}。最後の観測（${when(e.checked_at)}）から2時間以上たっているため、結果を表示していません。</p>`;
+  } else if (v.kind === 'observer_failure') {
+    inner = html`<p class="obs obs-stale">${OBS_TEXT.observer_failure}。</p><p>${OBSERVER_FAILURE_TEXT}</p><p class="sub">最終観測: ${when(e.checked_at)}</p>`;
+  } else {
+    inner = html`<p class="obs obs-${v.kind}">${OBS_TEXT[v.kind]}${v.kind === 'unknown' ? html`（${reasonLabel(e.reason)}）` : ''}</p>
+<p class="sub">最終観測: ${when(e.checked_at)}${v.kind !== 'ok' && e.last_ok_at ? html` ／ 最後に応答があった観測: ${when(e.last_ok_at)}` : ''}</p>
+${band(ctx, e)}`;
+  }
+  return html`<section aria-labelledby="obs"><h2 id="obs">当サイトからの観測</h2>
+${inner}
+<p class="sub">当サイトが外から応答を調べた結果で、公式発表ではありません。止まっているかどうかは公式のお知らせで確かめてください。海外からの接続を制限しているサイトは「判定できない」になります（<a href="${ctx.href('bot/')}">観測のしかた</a>）。</p>
+</section>`;
+}
+
+function observationSummary(ctx) {
+  const { status } = ctx;
+  if (!status) return '';
+  let inner;
+  if (isStale(status.generated_at, ctx.now)) {
+    inner = html`<p class="obs obs-stale">${OBS_TEXT.stale}。最後の観測（${when(status.generated_at)}）から2時間以上たっているため、結果を表示していません。</p>`;
+  } else if (isObserverFailure(status, ctx.now)) {
+    inner = html`<p class="obs obs-stale">${OBS_TEXT.observer_failure}。</p><p>${OBSERVER_FAILURE_TEXT}</p>`;
+  } else {
+    const ng = ctx.data.services.filter((s) => observationView(s, status, ctx.now).kind === 'ng');
+    inner = ng.length
+      ? html`<p>当サイトからの観測で、2回続けて応答が無かったもの（公式発表ではありません）:</p><ul>${ng.map((s) => html`<li><a href="${ctx.href(`s/${s.id}/`)}">${s.name}</a></li>`)}</ul>`
+      : html`<p>当サイトからの観測で、2回続けて応答が無かったものはありません。</p>`;
+  }
+  return html`<section aria-labelledby="observed">
+<h2 id="observed">当サイトからの観測</h2>
+${inner}
+<p class="sub">最終観測: ${when(status.generated_at)}。当サイトが外から応答を調べた結果で、公式発表ではありません（<a href="${ctx.href('bot/')}">観測のしかた</a>）。</p>
+</section>`;
 }
 
 // ---- サービスごとのページ ----
@@ -307,11 +382,13 @@ ${incidents.map((i) => incidentCard(ctx, i, { headingLevel: 2, showService: fals
 <div class="caution"><p>このサービスの情報は、まだ大部分を確かめていません。確かめるまでは、公式トップへのリンクと「未確認」の表示だけを載せています。</p></div>
 <section aria-labelledby="site"><h2 id="site">公式のサイト</h2>${top}
 <p>公式のお知らせ・公式の代わりの窓口・電話の窓口・公式ドメイン: ${unverified()}</p></section>
+${observationSection(ctx, s)}
 <p><a href="${ctx.href('phishing/')}">偽サイト・偽 SMS に注意</a></p>
 ${checked}`;
   } else {
     body = html`${intro}
 ${noticesSection(ctx, s)}
+${observationSection(ctx, s)}
 ${alternativesSection(ctx, s)}
 ${generalSection(ctx, s)}
 ${siteSection(ctx, s)}
@@ -379,6 +456,12 @@ ${data.categories.map((cat) => {
 ${p.url ? html`<p class="sub">${p.phone ? '根拠のページ: ' : ''}${ctx.ext(p.url, p.phone ? '案内のページを開く' : `${p.name}のサイト`)}</p>` : ''}
 <p class="sub">${p.phone || p.url ? '' : '連絡先は当サイトでは未確認のため載せていません。'}${verifiedDate(ctx, p.verified_at)}</p>
 </li>`)}</ul>`;
+    case 'monitored': {
+      const list = data.services.filter((s) => s.monitor.enabled);
+      const off = data.services.filter((s) => !s.monitor.enabled);
+      return html`<ul>${list.map((s) => html`<li><a href="${ctx.href(`s/${s.id}/`)}">${s.name}</a>: <code>${s.monitor.statuspage_api ?? s.monitor.url}</code>（${s.monitor.statuspage_api ? '状態の API を GET' : s.monitor.method}）</li>`)}</ul>
+${off.length ? html`<p>いまは観測していないサービス: ${off.map((s, i) => html`${i ? '、' : ''}<a href="${ctx.href(`s/${s.id}/`)}">${s.name}</a>`)}</p>` : ''}`;
+    }
     case 'category-services': {
       const list = data.services.filter((s) => s.category === page.meta.category);
       if (!list.length) throw new Error(`content/${page.file}: category "${page.meta.category}" のサービスがありません`);

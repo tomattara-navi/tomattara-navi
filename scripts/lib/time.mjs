@@ -39,3 +39,8 @@ export function formatWhen(value) {
   if (isValidDateTime(value)) return jstDateTime(new Date(value)) + '（日本時間）';
   return String(value);
 }
+
+// 日本時間の ISO 8601（例 2026-10-23T10:07:12+09:00）
+export function jstIso(date) {
+  return new Date(date.getTime() + JST_OFFSET_MS).toISOString().slice(0, 19) + '+09:00';
+}

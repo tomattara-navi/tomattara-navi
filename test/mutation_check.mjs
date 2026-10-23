@@ -67,8 +67,13 @@ async function main() {
     },
     {
       name: '2. 403 を ok に分類する',
-      expect: 'skip',
-      why: '観測（scripts/check.mjs）はフェーズ2で作るため、フェーズ2の PR でこの検算を足す',
+      expect: 'fail',
+      apply: (d) => replaceOnce(d, 'scripts/lib/status.mjs', "if (status === 403) return result('unknown', 'http_403', status);", "if (status === 403) return result('ok', 'http_403', status);"),
+    },
+    {
+      name: '2の対照. 403 の行を同じ意味の別の書き方にする（unknown のまま）のは通る',
+      expect: 'pass',
+      apply: (d) => replaceOnce(d, 'scripts/lib/status.mjs', "if (status === 403) return result('unknown', 'http_403', status);", "if (status === 403) return { state: 'unknown', reason: 'http_403', http_status: 403 };"),
     },
     {
       name: '3. 許可ドメイン外のリンクを1本足す（このサイトについて）',
@@ -120,6 +125,57 @@ async function main() {
       name: '9. 描画の側で内部の呼び名を足す（データの検査をすり抜ける形）',
       expect: 'fail',
       apply: (d) => replaceOnce(d, 'scripts/lib/render.mjs', '確かめ方: ${s.verified_by}', '確かめ方: ${s.verified_by}（Opus）'),
+    },
+    // ---- フェーズ2（自動観測） ----
+    {
+      name: '10. 503 を ok に分類する',
+      expect: 'fail',
+      apply: (d) => replaceOnce(d, 'scripts/lib/status.mjs', "return result('ng', 'http_5xx', status);", "return result('ok', 'http_5xx', status);"),
+    },
+    {
+      name: '11. 時間切れを unknown に分類する',
+      expect: 'fail',
+      apply: (d) => replaceOnce(d, 'scripts/lib/status.mjs', "if (e.name === 'TimeoutError' || e.name === 'AbortError') return result('ng', 'timeout');", "if (e.name === 'TimeoutError' || e.name === 'AbortError') return result('unknown', 'timeout');"),
+    },
+    {
+      name: '12. 挑戦ページの目印を見ない',
+      expect: 'fail',
+      apply: (d) => replaceOnce(d, 'scripts/lib/status.mjs', "if (isChallenge(headers, bodyText)) return result('unknown', 'challenge', status);", ''),
+    },
+    {
+      name: '13. robots.txt の禁止を無視する',
+      expect: 'fail',
+      apply: (d) => replaceOnce(d, 'scripts/check.mjs', "if (robots === 'disallowed') return result('unknown', 'robots_disallow');", ''),
+    },
+    {
+      name: '14. 公式ドメインの外への転送を ok にする',
+      expect: 'fail',
+      apply: (d) => replaceOnce(d, 'scripts/lib/status.mjs', "return result('unknown', 'redirect_offsite', status);", "return result('ok', 'redirect_offsite', status);"),
+    },
+    {
+      name: '15. ホストごとのリクエストの上限（2回）を外す',
+      expect: 'fail',
+      apply: (d) => replaceOnce(d, 'scripts/check.mjs', 'if (n >= MAX_REQUESTS_PER_HOST) throw new HostBudgetError(host);', ''),
+    },
+    {
+      name: '16. User-Agent にメールアドレスを入れる',
+      expect: 'fail',
+      apply: (d) => replaceOnce(d, 'scripts/check.mjs', 'return `${PRODUCT_TOKEN}/1.0 (+${siteUrl}bot/)`;', 'return `${PRODUCT_TOKEN}/1.0 (+${siteUrl}bot/; ${["bot", "example.com"].join("@")})`;'),
+    },
+    {
+      name: '17. 観測が古いかの判断を外す（2時間 → 1年）',
+      expect: 'fail',
+      apply: (d) => replaceOnce(d, 'scripts/lib/status.mjs', 'export const STALE_MS = 2 * 60 * 60 * 1000;', 'export const STALE_MS = 365 * 24 * 60 * 60 * 1000;'),
+    },
+    {
+      name: '18. 1回の ng で「応答がありませんでした」を出す',
+      expect: 'fail',
+      apply: (d) => replaceOnce(d, 'scripts/lib/status.mjs', 'export const NG_DISPLAY_MIN = 2;', 'export const NG_DISPLAY_MIN = 1;'),
+    },
+    {
+      name: '19. 観測の全滅のときも各社の「応答なし」を出す',
+      expect: 'fail',
+      apply: (d) => replaceOnce(d, 'scripts/lib/status.mjs', "if (isObserverFailure(status, now)) return { kind: 'observer_failure', entry: e };", ''),
     },
   ];
 

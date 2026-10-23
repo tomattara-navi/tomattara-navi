@@ -109,3 +109,15 @@ li { margin: 0.2rem 0; }
   .facts dd { margin-bottom: 0.4rem; }
   h1 { font-size: 1.35rem; }
 }
+
+/* 当サイトからの観測（三状態。色だけに頼らず、文と棒の高さでも区別する） */
+.obs { font-weight: 700; margin-bottom: 0.25rem; }
+.obs-ng { color: var(--caution-line); }
+.obs-stale, .obs-unknown, .obs-retrying { color: var(--unverified); }
+.obs-mark { display: inline-block; font-size: 0.85rem; font-weight: 700; color: var(--caution-line); border: 1px solid var(--caution-line); border-radius: 3px; padding: 0 0.4rem; }
+.band { list-style: none; display: flex; align-items: flex-end; gap: 1px; height: 1.5rem; margin: 0.25rem 0 0.75rem; padding: 0; max-width: 100%; }
+.band li { flex: 1 1 0; min-width: 2px; max-width: 0.75rem; }
+.b-ok { height: 100%; background: var(--link); }
+.b-unknown, .b-retrying { height: 55%; background: var(--unverified); }
+.b-ng { height: 25%; background: var(--caution-line); }
+.vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }

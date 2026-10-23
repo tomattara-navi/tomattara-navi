@@ -9,6 +9,7 @@ import { loadData } from '../scripts/lib/data.mjs';
 import { linkAllowlist, isAllowedLink } from '../scripts/lib/links.mjs';
 import { hasStandaloneOfficial } from '../scripts/validate.mjs';
 import { BANNER_TEXT, CSP } from '../scripts/lib/render.mjs';
+import { jstIso } from '../scripts/lib/time.mjs';
 
 const NOW = new Date('2026-10-23T07:00:00Z');
 const MAX_PAGE_BYTES = 60 * 1024;
@@ -42,11 +43,11 @@ function walk(dir) {
   });
 }
 
-function buildInto(edit) {
+function buildInto(edit, { status = null } = {}) {
   const outDir = mkdtempSync(join(tmpdir(), 'tomattara-build-'));
   const data = loadData();
   edit?.(data);
-  build({ outDir, now: NOW, data, siteUrl: 'https://tomattara-navi.github.io/tomattara-navi/' });
+  build({ outDir, now: NOW, data, status: typeof status === 'function' ? status(data) : status, siteUrl: 'https://tomattara-navi.github.io/tomattara-navi/' });
   const files = walk(outDir);
   const htmlFiles = files.filter((f) => f.endsWith('.html')).map((f) => ({ file: relative(outDir, f), text: readFileSync(f, 'utf8') }));
   return { outDir, files, htmlFiles, data };
@@ -54,13 +55,26 @@ function buildInto(edit) {
 
 let site; // いまのデータ（障害の登録は空にする）で生成したもの
 let withIncidents; // 試験用の障害を入れて生成したもの
+let withStatus; // 観測の結果（ok・ng・unknown・保留が混ざったもの）を入れて生成したもの
+// 有効なサービスに、順に ok・ng（2回）・unknown・ng（1回）を割り当てた観測の結果（48件の帯つき）
+function mixedStatus(data) {
+  const kinds = [['ok', 0], ['ng', 2], ['unknown', 0], ['ng', 1]];
+  const services = {};
+  data.services.filter((s) => s.monitor.enabled).forEach((s, i) => {
+    const [state, n] = kinds[i % kinds.length];
+    const history = Array.from({ length: 48 }, (_, j) => ({ t: jstIso(new Date(NOW.getTime() - (47 - j) * 1800 * 1000)), s: j % 5 === 0 ? 'unknown' : j % 7 < 2 ? 'ng' : 'ok' }));
+    services[s.id] = { state, consecutive_ng: n, http_status: 200, reason: state === 'unknown' ? 'http_403' : 'http_2xx', checked_at: jstIso(NOW), last_ok_at: jstIso(NOW), history };
+  });
+  return { generated_at: jstIso(NOW), services };
+}
 before(() => {
   site = buildInto((d) => { d.incidents = []; });
   withIncidents = buildInto((d) => { d.incidents = structuredClone(SAMPLE_INCIDENTS); });
+  withStatus = buildInto((d) => { d.incidents = structuredClone(SAMPLE_INCIDENTS); }, { status: mixedStatus });
 });
 
-for (const variant of ['site', 'withIncidents']) {
-  const get = () => (variant === 'site' ? site : withIncidents);
+for (const variant of ['site', 'withIncidents', 'withStatus']) {
+  const get = () => ({ site, withIncidents, withStatus })[variant];
 
   test(`[${variant}] 全ページに「非公式」バナーがあり、本文より前にある`, () => {
     for (const { file, text } of get().htmlFiles) {
@@ -172,6 +186,12 @@ for (const variant of ['site', 'withIncidents']) {
     }
   });
 }
+
+test('[withStatus] の検査は、観測の欄（帯・応答なし・判定できない）を実際に含むページに当たっている', () => {
+  const pages = withStatus.htmlFiles.map((f) => f.text).join('\n');
+  for (const s of ['<ol class="band">', 'class="b-ng"', 'class="b-unknown"', '応答がありませんでした（公式発表ではありません）', '判定できませんでした', 'obs-mark']) assert.ok(pages.includes(s), s);
+  assert.ok(existsSync(join(withStatus.outDir, 'status.json')));
+});
 
 test('障害の登録が無いときは、どのページにも障害の表示を出さない', () => {
   for (const { file, text } of site.htmlFiles) {

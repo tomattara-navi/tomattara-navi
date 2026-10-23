@@ -1,10 +1,14 @@
-# main への push で GitHub Pages へデプロイ: validate → test → build → deploy
-# （観測の cron はフェーズ2で足す）
+# GitHub Pages へデプロイ: validate → test → check（観測）→ build → deploy
+# ・cron（30分ごと）: 各社のサイトを観測してから生成する（docs/PLAN.md §7）
+# ・main への push・手動: 観測はせず、公開中の status.json をそのまま引き継いで生成する
+#   （観測の間隔を30分に1回に保つため。push のたびに各社へアクセスしない）
 name: Deploy
 
 on:
   push:
     branches: [main]
+  schedule:
+    - cron: '7,37 * * * *'
   workflow_dispatch:
 
 permissions: {}
@@ -16,7 +20,8 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-24.04
-    timeout-minutes: 10
+    # 観測は最悪（全サイトが時間切れ＋再試行）でも10分ほど。余裕をみて20分
+    timeout-minutes: 20
     permissions:
       contents: read
     steps:
@@ -31,8 +36,34 @@ jobs:
         run: node scripts/validate.mjs
       - name: 試験
         run: node --test
+      # robots.txt の24時間キャッシュ（§2.3-17）。いちばん新しいものを戻し、観測の後に新しいキーで保存する
+      - name: robots.txt のキャッシュを戻す
+        if: github.event_name == 'schedule'
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: .cache/robots
+          key: robots-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: robots-
+      - name: 観測
+        id: observe
+        if: github.event_name == 'schedule'
+        continue-on-error: true
+        run: node scripts/check.mjs
+      - name: robots.txt のキャッシュを保存する
+        if: github.event_name == 'schedule' && steps.observe.outcome == 'success'
+        uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: .cache/robots
+          key: robots-${{ github.run_id }}-${{ github.run_attempt }}
+      # 観測しない回（push・手動）と、観測が失敗した回は、公開中の結果を引き継ぐ
+      # （観測の時刻は前のままなので、2時間たてば画面は「観測が止まっています」になる）
+      - name: 公開中の観測の結果を引き継ぐ
+        if: github.event_name != 'schedule' || steps.observe.outcome == 'failure'
+        run: node scripts/check.mjs --carry
       - name: 生成
         run: node scripts/build.mjs
+        env:
+          STATUS_FILE: .cache/status.json
       - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
           path: dist
