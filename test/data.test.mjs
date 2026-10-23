@@ -5,6 +5,7 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { loadData, ROOT } from '../scripts/lib/data.mjs';
 import { validate } from '../scripts/validate.mjs';
+import { matchesAllowEntry } from '../scripts/lib/url.mjs';
 
 const data = loadData();
 
@@ -41,8 +42,13 @@ test('コミックシーモアの公式ドメインは nttsolmare.com と cmoa.j
 
 test('楽天市場の rakuten.com は account.rakuten.com だけ（rakuten.com 全体は入れない）', () => {
   const domains = data.services.find((s) => s.id === 'rakutenichiba').official_domains;
-  assert.ok(domains.includes('account.rakuten.com'));
-  assert.ok(!domains.includes('rakuten.com'));
+  // 文字列の部分一致ではなく、new URL() で取り出したホスト名を許可の規則（完全一致かサブドメイン）で比べる
+  const allowed = (url) => domains.some((d) => matchesAllowEntry(new URL(url), d));
+  assert.ok(allowed('https://account.rakuten.com/'));
+  assert.ok(allowed('https://login.account.rakuten.com/'), 'account.rakuten.com のサブドメインは許可');
+  for (const url of ['https://rakuten.com/', 'https://www.rakuten.com/', 'https://evil-account.rakuten.com/', 'https://account.rakuten.com.example.com/']) {
+    assert.ok(!allowed(url), url);
+  }
 });
 
 test('公式の登録と同じ件の報道の事例は incident_id でつなぐ（佐川急便・コミックシーモア）', () => {
