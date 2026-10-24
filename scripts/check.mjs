@@ -192,6 +192,7 @@ async function observe(ctx, service, prev) {
     }
   }
   const out = result(r.state, r.reason, r.http_status);
+  if (r.redirect_host) out.redirect_host = r.redirect_host;
   if (r.retryAfterMs !== null && r.retryAfterMs > 0 && r.state !== 'ok') {
     out.retryAfterUntil = jstIso(new Date(ctx.now().getTime() + Math.min(r.retryAfterMs, MAX_SKIP_MS)));
   }
@@ -209,6 +210,7 @@ export function mergeEntry(prev, r, checkedAt, now) {
     checked_at: checkedAt,
     last_ok_at: r.state === 'ok' ? checkedAt : prev?.last_ok_at ?? null,
     ...(r.retryAfterUntil ? { retry_after_until: r.retryAfterUntil } : {}),
+    ...(r.redirect_host ? { redirect_host: r.redirect_host } : {}),
     history: [...(prev?.history ?? []), { t: checkedAt, s: r.state }].slice(-HISTORY_MAX),
   };
 }

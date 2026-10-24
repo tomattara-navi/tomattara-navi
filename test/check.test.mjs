@@ -7,7 +7,7 @@ import { join } from 'node:path';
 import { runChecks, fetchPrevious, userAgent, mergeEntry, PRODUCT_TOKEN, MAX_REQUESTS_PER_HOST, RETRY_WAIT_MS } from '../scripts/check.mjs';
 import { loadData, ROOT } from '../scripts/lib/data.mjs';
 import { parseRobots, isAllowedByRobots } from '../scripts/lib/robots.mjs';
-import { classifyResponse } from '../scripts/lib/status.mjs';
+import { classifyResponse, sanitizeStatus } from '../scripts/lib/status.mjs';
 
 const SITE_URL = 'https://tomattara-navi.github.io/tomattara-navi/';
 const UA = userAgent(SITE_URL);
@@ -110,13 +110,33 @@ test('3xx で転送先が公式ドメインの中 → ok（相対の Location �
 });
 
 test('公式ドメインの外への転送 → unknown（http: への転送も）', async () => {
-  for (const loc of ['https://example-jp.evil.test/', 'https://example.jp.evil.test/', 'http://www.example.jp/']) {
+  const hosts = { 'https://example-jp.evil.test/': 'example-jp.evil.test', 'https://example.jp.evil.test/': 'example.jp.evil.test', 'http://www.example.jp/': 'www.example.jp' };
+  for (const [loc, host] of Object.entries(hosts)) {
     const { e } = await one({ 'https://www.example.jp/': res(301, { location: loc }) });
     assert.equal(e.state, 'unknown', loc);
     assert.equal(e.reason, 'redirect_offsite', loc);
+    assert.equal(e.redirect_host, host, `${loc}: 転送先のホスト名を残す`);
   }
   const { e } = await one({ 'https://www.example.jp/': res(302) });
   assert.deepEqual([e.state, e.reason], ['unknown', 'redirect_without_location']);
+});
+
+test('redirect_offsite の転送先は、ホスト名だけを status.json に残す（パス・問い合わせ文字列は入れない）', async () => {
+  const { e, status } = await one({ 'https://www.example.jp/': res(302, { location: 'https://Other.Example.NET:8443/path/to?q=secret#frag' }) });
+  assert.equal(e.redirect_host, 'other.example.net');
+  const json = JSON.stringify(status);
+  for (const s of ['/path', 'q=secret', 'frag', '8443']) assert.ok(!json.includes(s), s);
+  // 公式ドメインの中への転送や、転送でないときは残さない
+  const inside = await one({ 'https://www.example.jp/': res(302, { location: '/ja/' }) });
+  assert.ok(!('redirect_host' in inside.e));
+  // 前回値・生成のときの読み取りでも、ホスト名の形のものを redirect_offsite のときだけ残す
+  const base = { state: 'unknown', http_status: 302, checked_at: '2026-10-23T10:07:00+09:00', history: [] };
+  const read = (e) => sanitizeStatus({ generated_at: '2026-10-23T10:07:00+09:00', services: { x: { ...base, ...e } } }).services.x;
+  assert.equal(read({ reason: 'redirect_offsite', redirect_host: 'other.example.net' }).redirect_host, 'other.example.net');
+  for (const bad of ['other.example.net/path', 'https://other.example.net', 'a b', '', 1]) {
+    assert.ok(!('redirect_host' in read({ reason: 'redirect_offsite', redirect_host: bad })), String(bad));
+  }
+  assert.ok(!('redirect_host' in read({ reason: 'http_403', redirect_host: 'other.example.net' })));
 });
 
 test('403 → unknown（再試行しない）', async () => {
@@ -389,7 +409,7 @@ test('monitor.enabled が false のサービスは観測しない', async () => 
 
 // ---- 前回値と連続回数 ----
 
-test('consecutive_ng: ng が続くと数え、ok・unknown で 0 に戻る。前回が2時間以上古ければ 1 から', () => {
+test('consecutive_ng: ng が続くと数え、ok・unknown で 0 に戻る。前回が4時間以上古ければ 1 から', () => {
   const now = new Date(T0);
   const at = (ms) => new Date(T0 - ms).toISOString();
   const ng = { state: 'ng', reason: 'http_5xx', http_status: 503 };
@@ -397,7 +417,8 @@ test('consecutive_ng: ng が続くと数え、ok・unknown で 0 に戻る。前
   assert.equal(e1.consecutive_ng, 1);
   const prev = { ...e1, checked_at: at(30 * 60 * 1000) };
   assert.equal(mergeEntry(prev, ng, now.toISOString(), now).consecutive_ng, 2);
-  assert.equal(mergeEntry({ ...prev, checked_at: at(3 * 3600 * 1000) }, ng, now.toISOString(), now).consecutive_ng, 1);
+  assert.equal(mergeEntry({ ...prev, checked_at: at(3 * 3600 * 1000) }, ng, now.toISOString(), now).consecutive_ng, 2, '3時間前（いまの実際の間隔）は続きとみなす');
+  assert.equal(mergeEntry({ ...prev, checked_at: at(4 * 3600 * 1000) }, ng, now.toISOString(), now).consecutive_ng, 1);
   assert.equal(mergeEntry(prev, { state: 'unknown', reason: 'http_403' }, now.toISOString(), now).consecutive_ng, 0);
   const ok = mergeEntry(prev, { state: 'ok', reason: 'http_2xx', http_status: 200 }, now.toISOString(), now);
   assert.equal(ok.consecutive_ng, 0);

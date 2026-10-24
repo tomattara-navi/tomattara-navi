@@ -6,7 +6,10 @@ import { isValidDateTime } from './time.mjs';
 
 export const STATES = ['ok', 'ng', 'unknown'];
 export const HISTORY_MAX = 48; // 直近48件（30分ごとで24時間分）
-export const STALE_MS = 2 * 60 * 60 * 1000; // 観測が2時間以上古ければ「観測が止まっています」
+// 観測が4時間以上古ければ「観測が止まっています」（店主承認 2026-10-24。それ以前は2時間。
+// GitHub の定期実行が間引かれ、実際の観測の間隔が約3時間になるため）
+export const STALE_HOURS = 4;
+export const STALE_MS = STALE_HOURS * 60 * 60 * 1000;
 export const NG_DISPLAY_MIN = 2; // 2回続けて ng のときだけ「応答がありませんでした」
 
 export function result(state, reason, httpStatus = null) {
@@ -48,7 +51,10 @@ export function classifyResponse({ status, headers, bodyText = null, requestUrl,
     } catch {
       return result('unknown', 'redirect_invalid', status);
     }
-    if (!parseHttpsUrl(target) || !isAllowedUrl(target, allow)) return result('unknown', 'redirect_offsite', status);
+    if (!parseHttpsUrl(target) || !isAllowedUrl(target, allow)) {
+      // 原因を見られるよう、転送先のホスト名だけを残す（パス・問い合わせ文字列は残さない）
+      return { ...result('unknown', 'redirect_offsite', status), redirect_host: new URL(target).hostname };
+    }
     return result('ok', 'http_3xx', status);
   }
   if (status === 403) return result('unknown', 'http_403', status);
@@ -102,6 +108,12 @@ export function parseRetryAfter(value, now) {
 }
 
 // ---- status.json の読み取り（前回値・生成のとき） ----
+// 転送先のホスト名（redirect_host）は、ホスト名の形のものだけを残す（パスや問い合わせ文字列は入れない）
+const HOSTNAME_RE = /^(?=.{1,253}$)[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?(\.[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)*$|^\[[0-9a-f:.]{2,45}\]$/;
+export function isHostname(value) {
+  return typeof value === 'string' && HOSTNAME_RE.test(value);
+}
+
 // 形の合わないものは捨てる（壊れた前回値で表示を誤らないため）。
 export function sanitizeStatus(json, serviceIds = null) {
   if (!json || typeof json !== 'object' || !isValidDateTime(json.generated_at) || !json.services || typeof json.services !== 'object') return null;
@@ -120,6 +132,7 @@ export function sanitizeStatus(json, serviceIds = null) {
       checked_at: e.checked_at,
       last_ok_at: isValidDateTime(e.last_ok_at) ? e.last_ok_at : null,
       retry_after_until: isValidDateTime(e.retry_after_until) ? e.retry_after_until : null,
+      ...(e.reason === 'redirect_offsite' && isHostname(e.redirect_host) ? { redirect_host: e.redirect_host } : {}),
       history,
     };
   }
