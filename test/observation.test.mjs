@@ -76,23 +76,26 @@ test('unknown: 「判定できませんでした」と理由。ok にも ng に�
   assert.ok(text.includes('<li class="b-unknown">'));
 });
 
-test('観測が2時間以上古いと「観測が止まっています」になり、古い ok を出さない', () => {
-  // ちょうど2時間前 → 止まっている
-  const stale = buildWith(makeStatus(data, { checkedAt: new Date(NOW.getTime() - 120 * MIN) }));
+test('観測が4時間以上古いと「観測が止まっています」になり、古い ok を出さない（店主承認 2026-10-24。それ以前は2時間）', () => {
+  // ちょうど4時間前 → 止まっている
+  const stale = buildWith(makeStatus(data, { checkedAt: new Date(NOW.getTime() - 240 * MIN) }));
   for (const p of ['s/mufg', 's/smbc', '']) {
     const text = stale.page(p);
     assert.ok(text.includes(OBS_TEXT.stale), p);
     assert.ok(!text.includes(OBS_TEXT.ok), `${p}: 古い ok を出さない`);
     assert.ok(!text.includes('class="band"'), `${p}: 帯も出さない`);
   }
-  assert.ok(stale.page('s/mufg').includes('最後の観測（2026-10-23 14:00（日本時間））'));
+  assert.ok(stale.page('s/mufg').includes('最後の観測（2026-10-23 12:00（日本時間））から4時間以上たっているため'));
+  assert.ok(stale.page('').includes('から4時間以上たっているため'), 'トップのまとめも4時間');
   // 古い ng も出さない
-  const staleNg = buildWith(makeStatus(data, { checkedAt: new Date(NOW.getTime() - 3 * 60 * MIN), overrides: { mufg: { state: 'ng', consecutive_ng: 3, history: ['ng', 'ng', 'ng'] } } }));
+  const staleNg = buildWith(makeStatus(data, { checkedAt: new Date(NOW.getTime() - 5 * 60 * MIN), overrides: { mufg: { state: 'ng', consecutive_ng: 3, history: ['ng', 'ng', 'ng'] } } }));
   assert.ok(!staleNg.page('s/mufg').includes(NG_TEXT));
-  // 1時間59分前 → まだ止まっていない
-  const fresh = buildWith(makeStatus(data, { checkedAt: new Date(NOW.getTime() - 119 * MIN) }));
-  assert.ok(!fresh.page('s/mufg').includes(OBS_TEXT.stale));
-  assert.ok(fresh.page('s/mufg').includes(OBS_TEXT.ok));
+  // 3時間前（いまの実際の観測の間隔）・3時間59分前 → まだ止まっていない
+  for (const min of [180, 239]) {
+    const fresh = buildWith(makeStatus(data, { checkedAt: new Date(NOW.getTime() - min * MIN) }));
+    assert.ok(!fresh.page('s/mufg').includes(OBS_TEXT.stale), `${min} 分前`);
+    assert.ok(fresh.page('s/mufg').includes(OBS_TEXT.ok), `${min} 分前`);
+  }
 });
 
 test('観測が全滅（すべて unknown/ng）なら「観測側の不調の可能性」を出し、各社の障害と言わない', () => {
@@ -169,5 +172,6 @@ test('observationView の判断（表の形で）', () => {
   assert.equal(observationView(s, st({ state: 'ng', consecutive_ng: 1, checked_at: at }), NOW).kind, 'retrying');
   assert.equal(observationView(s, st({ state: 'ng', consecutive_ng: 2, checked_at: at }), NOW).kind, 'ng');
   assert.equal(observationView(s, st({ state: 'unknown', checked_at: at }), NOW).kind, 'unknown');
-  assert.equal(observationView(s, st({ state: 'ok', checked_at: jstIso(new Date(NOW - 2 * 60 * MIN)) }), NOW).kind, 'stale');
+  assert.equal(observationView(s, st({ state: 'ok', checked_at: jstIso(new Date(NOW - 3 * 60 * MIN)) }), NOW).kind, 'ok');
+  assert.equal(observationView(s, st({ state: 'ok', checked_at: jstIso(new Date(NOW - 4 * 60 * MIN)) }), NOW).kind, 'stale');
 });

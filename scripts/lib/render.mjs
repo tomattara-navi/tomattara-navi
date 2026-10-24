@@ -3,7 +3,7 @@ import { html, raw, SafeHtml } from './escape.mjs';
 import { displayUrl, isPathEntry } from './url.mjs';
 import { isAllowedLink } from './links.mjs';
 import { daysBetween, formatWhen, jstDate, jstDateTime } from './time.mjs';
-import { observationView, historyCells, isObserverFailure, isStale, reasonLabel } from './status.mjs';
+import { observationView, historyCells, isObserverFailure, isStale, reasonLabel, STALE_HOURS } from './status.mjs';
 
 export const BANNER_TEXT = 'このサイトは各社とは無関係の非公式の案内です。最新・正確な情報は必ず各社の公式発表で確かめてください。';
 export const TITLE_SUFFIX = '（非公式）';
@@ -238,7 +238,7 @@ export function observationSection(ctx, s) {
   if (v.kind === 'disabled' || v.kind === 'none') {
     inner = html`<p class="obs obs-none">${OBS_TEXT[v.kind]}。</p>`;
   } else if (v.kind === 'stale') {
-    inner = html`<p class="obs obs-stale">${OBS_TEXT.stale}。最後の観測（${when(e.checked_at)}）から2時間以上たっているため、結果を表示していません。</p>`;
+    inner = html`<p class="obs obs-stale">${OBS_TEXT.stale}。最後の観測（${when(e.checked_at)}）から${STALE_HOURS}時間以上たっているため、結果を表示していません。</p>`;
   } else if (v.kind === 'observer_failure') {
     inner = html`<p class="obs obs-stale">${OBS_TEXT.observer_failure}。</p><p>${OBSERVER_FAILURE_TEXT}</p><p class="sub">最終観測: ${when(e.checked_at)}</p>`;
   } else {
@@ -257,7 +257,7 @@ function observationSummary(ctx) {
   if (!status) return '';
   let inner;
   if (isStale(status.generated_at, ctx.now)) {
-    inner = html`<p class="obs obs-stale">${OBS_TEXT.stale}。最後の観測（${when(status.generated_at)}）から2時間以上たっているため、結果を表示していません。</p>`;
+    inner = html`<p class="obs obs-stale">${OBS_TEXT.stale}。最後の観測（${when(status.generated_at)}）から${STALE_HOURS}時間以上たっているため、結果を表示していません。</p>`;
   } else if (isObserverFailure(status, ctx.now)) {
     inner = html`<p class="obs obs-stale">${OBS_TEXT.observer_failure}。</p><p>${OBSERVER_FAILURE_TEXT}</p>`;
   } else {

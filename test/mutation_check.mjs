@@ -150,7 +150,7 @@ async function main() {
     {
       name: '14. 公式ドメインの外への転送を ok にする',
       expect: 'fail',
-      apply: (d) => replaceOnce(d, 'scripts/lib/status.mjs', "return result('unknown', 'redirect_offsite', status);", "return result('ok', 'redirect_offsite', status);"),
+      apply: (d) => replaceOnce(d, 'scripts/lib/status.mjs', "return { ...result('unknown', 'redirect_offsite', status),", "return { ...result('ok', 'redirect_offsite', status),"),
     },
     {
       name: '15. ホストごとのリクエストの上限（2回）を外す',
@@ -163,9 +163,9 @@ async function main() {
       apply: (d) => replaceOnce(d, 'scripts/check.mjs', 'return `${PRODUCT_TOKEN}/1.0 (+${siteUrl}bot/)`;', 'return `${PRODUCT_TOKEN}/1.0 (+${siteUrl}bot/; ${["bot", "example.com"].join("@")})`;'),
     },
     {
-      name: '17. 観測が古いかの判断を外す（2時間 → 1年）',
+      name: '17. 観測が古いかの判断を外す（4時間 → 1年）',
       expect: 'fail',
-      apply: (d) => replaceOnce(d, 'scripts/lib/status.mjs', 'export const STALE_MS = 2 * 60 * 60 * 1000;', 'export const STALE_MS = 365 * 24 * 60 * 60 * 1000;'),
+      apply: (d) => replaceOnce(d, 'scripts/lib/status.mjs', 'export const STALE_HOURS = 4;', 'export const STALE_HOURS = 365 * 24;'),
     },
     {
       name: '18. 1回の ng で「応答がありませんでした」を出す',
@@ -206,6 +206,16 @@ async function main() {
       name: '25. 開けなかった公式トップに「開けなかった」の注記を出す（変更前の動き）',
       expect: 'fail',
       apply: (d) => replaceOnce(d, 'scripts/lib/render.mjs', 'const note = link.verified ? link.note : null;', 'const note = link.note;'),
+    },
+    {
+      name: '26. 「観測が止まっています」までの時間を2時間に戻す（変更前の動き）',
+      expect: 'fail',
+      apply: (d) => replaceOnce(d, 'scripts/lib/status.mjs', 'export const STALE_HOURS = 4;', 'export const STALE_HOURS = 2;'),
+    },
+    {
+      name: '27. redirect_offsite の転送先にパス・問い合わせ文字列まで残す',
+      expect: 'fail',
+      apply: (d) => replaceOnce(d, 'scripts/lib/status.mjs', 'redirect_host: new URL(target).hostname', 'redirect_host: target'),
     },
   ];
 

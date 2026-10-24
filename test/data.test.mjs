@@ -62,3 +62,9 @@ test('data/schema/*.schema.json は JSON として読める', () => {
   assert.ok(files.length >= 4);
   for (const f of files) JSON.parse(readFileSync(join(dir, f), 'utf8'));
 });
+
+test('スマートEX の観測先は https://smart-ex.jp/top.php。転送先のドメインは確かめるまで公式ドメインに足さない', () => {
+  const s = data.services.find((x) => x.id === 'smartex');
+  assert.equal(s.monitor.url, 'https://smart-ex.jp/top.php');
+  assert.deepEqual(s.official_domains, ['smart-ex.jp', 'expy.jp']);
+});

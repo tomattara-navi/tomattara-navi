@@ -786,7 +786,7 @@
     "not_official": [],
     "phishing_guide": null,
     "monitor": {
-      "url": "https://smart-ex.jp/",
+      "url": "https://smart-ex.jp/top.php",
       "method": "HEAD",
       "enabled": true,
       "statuspage_api": null
